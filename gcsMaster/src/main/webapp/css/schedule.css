@@ -1,0 +1,286 @@
+@charset "utf-8";
+
+.schedule_guide{ font-size:0;}
+.schedule_guide > div{display: inline-block; font-size: 15px; vertical-align: top; }
+.schedule_all{width: calc(100% - 200px);padding-right: 20px;}
+.schedule_all2{width: calc(100% - 0px);padding-right: 20px;}
+.schedule_all1{width: 100%;padding-right: 20px;}
+
+/* schedule_top ************************************************************************************/
+.schedule_top{ height: 55px;}
+.schedule_top *{ display: inline-block; vertical-align: top;line-height: 33px;}
+.schedule_top .sc_title{ font-size: 24px;}
+.schedule_top .sc_title button{width: 35px; height: 35px; overflow: hidden; text-indent: -5000px; background-color: #fff !important; background-position: center; background-repeat: no-repeat; margin-top: 2px;}
+.schedule_top .sc_title .prev{ background-image: url("../images/sc_prev.png");}
+.schedule_top .sc_title .next{ background-image: url("../images/sc_next.png");}
+.schedule_top .sc_title .now{width: 30px; height: 35px; overflow: hidden; text-indent: -5000px; background: url("../images/sc_now.png") center no-repeat; margin-top: 1px;}
+.schedule_top .sc_title strong{ line-height: 35px;}
+
+.schedule_top .view_btn{background:  url("../images/period_bg.png") left top repeat-x; font-size: 0;border-radius: 5px;	overflow: hidden;}
+.schedule_top .view_btn a{display: block; padding: 0 10px;border: 1px solid #ddd; border-left:none; font-size: 13px;}
+.schedule_top .view_btn li:first-child a{border-left:1px solid #ddd; border-radius: 5px 0 0 5px; }
+.schedule_top .view_btn li:last-child a{border-radius:0 5px 5px 0; }
+.schedule_top .view_btn a:hover,
+.schedule_top .view_btn a:focus{color: #ff5371;}
+.schedule_top .view_btn a.active{ background: #ff5371; color: #fff; border-color: #ff5371;}
+
+.schedule_top .project_tit{ font-size: 20px; font-weight: 500;}
+
+.schedule_top .sc_text{ margin-left: 20px; font-size: 13px; color: #035faa;}
+
+.schedule_top .condition{ float: right;}
+.schedule_top .condition li{ margin-left: 10px; line-height: 35px;}
+.schedule_top .condition li > span{display: inline-block; height: 20px; width: 20px; border-radius: 50%; vertical-align: middle; line-height: 35px;}
+.sc_past{ background: #888888;}
+.sc_now{background: #ff5271;}
+.sc_expect{background: #6e63b2;}
+.sc_inform{background: #3cc8c9;}
+
+.ing_month, .ing_time{ background: #ffe4e9 !important;}
+
+.schedule_top:after{  display: block; clear: both; content: '';}
+
+
+/* year_guide ************************************************************************************/
+.year_guide{}
+
+.year_guide .year_top{font-size: 0;}
+.year_guide .year_top .project_top{display: inline-block; font-size: 15px; vertical-align: top; width: 250px; padding-right: 10px;}
+.year_guide .year_top .project_top select{ height: 55px; font-size: 16px; border-radius: 8px;}
+.year_guide .year_top .month{ display: inline-block; vertical-align: top; width: calc(100% - 250px); font-size: 0; border: 1px solid #ddd; border-radius: 8px 8px 0 0 ;}
+.year_guide .year_top .month li{ display: inline-block; width: calc(100% / 12.01); font-size: 18px; font-weight: 500; text-align: center; line-height: 53px;border-left: 1px solid #ddd; white-space: nowrap;}
+.year_guide .year_top .month li:first-child{border-left:none;}
+
+
+.year_guide .project_all{ position: relative;}
+.year_guide .project_all .project_list{ font-size: 0}
+
+.year_guide .project_all .project_list .project_name{display: inline-block; font-size: 15px; vertical-align: top;  width: 240px; margin-right: 10px; margin-top: 10px; background: #f4f8fb; border-left: 8px solid #69abe5; border-radius: 8px; padding:15px; height: 140px;}
+.year_guide .project_all .project_list .project_name > strong{display: block; height: 75px; overflow: hidden; line-height: 24px;}
+.year_guide .project_all .project_list .project_name > span{display: inline-block; font-size: 13px;  padding: 5px 15px; border-radius: 20px; color: #fff; float: right; margin-top: 5px;}
+
+
+.year_guide .project_all .project_list .sc_project{display: inline-block; vertical-align: top; width: calc(100% - 250px); font-size: 0; border-left:1px solid #ddd; border-right:1px solid #ddd;border-bottom:1px solid #ddd;}
+.year_guide .project_all .project_list:last-child .sc_project{border-radius: 0 0 8px 8px;}
+.year_guide .project_all .project_list .sc_project ul{ display: inline-block; width: calc(100% / 12.01);background: #fafbfd; border-left: 1px solid #ddd; vertical-align: top;}
+.year_guide .project_all .project_list .sc_project ul:first-child{border-left:none;}
+.year_guide .project_all .project_list .sc_project ul li{display: inline-block; width: 100%; min-width: 100%; font-size: 13px;border-left: 1px dashed #e1e2e4; height: 150px; text-align: center; vertical-align: top; padding-top: 40px;}
+.year_guide .project_all .project_list .sc_project ul li:first-child{border-left:none;}
+
+
+/* month_guide ************************************************************************************/
+.month_guide{}
+.month_guide .week_tit{ font-size: 0; border:1px solid #ddd; border-radius: 8px 8px 0 0;}
+.month_guide .week_tit li{ display: inline-block; width: calc(100% / 7.01); font-size: 15px; border-left:1px solid #ddd; text-align: center; line-height: 53px; font-weight: 500;}
+.month_guide .week_tit li:last-child{color: #0860aa;}
+.month_guide .day_all{}
+.month_guide .day_all ul{font-size: 0;border:1px solid #ddd; border-top: none; position:relative;}
+.month_guide .day_all ul li{display: inline-block; width: calc(100% / 7.01); font-size: 13px; border-left:1px solid #ddd; min-height: 105px; height:100%; vertical-align: top; padding: 10px;}
+.month_guide .day_all ul li > span{ display: inline-block; width: 25px; line-height: 25px; text-align: center;}
+.month_guide .day_all ul li:first-child{border-left:none;}
+.month_guide .day_all ul li:first-child > span,
+.month_guide .day_all ul li:first-child > span > a{color: #ff1446;}
+.month_guide .day_all ul li:last-child > span,
+.month_guide .day_all ul li:last-child > span > a{color: #0860aa;}
+
+.month_guide .day_all ul li .holiday,
+.month_guide .day_all ul li .holiday > a{color: #ff1446;}
+
+.month_guide .day_all ul li .today{ position: relative; color: #fff;}
+.month_guide .day_all ul li .today:before{ position: absolute; display: inline-block; content: ''; width: 25px; height: 25px; left:0px; top: 0px; border-radius: 50%; background: #7063b3; z-index: -1;}
+
+.month_guide .day_all ul li .inactive,
+.month_guide .day_all ul li .inactive > a{color: #ccc !important;}
+
+.month_guide .day_all ul div.process_view{position:absolute; left:0px; top:40px; width:100%;}
+.month_guide .day_all ul div.process_view div.process_unit{min-height:65px; position:relative;}
+.month_guide .day_all ul div.process_view div.process_unit div.sc_view01{position:absolute}
+
+.month_guide .day_all ul div.process_view div.process_start1 {left:0px;}						/*월간일정 일요일 시작*/
+.month_guide .day_all ul div.process_view div.process_start2 {left:calc((100% / 7.01)*1);}	/*월간일정 월요일 시작*/
+.month_guide .day_all ul div.process_view div.process_start3 {left:calc((100% / 7.01)*2);}	/*월간일정 화요일 시작*/
+.month_guide .day_all ul div.process_view div.process_start4 {left:calc((100% / 7.01)*3);}	/*월간일정 수요일 시작*/
+.month_guide .day_all ul div.process_view div.process_start5 {left:calc((100% / 7.01)*4);}	/*월간일정 목요일 시작*/
+.month_guide .day_all ul div.process_view div.process_start6 {left:calc((100% / 7.01)*5);}	/*월간일정 금요일 시작*/
+.month_guide .day_all ul div.process_view div.process_start7 {left:calc((100% / 7.01)*6);}	/*월간일정 토요일 시작*/
+
+.month_guide .day_all ul div.process_view div.process_len1 {width:calc((100% / 7.01)*1);}	/*월간일정 길이 1일*/
+.month_guide .day_all ul div.process_view div.process_len2 {width:calc((100% / 7.01)*2);}	/*월간일정 길이 2일*/
+.month_guide .day_all ul div.process_view div.process_len3 {width:calc((100% / 7.01)*3);}	/*월간일정 길이 3일*/
+.month_guide .day_all ul div.process_view div.process_len4 {width:calc((100% / 7.01)*4);}	/*월간일정 길이 4일*/
+.month_guide .day_all ul div.process_view div.process_len5 {width:calc((100% / 7.01)*5);}	/*월간일정 길이 5일*/
+.month_guide .day_all ul div.process_view div.process_len6 {width:calc((100% / 7.01)*6);}	/*월간일정 길이 6일*/
+.month_guide .day_all ul div.process_view div.process_len7 {width:calc((100% / 7.01)*7);}	/*월간일정 길이 7일*/
+
+
+
+/* week_guide ************************************************************************************/
+.week_guide{}
+.week_guide .week_top{ font-size: 0;}
+.week_guide .week_top > div{display: inline-block; width: 100px; font-size: 14px; text-align: center; height:55px; line-height: 55px; border:1px solid #ddd; border-right:none; border-radius: 8px 0 0 0px; font-weight: 300;}
+.week_guide .week_top > ul{ display: inline-block; width: calc(100% - 100px); vertical-align: top;}
+.week_guide .week_top .day_tit{font-size: 0;border:1px solid #ddd; border-radius: 0px 8px 0 0; }
+.week_guide .week_top .day_tit li{display: inline-block; width: calc(100% / 7.01);font-size: 11px; color: #999; font-weight: 300; text-align: center; padding-top: 8px; height:53px; line-height: 17px;border-left:1px solid #ddd; }
+.week_guide .week_top .day_tit li:first-child{border-left:none; }
+.week_guide .week_top .day_tit li > span{display: block; font-size: 16px; color: #000; font-weight: 500;}
+.week_guide .week_top .day_tit li:first-child > span{color: #ff1446;}
+.week_guide .week_top .day_tit li:last-child > span{color: #0860aa;}
+.week_guide .week_top .day_tit .today{position: relative;}
+.week_guide .week_top .day_tit .today:before{position: absolute; content: ''; display: inline-block; width: 10px; height: 10px; background: #7063b3; border-radius: 50%; right: 10px;}
+
+.week_guide .time_all{}
+.week_guide .time_all .time_list{ border-bottom: 1px dashed #ddd; font-size: 0; padding-top:3px;}
+.week_guide .time_list > div.time_view{display: inline-block; width: 100px; min-height: 60px; padding: 5px 10px; font-size: 12px;}
+.week_guide .time_list > div.time_view > span{display: inline-block; color: #999;}
+.week_guide .time_list > div.process_view{position: relative; display: inline-block; width: calc(100% - 100px); vertical-align: top;}
+
+.week_guide .time_list > div.process_view > ul{ display: inline-block; width:100%; vertical-align: top; padding-bottom:3px; min-height: 60px;}
+.week_guide .time_list > div.process_view > ul > li{ position: absolute; display: inline-block; width: calc(100% / 7.01); font-size: 14px;  padding: 10px; min-height: 60px; vertical-align: top;}
+
+.week_guide .time_list > div.process_view .process_start1 {left:0px;}					/* 일요일 시작 */
+.week_guide .time_list > div.process_view .process_start2 {left:calc((100% / 7.01)*1);}	/* 월요일 시작 */
+.week_guide .time_list > div.process_view .process_start3 {left:calc((100% / 7.01)*2);}	/* 화요일 시작 */
+.week_guide .time_list > div.process_view .process_start4 {left:calc((100% / 7.01)*3);}	/* 수요일 시작 */
+.week_guide .time_list > div.process_view .process_start5 {left:calc((100% / 7.01)*4);}	/* 목요일 시작 */
+.week_guide .time_list > div.process_view .process_start6 {left:calc((100% / 7.01)*5);}	/* 금요일 시작 */
+.week_guide .time_list > div.process_view .process_start7 {left:calc((100% / 7.01)*6);}	/* 토요일 시작 */
+
+.week_guide .time_list > div.process_view .process_len1 {width:calc((100% / 7.01)*1);}	/*주간일정 길이 1일*/
+.week_guide .time_list > div.process_view .process_len2 {width:calc((100% / 7.01)*2);}	/*주간일정 길이 2일*/
+.week_guide .time_list > div.process_view .process_len3 {width:calc((100% / 7.01)*3);}	/*주간일정 길이 3일*/
+.week_guide .time_list > div.process_view .process_len4 {width:calc((100% / 7.01)*4);}	/*주간일정 길이 4일*/
+.week_guide .time_list > div.process_view .process_len5 {width:calc((100% / 7.01)*5);}	/*주간일정 길이 5일*/
+.week_guide .time_list > div.process_view .process_len6 {width:calc((100% / 7.01)*6);}	/*주간일정 길이 6일*/
+.week_guide .time_list > div.process_view .process_len7 {width:calc((100% / 7.01)*7);}	/*주간일정 길이 7일*/
+
+.week_guide .time_all .time_list:hover{background: #f7f7f7;}
+
+
+/* process_guide ************************************************************************************/
+.process_guide{width: 200px; padding: 55px 0 20px 0;}
+.process_guide .title{border-radius: 8px; background: #5c6574; color: #fff; text-align: center; line-height: 55px; padding: 0 20px; margin-bottom: 10px;}
+.process_guide .process_list{border:1px solid #ddd; border-radius: 8px; overflow: hidden;}
+.process_guide .process_list > li{border-top:1px solid #ddd; background: url("../images/icon_plus04.png") 90% 20px no-repeat;}
+.process_guide .process_list > li:first-child{border-top:none;}
+.process_guide .process_list > li.active{color: #fff; background:#0260aa url("../images/icon_minus04.png") 90% 20px no-repeat; }
+.process_guide .process_list > li.active > a{color: #fff !important;}
+.process_guide .process_list > li a{display: block; padding: 15px;}
+.process_guide .process_list > li a:hover,
+.process_guide .process_list > li a:focus{color: #0260aa;}
+.process_guide .process_list ul{background: #f0f3f8; padding: 10px;}
+.process_guide .process_list ul li{ color: #666;}
+.process_guide .process_list ul li a{padding: 5px; font-size: 14px; color: #666; background: url("../images/icon_dot03.png") 5px 14px no-repeat; padding-left: 17px;}
+.process_guide .process_list ul li a.active{color: #0260aa;}
+
+
+
+/* schedule_popup ***********************************************************************/
+
+/* year_popup ***********************************************************************/
+.tatal_period{ margin-bottom: 10px;}
+.tatal_period ul{  font-size: 0;}
+.tatal_period li{display: inline-block; min-width: 50%; height: 8px; background: url("../images/total_line02.png") right center no-repeat;}
+.tatal_period li:first-child{ background: url("../images/total_line01.png") left center no-repeat;}
+
+.bar_start{background: url("../images/total_line01.png") left 20px no-repeat;}
+.bar_middle{background: url("../images/total_line03.png") right 20px no-repeat;}
+.bar_end{background: url("../images/total_line02.png") right 20px no-repeat;}
+
+.sc_project > ul > li{text-align: center; padding: 0;}
+.sc_project > ul > li > div > span {
+    vertical-align: top;
+	display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    z-index: 3;
+    font-size: 13px;
+    color: #fff;
+	cursor:pointer;
+}
+
+
+.sc_start{
+	position: relative;
+	z-index: 1;
+}
+
+.sc_start:before{
+	position: absolute;
+	display: inline-block; 
+	content: ''; 
+	width:10px; 
+	height: 20px; 
+	background: #eeeeee; 
+	right:0; 
+	z-index: -1;
+}
+
+.sc_end{
+	position: relative;
+	z-index: 1;
+}
+
+.sc_end:before{
+	position: absolute;
+	display: inline-block; 
+	content: ''; 
+	width:10px; 
+	height: 20px; 
+	background: #eeeeee; 
+	left: 0px; 
+	z-index: -1;
+}
+
+.dot_inform span{background: #3cc8c9;}
+.dot_now span{background: #ff5271;}
+.dot_past span{background: #888888;}
+.dot_expect span{background: #6e63b2;}
+
+
+
+.sc_txt{
+		position: relative;
+		transform: translateX(0%); 
+		display: inline-block; 
+		padding: 3px 1px;
+		border:1px solid; 
+		background-color: #fff; 
+		font-size: 10px; 
+		color: #777; 
+		margin-top: 10px;
+		width:25px;
+		line-height : 12px;
+	}
+
+.sc_txt:before{position: absolute; display: inline-block; content: ''; width: 10px; height: 7px; top: -7px; left: 50%; transform: translateX(-50%);  z-index: 1; }
+
+.dot_inform .sc_txt{ border-color: #3cc8c9;}
+.dot_inform .sc_txt:before{background: url("../images/sc_arrow01.png") center no-repeat;}
+
+.dot_now .sc_txt{ border-color: #ff5271;}
+.dot_now .sc_txt:before{background: url("../images/sc_arrow03.png") center no-repeat;}
+
+.dot_past .sc_txt{ border-color: #888888;}
+.dot_past .sc_txt:before{background: url("../images/sc_arrow02.png") center no-repeat;}
+
+.dot_expect .sc_txt{ border-color: #6e63b2;}
+.dot_expect .sc_txt:before{background: url("../images/sc_arrow04.png") center no-repeat;}
+
+.bgyes{ padding: 0;}
+.bgyes > div > span{ display: block; background: #eeeeee !important; height:20px; width:100% !important; border-radius: 0% !important;}
+
+/* month_popup ***********************************************************************/
+.sc_view01{  padding: 10px; border-radius: 5px; height: 60px; vertical-align: top;}
+.sc_view01 strong{ display: block; overflow: hidden; white-space: nowrap;text-overflow: ellipsis; font-size:15px;}
+.sc_view01 span{ display: block; overflow: hidden; white-space: nowrap;text-overflow: ellipsis; font-size: 13px; color: #666;}
+
+.view_inform{ border-left: 5px solid #3cc8c9; background: #e5fefe;}
+.view_now{border-left: 5px solid #ff5271; background: #fdedf0;}
+.view_past{border-left: 5px solid #888888; background: #f3f3f3;}
+.view_expect{border-left: 5px solid #6e63b2; background: #ebe8f9;}
+
+
+
+

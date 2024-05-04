@@ -1,0 +1,68 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: #3498db;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    width: 90%; /* 모바일 화면 너비에 따라 조정됨 */
+    max-width: 400px; /* 최대 너비 설정 */
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 1.5em;
+    color: #525252;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: calc(100% - 16px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.button {
+    background: #2ecc71;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    font-weight: 800;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.button:hover {
+    background: #2cc06b;
+}
+
+.fpwd {
+    color: #f1c40f;
+    text-decoration: underline;
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+
+/* 모바일 화면에서 컨테이너를 중앙 정렬 */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+}

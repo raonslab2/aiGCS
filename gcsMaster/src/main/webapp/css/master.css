@@ -1,0 +1,108 @@
+#page-container 
+{
+	//clear:both;
+	overflow: hidden;
+width: 100%;
+height:100%;
+position: relative;
+margin: auto;
+<!-- is the same as the left and right adaptive distances on both sides - centered, -->
+>
+margin: auto;
+background: red;
+	text-align: center;
+}
+
+html,body 
+{
+ <!--There is a gap between the box and the top of the browser. Due to the browser's default padding and boundaries. Eliminate voids -->
+margin: auto;
+height:100%;
+width:100%;
+font-family:Sans-serif;
+font-size: 16px;
+color: #666666;
+background: #ffffff;
+
+}
+ <!--Add a class, you can make any element on the page belonging to the hidden class (element) not displayed -->
+.hidden {display: none;}
+
+#main-nav 
+{
+background: khaki;
+ /*position:absolute; will cause the main-nav height to not match */
+height:20%;
+width:100%;
+ Border-style: dotted;/* dotted line*/
+overflow: hidden;
+}
+
+#multi
+{
+background: black;
+height:60%;
+width:100%;
+float:auto;
+ Font-family: "black body";
+text-decoration: underline; 
+}
+
+#content 
+{
+background:cyan ;
+clear: both;
+height:100%;
+width:20%;
+float:left;
+ Font-family: "black body";
+text-decoration: underline; 
+border-style:none;
+}
+
+#footer 
+{
+background: green;
+width:80%;
+	height:100%;
+float:right;
+} 
+
+
+#desk
+{
+clear: both;
+margin:auto;
+background: pink;
+width:100%;
+height:20%;
+} 
+#shelf
+{
+background: yellow;
+float:left;
+width:60%;
+height:80%;
+//border-style:solid;
+} 
+
+#block
+{
+clear: both;
+background: lavender ;
+float:right;
+width:40%;
+height:80%;
+//border-style:solid;
+} 
+
+
+#sidebar-a 
+{
+clear:both;
+background: tomato;
+height:20%;
+text-decoration: underline; 
+ Font-family: "Chinese New Wei";
+ Border-style:dashed; /*dashed line*/
+}

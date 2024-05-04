@@ -1,0 +1,682 @@
+/* 변수 정의 */
+:root {
+    --background-color: #f8f8f8; /* 더 연한 회색 */
+    --border-color: #f2f2f2; /* 더 연한 테두리 색상 */
+    --border-radius: 10px;
+    --spacing: 10px;
+}
+
+/* 컨테이너 설정 */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: calc(100% - 50px);
+}
+
+.container-left {
+    max-width: 600px;
+}
+
+.container-middle {
+    flex: 1; /* 남은 공간을 동일하게 나눠가짐 */
+}
+
+.container-right {
+    width: 450px; /* 폭을 400px로 설정합니다. */
+}
+
+
+.container-left, .container-middle, .container-right {
+    margin: var(--spacing);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+
+
+/* 섹션 너비 조정 및 간격 설정 */
+.container-left, .container-middle, .container-right { 
+    margin: var(--spacing);
+    border: 2px solid var(--border-color); /* 테두리 색상 변경 */
+    border-radius: var(--border-radius);
+}
+
+
+
+/* 서비스 박스 스타일 */
+.top-service, .bottom-service, .service {
+    margin: var(--spacing) 0;
+    padding: var(--spacing);
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.task-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-radius: var(--border-radius);
+    overflow: hidden; 
+}
+
+.task-table tr {
+    vertical-align: top; /* 위로 정렬 */
+}
+
+.task-table tbody tr {
+    height: 25px; /* 원하는 높이로 설정 */
+    vertical-align: top; /* 위쪽 정렬 */
+}
+ 
+
+.task-table tbody td {
+    padding: var(--spacing);
+    height: auto; /* td의 높이 자동으로 설정 */
+    border-bottom: 1px solid var(--border-color); /* 테두리 색상 변경 */
+}
+
+.task-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.task-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* 짝수 번째 행의 배경색 변경 */
+}
+
+.task-table tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* 홀수 번째 행의 배경색 변경 */
+}
+
+.task-table tbody tr:hover {
+    background-color: #e6e6e6; /* 마우스 호버시 배경색 변경 */
+}
+
+
+/* 공통 스타일 */
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-form .input-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1; /* 입력 그룹이 가능한 최대 공간을 차지할 수 있도록 확장 */
+}
+
+.search-form .title {
+    margin-right: 10px;
+}
+
+/* 입력 필드 스타일 */
+.search-form input[type="date"],
+.search-form button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* 구분 기호 스타일 */
+.search-form .separator {
+    margin: 0 5px;
+}
+
+/* 검색 버튼 스타일 */
+.search-form button.search-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* 검색 버튼 호버 효과 */
+.search-form button.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* 서비스 3 영역 스타일 */
+.container-middle .service {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* 자주 사용하는 메뉴 스타일 */
+.container-middle .service .topTitle {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.container-middle .service .topTitle button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.container-middle .service .topTitle button:hover {
+    background-color: #0056b3;
+}
+
+/* 폼 요소 스타일 */
+.container-middle .service form .form-row {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container-middle .service form .input-data {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.container-middle .service form .input-data:last-child {
+    margin-right: 0;
+}
+
+.container-middle .service form .input-data select,
+.container-middle .service form .input-data input[type="text"],
+.container-middle .service form .input-data input[type="date"],
+.container-middle .service form .input-data textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.container-middle .service form .input-data select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23007bff' d='M256 0C114.617 0 0 114.615 0 256c0 141.382 114.615 256 256 256 141.383 0 256-114.618 256-256C512 114.615 397.383 0 256 0zm0 480c-123.71 0-224-100.289-224-224S132.29 32 256 32s224 100.289 224 224-100.29 224-224 224zm0-192c-8.836 0-16-7.163-16-16V112c0-8.837 7.164-16 16-16s16 7.163 16 16v160c0 8.837-7.164 16-16 16z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: 12px;
+    background-position: calc(100% - 10px) center;
+    background-repeat: no-repeat;
+    padding-right: 30px;
+}
+
+.container-middle .service form .input-data textarea {
+    height: 100px;
+}
+
+.container-middle .service form .input-data label {
+    position: absolute;
+    bottom: 10px;
+    left: 8px;
+    font-size: 14px;
+    color: #555;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.container-middle .service form .input-data input:focus + label,
+.container-middle .service form .input-data textarea:focus + label,
+.container-middle .service form .input-data select:focus + label,
+.container-middle .service form .input-data input:valid + label,
+.container-middle .service form .input-data textarea:valid + label,
+.container-middle .service form .input-data select:valid + label {
+    bottom: 26px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+.container-middle .service form .input-data .underline {
+    position: relative;
+    width: 100%;
+}
+
+.container-middle .service form .input-data .underline:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #007bff;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.container-middle .service form .input-data input:focus ~ .underline:before,
+.container-middle .service form .input-data textarea:focus ~ .underline:before,
+.container-middle .service form .input-data select:focus ~ .underline:before,
+.container-middle .service form .input-data input:valid ~ .underline:before,
+.container-middle .service form .input-data textarea:valid ~ .underline:before,
+.container-middle .service form .input-data select:valid ~ .underline:before {
+    transform: scaleX(1);
+}
+
+/* 서비스 3 영역 스타일 */
+.service3 {
+    margin-top: 0px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.service3 h2 {
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+
+.service3 p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0px;
+}
+
+.title {
+    display: inline-block;
+    width: 100px; /* 원하는 폭으로 조정하세요 */
+    margin-right: 10px; /* 각 제목 사이의 간격을 조정합니다 */
+    font-weight: bold;
+}
+ 
+#twContent {
+    height: 450px; /* 원하는 높이로 설정하세요 */
+}
+
+textarea[readonly] {
+    width: 100%;
+    height: 450px; /* 높이를 원하는 값으로 조정하세요 */
+    border: 1px solid #ccc; /* 연한 회색 테두리 */
+    resize: none;
+}
+
+textarea[readonly]:focus {
+    border: 1px solid #ccc; /* 연한 회색 테두리 */
+    outline: none; /* 클릭된 상태일 때의 외곽선 제거 */
+}
+
+
+.attachment-list {
+    margin-top: 10px;
+}
+
+/* 선택 목록 스타일 */
+#pageUnit {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination li {
+    margin: 0 3px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    font-size: 12px;
+}
+
+.pagination li a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    color: #ccc;
+}
+
+.pagination li a img {
+    width: 10px;
+    height: 10px;
+}
+
+
+.resultList {
+    height: 250px;
+    overflow-y: auto; /* 필요한 경우 수직 스크롤을 표시 */
+}
+
+#resultList tr:hover {
+    background-color: #f0f0f0; /* 마우스 호버 시 배경색 변경 */
+    cursor: pointer; /* 마우스 포인터 모양 변경 */
+}
+
+#resultList tr.selected {
+    background-color: #f0f0f0; /* 선택된 상태의 배경색 */
+}
+
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f0f0f0; /* 대화창 배경색 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+ 
+
+/* 수정된 코드 */
+.message.received {
+    background-color: #ffffff; /* 하얀색 배경 */
+    border: 1px solid #e0e0e0; /* 살짝 회색 테두리 */
+    border-radius: 20px; /* 테두리의 모서리를 더 둥글게 만듦 */
+    /* 그 외에 필요한 스타일링 속성 추가 */
+}
+
+.message.received, .message.sent {
+    padding: 10px; /* 패딩 값을 10px로 설정 */
+    font-size: 12px; /* 폰트 크기를 14px로 설정 */
+}
+
+.message.sent {
+    margin-bottom: 5px; /* 메시지 간 간격을 더 벌립니다. */
+    text-align: right; /* 텍스트를 우측으로 정렬 */
+    padding: 2px;
+    border-radius: 20px; /* 테두리의 모서리를 더 둥글게 만듦 */
+    max-width: 80%; /* 최대 너비 설정 */
+    min-width: 100px; /* 최소 너비 설정 */
+    background-color: #dcf8c6; /* WhatsApp의 배경색 */
+    color: #075e54; /* WhatsApp의 텍스트 색상 */
+    border: 1px solid #dcf8c6; /* WhatsApp의 테두리 색상과 동일하게 설정 */
+}
+ 
+
+ 
+
+
+.message-text,
+.message-time {
+    border: 0px solid #e0e0e0; /* 살짝 회색 테두리 */
+    border-radius: 5px; /* 테두리의 둥근 정도 지정 */
+    padding: 1px 8px; /* 내부 여백 조정 */
+    margin: 2px 0; /* 위쪽과 아래쪽 여백 조정 */
+}
+
+
+
+
+
+
+.chat-box {
+    width: 100%; /* 너비를 화면의 100%로 설정 */
+    height: 50vh; /* 높이를 화면의 70%로 설정 */
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff; /* 입력상자 배경색 */
+    border-top: 1px solid #ccc;
+}
+
+.input-box input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f2f5; /* 입력상자 배경색 */
+}
+
+.input-box button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #25d366; /* WhatsApp 초록색 */
+    color: #fff;
+    cursor: pointer;
+}
+
+.message {
+    margin-bottom: 5px;
+}
+
+
+
+.received {
+    background-color: #dcf8c6; /* 받은 메시지 배경색 */
+    border-radius: 20px 20px 20px 0;
+    margin-right: 30%;
+    float: left;
+}
+
+.sent {
+    background-color: #fff; /* 보낸 메시지 배경색 */
+    border-radius: 20px 20px 0 20px;
+    margin-left: 30%;
+    padding:20px;
+    float: right;
+}
+
+.message-time {
+    font-size: 10px;
+    color: #999;
+    margin-top: 2px;
+}
+
+/* 미디어 쿼리를 사용하여 화면 너비에 따라 채팅 박스의 최대 너비 조정 */
+@media (max-width: 768px) {
+    .chat-container {
+        max-width: 100%;
+        border-radius: 0;
+    }
+
+    .input-box {
+        border-radius: 0;
+    }
+}
+
+/* 스크롤바 스타일링 */
+.chat-box {
+    overflow-y: auto; /* 세로 스크롤바 표시 */
+    scrollbar-width: thin; /* 스크롤바 너비 설정 */
+}
+
+/* 스크롤바 트랙 스타일링 */
+.chat-box::-webkit-scrollbar {
+    width: 2px; /* 스크롤바 너비 */
+}
+
+/* 스크롤바 핸들(쓰개) 스타일링 */
+.chat-box::-webkit-scrollbar-thumb {
+    width: 2px; /* 스크롤바 너비 */
+    background-color: rgba(0, 0, 0, 0.3); /* 스크롤바 색상 */
+    border-radius: 3px; /* 스크롤바 쓰개 모양 */
+}
+
+/* 마우스 오버시 스크롤바 핸들 스타일링 */
+.chat-box::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* 스크롤바 색상 변경 */
+}
+
+.activiti {
+    background-color: rgba(0, 0, 255, 0.1) !important; /* 일반적인 선택 배경색으로 설정 */
+}
+
+.container-middleTitle {
+    font-size: 24px; /* 원하는 크기로 설정 */
+}
+
+
+
+#todayList th {
+    height: 50px; /* 높이를 원하는 값으로 설정 */
+    text-align: center; /* 가운데 정렬을 원하는 경우 */
+    background-color: #F5F5F5; /* 배경색을 연한 회색으로 설정 */
+    color: black; /* 텍스트 색상을 검정색으로 설정 */
+    line-height: 50px; /* 텍스트의 높이와 일치하도록 line-height 설정 */
+}
+
+    .attachment-list {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .attachment-list h2 {
+        margin-bottom: 10px;
+    }
+
+    .attachment-list ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .attachment-list li {
+        margin-bottom: 10px; /* 각 li 요소의 하단 간격 */
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .attachment-list span {
+        display: block;
+        height: 50px; /* 각 span 요소의 높이 */
+        line-height: 50px; /* 텍스트 수직 가운데 정렬 */
+        background-color: #f5f5f5;
+        color: #333;
+        padding: 10px;
+    }
+
+    .middleRaw {
+        margin-bottom: 10px; /* 각 <p> 요소 사이의 간격을 10px로 설정 */
+    }
+
+    .twStatus {
+        padding: 8px; /* 내부 여백 설정 */
+        font-size: 14px; /* 글꼴 크기 설정 */
+        border: 1px solid #ccc; /* 테두리 설정 */
+        border-radius: 4px; /* 테두리의 둥근 정도 설정 */
+        background-color: #f8f8f8; /* 배경색 설정 */
+    }
+    
+.complete-button {
+    padding: 10px 20px; /* 내부 여백 설정 */
+    font-size: 16px; /* 글꼴 크기 설정 */
+    border: none; /* 테두리 없음 */
+    border-radius: 4px; /* 테두리의 둥근 정도 설정 */
+    background-color: #a0a0a0; /* 연한 녹색 배경색 설정 */
+    color: white; /* 텍스트 색상 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 설정하여 클릭 가능한 상태로 변경 */
+    transition: background-color 0.3s; /* 배경색 전환 효과 추가 */
+}
+
+/* 호버 상태에서 배경색 변경 */
+.complete-button:hover {
+    background-color: #737373; /* 조금 더 어두운 회색으로 변경 */
+}
+
+
+
+    
+.container-middle-state {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+    /* 호버 상태에서 배경색 변경 */
+    .complete-button:hover {
+        background-color: #6aa96a; /* 더 연한 녹색으로 변경 */
+    }
+    
+.message-window {
+    height: 400px; /* 화면 높이에서 message-input의 높이(50px)를 뺀 값으로 설정합니다. */
+    width: 100%;
+    background-color: #f5f5f5;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative; /* 부모 요소인 chat-window를 기준으로 위치를 설정합니다. */
+}
+
+/* 스크롤 디자인 */
+.message-window::-webkit-scrollbar {
+    width: 2px; /* 스크롤바 너비 조정 */
+}
+
+.message-window::-webkit-scrollbar-thumb {
+    background-color: #888; /* 스크롤바 색상 */
+    border-radius: 8px; /* 스크롤바 둥근 모서리 설정 */
+}
+
+.message-window::-webkit-scrollbar-track {
+    background-color: #f5f5f5; /* 스크롤바 트랙 배경색 */
+}
+
+.message-window::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* 스크롤바 hover 시 색상 */
+}
+
+
+
+.message-input {
+    position: absolute; /* 부모 요소인 message-window를 기준으로 절대적인 위치를 설정합니다. */
+    /* bottom: 0; */ /* 부모 요소의 하단에 위치하도록 설정합니다. */ 
+    padding: 10px;
+    width:400;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-radius: 8px;
+    z-index: 1000;
+    display: flex; /* flex 컨테이너로 설정하여 자식 요소를 수평으로 정렬합니다 */
+    
+}
+
+.message-input input[type="text"] {
+   flex: 1; /* 버튼을 제외한 나머지 공간을 모두 차지하도록 설정 */
+    padding: 8px;
+    width:90%;
+    margin-right: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.message-input button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

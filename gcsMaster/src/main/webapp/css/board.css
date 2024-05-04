@@ -1,0 +1,272 @@
+@charset "utf-8";
+
+/* input_style ************************************************************************************/
+.input_style01{border-right:none; border-radius: 5px 0 0 5px !important;}
+.input_style02{border-left:none; border-radius:0 5px 5px 0 !important;}
+
+/* search ************************************************************************************/
+.search_box01{position: relative; text-align: center; margin-bottom: 30px;}
+.search_box01 select{display: inline-block; margin:0 10px; font-size: 15px !important;}
+.search_box01 > span{display: inline-block;font-size: 15px;}
+.search_box01 button{display: inline-block;font-size: 15px;}
+.search_box01 button > span{ font-size: 10px; margin-left:10px; line-height: 33px; vertical-align: top;}
+
+/*.search_box02{ display: block; position: absolute; width:100%;  margin-top: 20px; background: #f3f7fb; border: 1px solid #c3d9ef; border-radius: 10px; padding: 25px;}*/
+.search_box02{ display: block; width:100%;  margin-top: 20px; background: #f3f7fb; border: 1px solid #c3d9ef; border-radius: 10px; padding: 25px;}
+.search_box02 ul{font-size: 0;}
+.search_box02 ul li{display: inline-block; font-size: 15px; margin-left: 20px; text-align: left;}
+.search_box02 ul li:first-child{margin-left:0px;}
+.search_box02 span{ display: inline-block; padding-right: 10px;color: #0259aa;}
+
+.search_box03{display: inline-block !important; border-radius:5px; border:1px solid #ddd; background: #fff;}
+.search_box03 > input[type=text]{display: inline-block; border: none !important; height: 33px !important; width: calc(100% - 40px) !important;}
+.search_box03 > button{display: inline-block; border: none !important; height: 33px !important; width: 33px; overflow: hidden; text-indent: -5000px;}
+
+
+/* 기간설정 */
+.period{display: inline-block; background:  url("../images/period_bg.png") left bottom repeat-x; vertical-align: middle; font-size: 0; margin-left: 5px;text-align: center; overflow: hidden;border-radius: 5px;}
+.period a{ display: inline-block; width: 40px; height: 35px;line-height: 35px; font-size: 13px; border: 1px solid #ddd; border-left:none; }
+.period a:first-child{border-left:1px solid #ddd; border-radius: 5px 0 0 5px; }
+.period a:last-child{border-radius:0 5px 5px 0; }
+.period a:hover,
+.period a:focus{color: #0259aa;}
+.period a.active{ background: #545454; color: #fff; border-color: #545454;}
+
+/* 사업관리 오른쪽영역 */
+.business_right{ position: fixed; right: 40px; top:70px;}
+
+/* bbs_list ************************************************************************************/
+.bbs_list{ margin: 10px 0 30px 0;}
+.bbs_list table{  width: 100%; text-align: center; font-size: 15px;border-top: 1px solid #8b91a2;}
+.bbs_list table th{ background: #8b91a2; color: #fff; font-size: 14px; padding: 10px; border-left: 1px solid #a2a7b5;}
+.bbs_list table tbody th{ background: #e7e9f0; color: #565e75; border-bottom:1px solid #dbdee6; border-left: 1px solid #dbdee6; text-align: left; padding-left: 20px;}
+.bbs_list table thead th{  white-space: nowrap;}
+.bbs_list table td{ padding: 10px 0.5%; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd; font-weight:300;}
+.bbs_list table th:first-child, .bbs_list table td:first-child{border-left: none;}
+.bbs_list .text_l{ text-align: left; padding: 10px;}
+.bbs_list .table_l td{ text-align: left; padding: 10px;}
+.bbs_list table tr:hover{ background: #f5f5f5;}
+.bbs_list table .th_line{border-left: 1px solid #dbdee6 !important;}
+
+.bbs_list table tr.over{ background: #f5f5f5;}
+
+/* bbs_list2 ************************************************************************************/
+.bbs_list2{ margin: 10px 0 30px 0;}
+.bbs_list2 table{  width: 100%; text-align: center; font-size: 15px;border-top: 1px solid #8b91a2;}
+.bbs_list2 table th{ background: #8b91a2; color: #fff; font-size: 14px; padding: 10px; border-left: 1px solid #a2a7b5;}
+.bbs_list2 table tbody th{ background: #e7e9f0; color: #565e75; border-bottom:1px solid #dbdee6; border-left: 1px solid #dbdee6; text-align: left; padding-left: 20px;}
+.bbs_list2 table thead th{  white-space: nowrap;}
+.bbs_list2 table td{ padding: 10px 0.5%; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd; font-weight:300;}
+.bbs_list2 table th:first-child, .bbs_list table td:first-child{border-left: none;}
+.bbs_list2 .text_l{ text-align: left; padding: 10px;}
+.bbs_list2 .table_l td{ text-align: left; padding: 10px;}
+.bbs_list2 table tr:hover{ background: #f5f5f5;height:50px;;}
+.bbs_list2 table .th_line{border-left: 1px solid #dbdee6 !important;}
+
+.bbs_list2 table tr.over{ background: #f5f5f5;}
+
+
+/* bbs_write01 ************************************************************************************/
+.bbs_write01{}
+.bbs_write01 > ul{font-size: 0;}
+.bbs_write01 > ul > li{ padding: 8px 0.5%; border-bottom: 1px solid #eee; font-size: 15px; vertical-align: top;}
+.bbs_write01 li > span{ display: block; font-size: 13px; color: #999999; margin-bottom: 10px;}
+.bbs_write01 li > span.notice{background: url("../images/icon_notice02.png") left no-repeat; padding-left: 35px; cursor:pointer;}
+.bbs_write01 li > .date{font-size: 13px; color: #999999; margin-left:10px; margin-bottom: 10px;}
+.bbs_write01 .w40p{ display: inline-block; width: 40%;}
+.bbs_write01 .w50p{ display: inline-block; width: 50%;}
+.bbs_write01 .w60p{ display: inline-block; width: 60%;}
+.bbs_write01 .tl_line{border-left: 1px solid #eee;}
+.bbs_write01 .tlink_info{color: #666; }
+.bbs_write01 .tlink_info_tit{border-bottom: 1px solid #ddd; background: #e7e9f0; border-top: 1px solid #ddd;vertical-align: middle; font-weight: 500; padding: 10px 20px; margin-bottom: 10px;}
+.bbs_write01 .tlink_info_tit > span{display: inline-block; width: 25px; height: 25px; background: #8b91a2 url("../images/arrow05.png") center no-repeat; border-radius: 50%; margin: 0 10px; vertical-align: middle;}
+
+.line_no > li{ border-bottom: none !important;}
+
+.bbs_write01 li > .add{ display: block; width:100%;  margin-top: 10px; background: #f3f7fb; border: 1px solid #c3d9ef; border-radius: 10px; padding: 10px;}
+.bbs_write01 li > .add div{text-align:center;}
+.bbs_write01 li > .add ul{font-size: 0;}
+.bbs_write01 li > .add ul li{display: inline-block; font-size: 15px; margin-left: 20px; text-align: left;}
+.bbs_write01 li > .add ul li:first-child{margin-left:0px;}
+.bbs_write01 li > .add span{ display: inline-block; padding-right: 10px;color: #0259aa;}
+
+.bbs_write01 li > .inputDiv{ display: block; width:100%;}
+.bbs_write01 li > .inputDiv div{text-align:center;}
+.bbs_write01 li > .inputDiv ul{font-size: 0;}
+.bbs_write01 li > .inputDiv ul li{display: inline-block; font-size: 15px; margin-left: 20px; text-align: left; width:45%;}
+.bbs_write01 li > .inputDiv ul li:first-child{margin-left:0px; width:50%;}
+.bbs_write01 li > .inputDiv span{ display: block; font-size: 13px; color: #999999; margin-bottom: 10px;}
+
+
+/* t_link ************************************************************************************/
+.tlink_guide{font-size: 0}
+.tlink_guide > div{display: inline-block; width: 25%; vertical-align: top; font-size: 15px; padding: 0 10px;}
+.tlink_guide h4{ position: relative; background: #eaedf3; border-radius: 5px; padding: 10px 20px; margin-bottom: 10px;}
+.tlink_guide h4 > span{ position: absolute; right: 10px; top: 12px; }
+.tlink_guide h4 > span > a{display: inline-block; width: 20px; height: 20px; font-size: 13px; border-radius: 3px; background: #1e329c url("../images/icon_plus01.png") center no-repeat;overflow: hidden; text-indent: -5000px;}
+.tlink_guide .data_info{ position: relative; border-radius: 5px; border:1px solid #ddd; padding: 20px; margin-bottom: 10px;}
+.tlink_guide .data_info > li{ padding-bottom: 5px; color: #666; background: url("../images/arrow04.png") 5px 9px no-repeat; padding-left: 15px;}
+.tlink_guide .data_info > li:first-child{ font-size: 17px; color: #0259aa; font-weight:500; background: none; padding-left: 0; padding-bottom: 10px;}
+.tlink_guide .data_info > li:first-child > a{color: #0259aa;}
+.tlink_guide .data_info > li:first-child button{ display: inline-block; float: right; background: url("../images/icon_menu01.png") right center no-repeat; width: 25px; height: 25px; vertical-align: top;  overflow: hidden; text-indent: -5000px;}
+.tlink_guide .data_info > li:first-child:after{ clear: both; display: block; content: '';}
+.tlink_guide .data_info > .date{color: #000; font-weight:500;}
+.tlink_guide .data_info ul{ background: #f5f5f5; padding: 10px;font-size: 14px;}
+.tlink_guide .data_info li > ul > li{background: url("../images/icon_dot02.png") 5px 9px no-repeat; padding-left: 15px;}
+.tlink_guide .data_info .bgnone{background: none; padding-left: 0;}
+.tlink_guide .data_info .file{background: url("../images/icon_file01.png") left 5px no-repeat; padding-left: 15px; display: inline-block; padding-right: 20px;}
+.file{background: url("../images/icon_file01.png") left 5px no-repeat; padding-left: 15px; display: inline-block; padding-right: 20px; font-size: 14px;}
+
+
+/* tree style ************************************************************************************/
+.tree_guide{}
+.tree_guide .btn_guide{ /* background-color: #4d556d; background-image: linear-gradient(to bottom right, #4d556d , #9aa1b7); padding: 20px;*/}
+.tree_guide .btn_guide:after{ clear: both; display: block; content:'';}
+
+.tree_style01{ background: #f8f8f8; padding: 20px;}
+.tree_style01 ul{}
+.tree_style01 ul > li{ font-size: 15px;}
+.tree_style01 ul > li > span{ display: block; border:1px solid #e5e5e5; background-color: #fff; background-position: 20px 12px; background-repeat: no-repeat; padding: 10px; padding-left: 50px; border-radius: 5px; margin: 3px 0;}
+.tree_style01 ul > li span:hover{background-color: #eaeaea; }
+.tree_style01 .on{ background-image: url("../images/tree_on.png");}
+.tree_style01 .off{background-image: url("../images/tree_off.png");}
+
+.tree_style01 ul > li > ul{ padding-left: 50px;padding-bottom: 5px; font-size: 14px;}
+.tree_style01 ul > li > ul > li{position: relative; vertical-align: top;}
+.tree_style01 ul > li > ul > li > span{ display: block; border:1px solid #e5e5e5;  background: #fff url("../images/arrow02.png") 20px 17px no-repeat; padding: 10px; padding-left: 30px; border-radius: 5px;}
+.tree_style01 ul > li > ul > li:before{ position: absolute; display: inline-block; content: ''; width: 30px; height:55px; left: -30px; top: -3px; background: url("../images/tree_line01.png") left center no-repeat;}
+.tree_style01 ul > li > ul > li:last-of-type:before{ position: absolute; display: inline-block; content: ''; width: 30px; height:55px; left: -30px; top: -3px; background: url("../images/tree_line02.png") left center no-repeat;}
+
+
+.tree_guide .tree_style02{ margin: 10px 0; padding: 30px;}
+.tree_style02 ul > li > span{ display: inline-block; width:calc(100% - 42px); border-radius: 5px 0 0 5px;vertical-align: middle;}
+.tree_style02 ul > li > span > em{display: inline-block; font-style: normal; font-size: 15px; float: right;}
+.tree_style02 ul > li > span:after{clear: both; display: block; content:'';}
+.tree_style02 ul > li button{display: inline-block; width: 42px; height: 44px; vertical-align: middle; overflow: hidden; text-indent: -5000px;}
+.tree_style02 ul > li > button.plus{background: #c0c4cf url("../images/icon_plus01.png") center no-repeat; border-radius: 0 5px 5px 0;}
+.tree_style02 ul > li a.move{display: inline-block; width: 42px; height: 44px; vertical-align: middle; overflow: hidden; text-indent: -5000px; background: #e5e5e5 url("../images/icon_move01.png") center no-repeat; border-radius: 2px; margin-left: 6px;}
+
+.tree_style02 ul > li > ul > li > span{  display: inline-block; width:100%; line-height: 22px;vertical-align: middle;}
+
+.tree_style03 ul > li > span{ display: inline-block; width:calc(100% - 90px); border-radius: 5px 0 0 5px;vertical-align: middle;}
+.tree_style03 ul > li > ul > li > span{  display: inline-block; width:calc(100% - 48px); line-height: 22px;vertical-align: middle;}
+
+
+
+
+
+/* bbs_calender01 ************************************************************************************/
+.calender_guide{ position: relative; margin-top: 30px;}
+.calender_guide .tit_date{font-size: 18px; font-weight: 500;}
+.calender_guide .tit_date > span{display: inline-block; font-size: 13px;font-weight: 300; padding: 3px 10px; border-radius: 20px; border:1px solid #ddd; margin-right: 20px; background: #f5f5f5;}
+.calender_guide .tit_date button{ margin: 0 5px;}
+.calender_guide .sort{font-size: 0; position: absolute; top:10px; right: 0;}
+.calender_guide .sort li{display: inline-block; padding-left: 10px; font-size: 13px;}
+
+.calender_guide2{ position: relative; margin-top: 0px;}
+.calender_guide2 .tit_date{font-size: 18px; font-weight: 500;}
+.calender_guide2 .tit_date > span{display: inline-block; font-size: 13px;font-weight: 300; padding: 3px 10px; border-radius: 20px; border:1px solid #ddd; margin-right: 20px; background: #f5f5f5;}
+.calender_guide2 .tit_date button{ margin: 0 5px;}
+.calender_guide2 .sort{font-size: 0; position: absolute; top:10px; right: 0;}
+.calender_guide2 .sort li{display: inline-block; padding-left: 10px; font-size: 13px;}
+
+.dot{ display: inline-block; width: 12px; height: 12px; border-radius: 50%; overflow: hidden; text-indent: -5000px;}
+.possible{ background: #fe5373;}
+.wait{background: #3fc7c7;}
+.impossible{background: #888888;}
+.text_possible{ color: #fe5373; text-align: center;}
+.text_impossible{ color: #888888; text-align: center;}
+
+.bbs_calender01{ font-size: 0; margin-top: 20px;}
+
+.bbs_calender01 .calender_top{ font-size: 0;}
+.bbs_calender01 .calender_top > div{display: inline-block; width: 190px; margin-right: 10px; font-size: 14px; text-align: center; height:65px; line-height: 65px; border:1px solid #ddd; border-radius: 8px; font-weight: 300;}
+.bbs_calender01 .calender_top > ul{ display: inline-block; width: calc(100% - 200px); vertical-align: top;}
+
+.bbs_calender02{ font-size: 0; margin-top: 1px;}
+
+.bbs_calender02 .calender_top{ font-size: 0;}
+.bbs_calender02 .calender_top > div{display: inline-block; width: 190px; margin-right: 10px; font-size: 14px; text-align: center; height:65px; line-height: 65px; border:1px solid #ddd; border-radius: 8px; font-weight: 300;}
+.bbs_calender02 .calender_top > ul{ display: inline-block; width: calc(100% - 200px); vertical-align: top;}
+
+
+.calender_top .day_tit{height:65px;font-size: 0;border:1px solid #ddd; border-radius: 8px 8px 0 0; }
+.calender_top .day_tit li{display: inline-block; width: calc(100% / 7.01); font-size: 17px; font-weight: 500; text-align: center; padding: 10px 0;border-left:1px solid #ddd; }
+.calender_top .day_tit li:first-child{border-left:none; }
+.calender_top .day_tit li > span{display: block;font-size: 12px; color: #999;}
+
+
+.bbs_calender01 .calender_all{}
+.bbs_calender01 .calender_list > div{display: inline-block; width: 190px; margin-right: 10px; font-size: 15px; text-align: center;}
+.bbs_calender01 .calender_list > div{height:95px; padding: 5px 0;}
+.bbs_calender01 .calender_list > div > strong{ position: relative;  display:block; height: 100%; background:#f4f8fb; border-left: 5px solid #69abe5; border-radius: 4px 8px 8px 4px;}
+.bbs_calender01 .calender_list > div > strong > span{display:block; width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #555555;}
+
+.bbs_calender01 .calender_list > ul{ display: inline-block; width: calc(100% - 200px); vertical-align: top;border:1px solid #ddd; border-top: none;}
+.bbs_calender01 .calender_list > ul > li{ position: relative; display: inline-block; width: calc(100% / 7.01); font-size: 13px;  border-left:1px solid #ddd; padding: 10px; height:95px; vertical-align: top;}
+.bbs_calender01 .calender_list > ul > li:first-child{border-left:none;}
+.bbs_calender01 .calender_list > ul > li > ul{border:none; cursor: pointer;}
+.bbs_calender01 .calender_list > ul > li > ul > li{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+
+/* 게시판 페이지링 ************************************************************************************/
+.bbs_page{text-align:center; font-size:0px; display:table; width:100%;}
+.bbs_page *{ box-sizing:border-box;}
+.bbs_page ul{ display:inline-block; vertical-align:top;}
+.bbs_page ul li{display:inline-block; width:35px; height:35px;line-height:35px; border-radius: 50%; overflow: hidden; background:#e9ebf1; box-shadow: 0 0 3px #ccc; font-size:13px; margin:0 2px; vertical-align:top;}
+.bbs_page a{display:block; padding:0px; width:35px;line-height:35px; text-align:center;}
+.bbs_page a:hover, .bbs_page a:focus{background:#d3d7e2;}
+.bbs_page a img{line-height:35px; margin-top:-5px; vertical-align:middle;}
+.bbs_page .active{font-weight:bold; line-height:35px; color:#fff; background:#4d556d; box-shadow: 0 0 3px #ccc; width:35px; text-align:center; border:none;}
+.bbs_page .active a{color:#fff;}
+.bbs_page .active a:hover,.bbs_page .active a:focus{color:#fff; background:#4d556d;}
+
+
+/*botton setting *********************************************************************************/
+.btn_guide{}
+.btn_style01{ display: inline-block; font-size:15px; padding:0 20px; border-radius:30px; height: 35px; line-height: 35px; vertical-align: middle; white-space: nowrap;}
+.btn_style02{ display: inline-block; font-size:13px; padding:0 20px; border-radius:30px; height: 30px; line-height: 30px; vertical-align: middle; white-space: nowrap;}
+.btn_style03{ display: inline-block; font-size:13px; padding:0 15px; border-radius:30px; height: 25px; line-height: 25px; vertical-align: middle; white-space: nowrap;}
+.btn_style04{border-radius:0 5px 5px 0; width:40px; height: 35px;  border: 1px solid #ddd;border-left: none; text-indent: -5000px; overflow: hidden; white-space: nowrap;} /*img_btn style*/
+.btn_style05{ display: inline-block; height: 50px !important; line-height: 50px;  font-size:15px; padding:0 30px; border-radius:50px; vertical-align: middle; white-space: nowrap;} /*img_btn style*/
+.btn_style06{display: inline-block; font-size: 0;text-indent: -5000px; overflow: hidden;width:31px; height: 31px;border-radius: 3px;}
+.sb_style{ border-radius: 30px !important;}
+
+.btn_red {color: #fff;background:#ff5170;}
+.btn_blue {color: #fff;background:#005ede;}
+.btn_purple {color: #fff;background:#7063b3;}
+.btn_navy {color: #fff;background:#1e2459;}
+.btn_orange{color: #fff;background:#ff6000;}
+.btn_green {color: #fff;background:#539801;}
+.btn_white {color: #000;background:#f5f5f5; border: 1px solid #ddd !important;}
+.btn_black {color: #fff;background:#000;}
+.btn_gray {color: #fff;background:#4d556d;}
+
+.btn_style01.btn_white{ line-height: 33px;}
+.btn_style02.btn_white{ line-height: 28px;} 
+.btn_style03.btn_white{ line-height: 23px;}
+.btn_style05.btn_white{ line-height: 33px;}
+
+.btn_style01.btn_white:hover,
+.btn_style01.btn_white:focus{color: #000;background:#f5f5f5; border: 1px solid #ddd; line-height: 33px;}
+
+.btn_style02.btn_white:hover,
+.btn_style02.btn_white:focus{color: #000;background:#f5f5f5; border: 1px solid #ddd; line-height: 28px;}
+
+.btn_style03.btn_white:hover,
+.btn_style03.btn_white:focus{color: #000;background:#f5f5f5; border: 1px solid #ddd; line-height: 23px;}
+
+.btn_style05.btn_white:hover,
+.btn_style05.btn_white:focus{color: #000;background:#f5f5f5; border: 1px solid #ddd; line-height: 48px;}
+
+
+.btn_search01{ background:#fff url("../images/icon_search02.png") center no-repeat; border-radius:0 8px 8px 0; }
+.btn_date01{ background:#fff url("../images/icon_date02.png") center no-repeat;}
+.btn_prev01{ background:#4d556d url("../images/icon_prev02.png") center no-repeat; }
+.btn_next01{ background:#4d556d url("../images/icon_next02.png") center no-repeat; }
+
+.btn_prev02{ background: url("../images/icon_prev01.png") center no-repeat; border:1px solid #ddd;}
+.btn_next02{ background: url("../images/icon_next01.png") center no-repeat; border:1px solid #ddd;}
+
+
+

@@ -1,0 +1,161 @@
+/* Main section styles */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+main h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+ 
+#resultList input[type="text"],
+#resultList input[type="number"],
+#resultList input[type="email"],
+#resultList input[type="password"],
+#resultList textarea,
+#resultList select {
+    width: 100%;
+    padding: 12px; /* 기본적으로 10px이지만, PC에서는 더 큰 여백을 주는 것이 일반적입니다. */
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+
+
+.card-header a {
+  color: blue; /* 링크 색상을 파란색으로 설정 */
+}
+
+.btn_style02 {
+  background-color: #4CAF50; /* 버튼 배경색 */
+  border: none; /* 테두리 없음 */
+  color: white; /* 버튼 텍스트 색상 */
+  padding: 15px 32px; /* 버튼 내부 여백 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  text-decoration: none; /* 링크 텍스트에 밑줄 없음 */
+  display: inline-block; /* 인라인 요소로 표시 */
+  font-size: 16px; /* 텍스트 크기 */
+  margin: 4px 2px; /* 버튼 사이 여백 */
+  cursor: pointer; /* 포인터 커서 표시 */
+  border-radius: 12px; /* 버튼 테두리 둥글게 */
+}
+
+.btn_style02:hover {
+  background-color: #45a049; /* 마우스 호버 시 배경색 변경 */
+}
+
+
+/* Content styles */
+.content {
+  margin: 0 auto;
+  max-width: 90%; /* 변경: 너비를 90%로 조정 */
+}
+
+.page-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search_box03 {
+  margin-bottom: 20px;
+}
+
+.search_box03 input[type="text"] {
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search_box03 button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search_box03 button:hover {
+  background-color: #0056b3;
+}
+
+/* Table styles */
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+  line-height: 2; /* 각 행의 높이를 두 배로 설정 */
+}
+ 
+.table tbody tr {
+  background-color: #eaeaea;
+  line-height: 2; /* 각 행의 높이를 두 배로 설정 */
+  
+}
+
+
+/* Pagination styles */
+.pagination {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li.active {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.pagination li a,
+.pagination li span {
+  display: inline-block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+}
+
+.pagination li a:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+/* 변경: 선택된 페이지 번호의 텍스트 색상을 흰색으로 설정 */
+.pagination li.active a,
+.pagination li.active span {
+  color: #fff;
+}

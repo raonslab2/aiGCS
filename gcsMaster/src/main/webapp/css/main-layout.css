@@ -1,0 +1,52 @@
+	  body {
+	    margin: 0; 
+	    font-weight: bold;
+	  }
+	 
+	  /* Make Text in the middle */
+	  header,
+	  footer,
+	  nav,
+	  main,
+	  aside {
+	    display: flex; 
+	  }
+	 
+	  header,
+	  footer {
+	    height: 50px;
+	    background-color: #f1f1f1;
+	  }
+	 
+	  .container {
+	    overflow: hidden;
+	    margin: .5rem 0;
+	  }
+	  
+	  .container nav {
+	    width: 120px;
+	    height: calc(100vh - 100px - 1rem);
+	  }
+	 
+	  .container aside {
+	    width: 200px;
+	    height: calc(100vh - 100px - 1rem);
+	  }
+	 
+	  .container main {
+	    float: left;
+	    width: calc(100% - 310px - 1rem);
+	    height: calc(100vh - 100px - 1rem);
+	    background-color: #ffffff;
+ 
+	  }
+	 
+	  .container nav {
+	    float: left;
+	    background-color: #ffffff;
+	  }
+	 
+	  .container aside {
+	    float: right;
+	    background-color: gold;
+	  }

@@ -1,0 +1,247 @@
+@charset "utf-8";
+
+.dashboard_guide{ font-size:0;}
+.dashboard_guide > div{display: inline-block; width: 38%; padding-right: 30px; font-size: 15px; vertical-align: top;}
+.dashboard_guide .news_guide{width: 29%; padding-right: 0px;}
+.dashboard_guide .tasks_guide{width: 33%;}
+.dashboard_guide .tasks_guide2{width: 71%;}
+.dashboard_guide h4{ font-size: 24px; font-weight: 600; line-height: 28px;height: 30px; margin-bottom:15px; vertical-align: top;}
+.dashboard_guide select{ font-size: 15px; vertical-align: top; margin-left: 20px; height: 30px;}
+.dashboard_guide .btn_guide{ margin-top: -45px;}
+
+.txt_past{ color: #888888;}
+.txt_now{color: #ff5271;}
+.txt_expect{color: #6e63b2;}
+.txt_inform{color: #3cc8c9;}
+
+/* tasks_guide ************************************************************************************/
+.tasks_guide{}
+.tasks_guide .tasks_top{ margin-top: 15px; border-radius: 8px; border: 1px solid #ddd;}
+.tasks_guide .tasks_top ul{ font-size: 0;}
+.tasks_guide .tasks_top ul li{display: inline-block; width: 25%; height: 68px;  border-left:1px solid #ddd; }
+.tasks_guide .tasks_top ul li:first-child{border-left:none;}
+.tasks_guide .tasks_top ul li a{display:block; text-align: center; padding: 10px 0;}
+.tasks_guide .tasks_top ul li a > span{display:block;font-size: 14px; color: #999;}
+.tasks_guide .tasks_top ul li a > strong{display:block;font-size: 18px; color: #000;}
+
+.tasks_guide .tasks_top ul li:last-child a > span,
+.tasks_guide .tasks_top ul li:last-child a > strong{color: #035faa;}
+
+
+.tasks_guide .tasks_list_all{ margin-top: 20px;}
+.tasks_list_all .tasks_list{ position: relative; margin-bottom: 10px; border:1px solid #ddd; border-radius: 8px; overflow: hidden;}
+.tasks_list_all .tasks_list .tasks_btn{ position: absolute; display: inline-block; top: 15px; right: 10px; }
+.tasks_list_all .tasks_list .tasks_btn > a{display: inline-block; width: 20px; height: 20px; background: url("../images/icon_menu02.png") center no-repeat; overflow: hidden; text-indent: -100px;}
+
+.tasks_info{ padding: 15px 20px;}
+.tasks_info .date{color: #035faa;}
+.tasks_info .progress{ font-size: 18px; font-weight: 500; margin-bottom: 10px;}
+.tasks_info .progress > strong{font-size: 26px;font-weight: 700;}
+.tasks_info .tit{ font-weight: 400; font-size: 16px; max-height: 45px;overflow: hidden;}
+.tasks_info .t_period{color: #888; font-weight: 300;}
+
+.progress_guide{ background: #f4f8fb;padding: 15px 0 25px 0;}
+.progress_guide > h5{ margin-bottom: 20px; padding-left: 25px; font-size: 14px;}
+.progress_guide ul{ font-size: 0; border-top:2px solid #b2c5cb;}
+.progress_guide ul li{position: relative; display: inline-block; width: calc(100% / 8.01); font-size: 14px; text-align: center; height: 30px; vertical-align: top;}
+.progress_guide ul li > span{position: absolute; display: inline-block; width: 10px; height: 10px; top: -6px; left: 50%; transform: translateX(-50%);border: 3px solid #b2c5cb; background: #fff; border-radius: 50%;}
+.progress_guide ul li:first-child:before{position: absolute; display: inline-block; content: ''; width: 51%; height: 10px; left: -1%; top:-6px; background: #f4f8fb;}
+.progress_guide ul li:last-child:before{position: absolute; display: inline-block; content: ''; width: 51%; height: 10px; right:-1%; top:-6px; background: #f4f8fb;}
+.progress_guide ul li > span.bg_past{border: 3px solid #b2c5cb; background: #b2c5cb;}
+.progress_guide ul li > span.bg_now{border: 3px solid #ff5271; background: #ff5271;}
+.progress_guide ul li > p{ font-size: 13px; margin-top: 10px;}
+.progress_guide ul li > em{ display: block; font-style: normal;font-size: 12px; color: #999; line-height: 1.3em;}
+
+.progress_guide ul li > div{position: absolute;  display: inline-block; width: auto; font-size: 14px; color: #666; white-space: nowrap; top: 10px; left: 40%;}
+
+
+
+
+
+
+/* today_guide ************************************************************************************/
+.today_guide{}
+.today_guide h4 > strong{color: #035faa;font-weight: 600; display: inline-block; margin-right: 15px;}
+.today_guide h4 > span{font-size: 18px;font-weight: 400;display: inline-block; vertical-align: top;}
+.today_guide .sc_add{ display: inline-block; font-size: 0; width:23px; height: 23px; background: #5c6574 url("../images/icon_plus01.png") center no-repeat; vertical-align: top;border-radius: 50%; margin-top: 3px;  overflow: hidden; text-indent: -30px;}
+.today_guide .today_all{position: relative; margin-top: 15px;}
+.today_all .today_top{ border:1px solid #ddd; border-radius: 8px 8px 0 0; font-size: 0; height: 70px;}
+.today_all .today_top li{position: relative; display: inline-block; width: calc(100% / 7.01); font-size: 18px; text-align: center; border-left: 1px solid #ddd; height: 68px; padding-top: 10px; cursor:pointer;}
+.today_all .today_top li:first-child{ border-left: none;}
+.today_all .today_top li > span{ display: block; font-size: 13px; color: #999;}
+.today_all .today_top li > strong{ display: block;}
+.today_all .today_top li > strong.today{ position: relative; color: #fff; }
+.today_all .today_top li > strong.today:before{ display: inline-block; content: ''; position: absolute; width: 32px; height: 32px; background: #ff5371; border-radius: 50%; top:-3px; left: 50%; transform: translateX(-50%); z-index: -1;}
+.today_all .today_top li.sc_yes{position: relative;}
+.today_all .today_top li.sc_yes:before{display: inline-block; content: ''; position: absolute; width: 8px; height: 8px; background: #0260aa; border-radius: 50%; right: 5px; top: 5px;}
+
+.today_all .today_news_all{  background: #f2f5fa; border:1px solid #ddd; border-top: none;border-radius: 0 0 8px 8px; padding: 20px; padding-bottom: 65px; min-height: 450px; overflow: hidden; margin-bottom: 35px;}
+
+.today_all .today_news_all .notice{ margin-bottom: 10px;}
+.today_all .today_news_all .notice a{display: block; background: #2e9993 url("../images/icon_notice01.png") 20px center no-repeat; color: #fff; white-space: nowrap; text-overflow: ellipsis; padding: 15px 20px 15px 50px; border-radius: 8px; font-size: 16px;font-weight: 500;}
+.today_all .today_news_all .notice a > span{ float: right; vertical-align: middle;}
+.today_all .today_news_all .notice a:after{ clear: both; display: block; content: '';}
+
+.today_all .today_news_all .tnews_list{  margin-bottom: 10px;}
+.today_all .today_news_all .tnews_list a{display: block; color: #666; }
+.today_all .today_news_all .tnews_list a ul{position: relative; background: #fff;border-radius: 8px; font-size: 15px; color: #666; padding: 15px 20px;}
+.today_all .today_news_all .tnews_list a ul .tit{font-size: 16px; font-weight: 500; margin-bottom: 5px; color: #000;}
+.today_all .today_news_all .tnews_list a ul .date{ position: absolute; top: 15px; right: 20px;}
+
+
+.today_all .sc_more{ position: absolute;  width: 100%; bottom: 0; left: 0;}
+.today_all .sc_more > a{display: block; text-align: center; height: 65px; line-height: 65px; background: #fff; border: 1px solid #ddd;border-radius: 0 0 8px 8px; font-weight: 500; }
+.today_all .sc_more > a > span{ display: inline-block; background: url("../images/icon_plus03.png") right center no-repeat; padding-right: 20px;}
+
+.dashboard_guide .check_list{border-radius:8px; border:1px solid #ddd;  padding: 20px; margin-top: 15px;}
+.dashboard_guide .check_list li{ line-height: 1.6em;}
+.dashboard_guide .check_list .line_yes{text-decoration: line-through;}
+.line_yes{text-decoration: line-through;}
+
+
+
+
+/* news_guide ************************************************************************************/
+.news_guide{}
+.news_guide h4{ font-size: 22px; font-weight: 500;}
+.news_guide .news_all{position: relative; height: 750px; border:1px solid #ddd; border-radius: 8px; vertical-align: top;}
+
+.news_all .news_more{ position: absolute;  width: 100%; bottom: 0; left: 0;}
+.news_all .news_more > a{display: block; text-align: center; height: 65px; line-height: 65px; background: #f2f5fa; border-top: 1px solid #ddd;font-weight: 500; border-radius:0 0 8px 8px; }
+.news_all .news_more > a > span{ display: inline-block; background: url("../images/icon_plus03.png") right center no-repeat; padding-right: 20px;}
+
+.news_all .news_list_all{ padding-bottom: 65px;}
+.news_all .news_list_all ul{ padding: 20px; position: relative; border-bottom: 1px dashed #ddd;}
+.news_all .news_list_all ul li{ font-size: 14px; color: #666;}
+.news_all .news_list_all ul .al_time{ margin-bottom: 5px; color: #999;}
+.news_all .news_list_all ul .not_read{color: #ff5271; font-weight: 700;}
+.news_all .news_list_all ul .tit{font-size: 16px;font-weight: 500;color: #000;}
+.news_all .news_list_all ul .date{}
+.news_all .news_list_all ul .data_txt01{ margin-top: 10px; max-height: 40px; line-height: 20px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; word-wrap:break-word;}
+.news_all .news_list_all ul .data_txt02{margin-top: 5px;}
+.news_all .news_list_all ul .btn_del{ position: absolute; right: 10px; top:00px; }
+.news_all .news_list_all ul .btn_del > a{display: inline-block; font-size: 0; width: 30px; height: 30px; background: url("../images/icon_close04.png") center no-repeat;}
+
+
+
+.dashboard_detail{}
+.dashboard_detail .tasks_guide{ width: calc(100% - 380px) !important; background: #f2f5fa; border-radius: 8px; padding: 30px; margin-right: 30px;}
+.dashboard_detail .check_guide{width:350px !important;}
+.dashboard_detail h4{ font-weight:700;}
+.dashboard_detail h4 > strong{color: #035faa;font-weight:700;}
+.dashboard_detail h4 > span{ font-size: 20px;  font-weight:500;}
+.dashboard_detail h4 > b{  display: inline-block; float: right; padding-right: 380px;}
+.dashboard_detail h4:after{ display: block; clear: both; content: '';}
+.dashboard_detail h5{ font-size: 22px;}
+.dashboard_detail .btn_guide{ margin-top: -40px;}
+
+.dashboard_detail button{overflow: hidden; text-indent: -50px; background-color: #fff !important; background-position: center; background-repeat: no-repeat; margin-top: 2px;}
+.dashboard_detail .prev{ background-image: url("../images/sc_prev.png");}
+.dashboard_detail .next{ background-image: url("../images/sc_next.png");}
+.dashboard_detail .sc_add{ display: inline-block; font-size: 0; width:23px; height: 23px; background: #5c6574 url("../images/icon_plus01.png") center no-repeat; vertical-align: top;border-radius: 50%; margin-top: 3px;  overflow: hidden; text-indent: -30px;}
+
+.dashboard_detail .tasks_top{background: #fff;}
+.dashboard_detail .tasks_top ul li{display: inline-block; width: 25%; height: 48px;  border-left:1px solid #ddd; }
+.dashboard_detail .tasks_top ul li a > span{display:inline-block;vertical-align: middle; margin-right: 10px;}
+.dashboard_detail .tasks_top ul li a > strong{display:inline-block;vertical-align: middle;}
+
+
+.dashboard_detail .tasks_list{ font-size: 0; background: #fff; min-height: 160px;}
+.dashboard_detail .tasks_list.active{ border:3px solid #0260aa;}
+.dashboard_detail .tasks_info{ display: inline-block; width: 35%; vertical-align: top; font-size: 15px;}
+.dashboard_detail .progress_guide{display: inline-block; width: 65%; vertical-align: top; font-size: 13px; background: none; padding: 15px 20px 0 0;}
+.dashboard_detail .progress_guide .tit_txt{ padding:10px 20px 20px 0; font-size: 15px; text-align: right; color: #888;}
+.dashboard_detail .progress_guide .tit_txt > strong{color: #035faa;}
+.dashboard_detail .progress_guide ul li > span{width: 15px; height: 15px; top: -8px;}
+.dashboard_detail .progress_guide ul li:first-child:before{height: 15px;top:-8px; background: #fff;}
+.dashboard_detail .progress_guide ul li:last-child:before{height: 15px;top:-8px; background: #fff;}
+
+.check_guide .check_list{  margin-top: 0px; margin-bottom: 10px;  border-radius: 8px; border: 1px solid #ddd; padding:25px 30px; }
+.check_guide .check_list ul{margin-top: 10px;}
+
+.check_guide .btn_todo_add a{ display: block; background: #ffcd20; height: 60px; line-height: 60px; text-align: center; border-radius: 8px; margin-bottom: 10px;}
+.check_guide .btn_todo_add a > span{display: inline-block; background: url("../images/icon_plus03.png") right center no-repeat; padding-right: 20px;}
+
+.check_guide .day_guide{}
+.check_guide .day_guide .sc_title{font-size: 0px; text-align: center;}
+.check_guide .day_guide .sc_title *{display: inline-block;}
+.day_guide .sc_title li{vertical-align: top; }
+.day_guide .sc_title button{width: 20px; height: 20px; overflow: hidden; text-indent: -50px; background-color: #fff !important; background-position: center; background-repeat: no-repeat; margin-top: 2px;}
+.day_guide .sc_title .prev{ background-image: url("../images/sc_prev.png");}
+.day_guide .sc_title .next{ background-image: url("../images/sc_next.png");}
+.day_guide .sc_title .now{width: 20px; height: 20px; overflow: hidden; text-indent: -20px; background: url("../images/sc_now.png") center no-repeat;margin-top: 2px; margin-right: 10px;}
+.day_guide .sc_title strong{ line-height: 20px;font-size: 20px; padding: 0 15px;}
+
+.day_guide .sc_week2_guide{ text-align: center; background: #fafbfd; padding:10px 5px; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px;}
+.sc_week2_guide ul{ font-size: 0;}
+.sc_week2_guide ul li{ display: inline-block; width: calc(100% / 7.01); vertical-align: top;}
+.sc_week2_guide .week2_tit{}
+.sc_week2_guide .week2_tit li{ font-size: 12px; color: #888;}
+.sc_week2_guide .week2_day{}
+
+/**/
+/*.sc_week2_guide .week2_day li{ position: relative; font-size: 13px; line-height: 35px; z-index: 1;}*/
+/*.sc_week2_guide .week2_day .today:before{ position: absolute; display: inline-block; content: ''; width: 20px; height: 20px; left: 50%; top: 50%; transform: translate(-50%, -50%);border-radius: 50%; background: #ccc; z-index: -1;}*/
+/*.sc_week2_guide .week2_day .sc_yes:after{position: absolute; display: inline-block; content: ''; width: 6px; height: 6px; left: 65%; top:5px; border-radius: 50%; background: #6f62b2; z-index: 0;}*/
+
+.day_guide .day_time{display:block;padding:0 5px; margin-top: 10px;}
+.day_guide .day_time ul{ font-size: 0; border-top: 1px dashed #ddd; padding: 5px 0;}
+.day_guide .day_time ul li{ display: inline-block; width: calc(100% - 50px); font-size: 13px; vertical-align: top; min-height: 40px;}
+.day_guide .day_time ul li:first-child{ width: 50px;font-size: 12px;color: #999;}
+.day_guide .day_time ul li .time_txt{padding: 5px; background: #d8e4f8; border-radius: 30px; border: 1px solid #bdd1f1; cursor:pointer;}
+.day_guide .day_time ul li .time_txt > p{font-size: 10px; color: #999;}
+
+.sc_week2_guide .week2_day li{position: relative; display: inline-block; font-size: 13px; line-height: 35px; z-index: 1;}
+.sc_week2_guide .week2_day .sc_yes:after{position: absolute; display: inline-block; content: ''; width: 6px; height: 6px; left: 65%; top:5px; border-radius: 50%; background: #6f62b2; z-index: 1;}
+
+.week2_day > ul > li > div > span {
+    vertical-align: top;
+	display: inline-block;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    text-align: center;
+    z-index: 3;
+    font-size: 13px;
+	cursor:pointer;
+}
+
+.sc_week2_guide .week2_day .today:before{
+	position: absolute;
+	display: inline-block; 
+	content: ''; 
+	width: 30px; height: 30px; left: 50%; top: 50%; transform: translate(-50%, -50%);border-radius: 50%; background: #ccc; z-index: -1;
+}
+
+.sc_start:before{
+	position: absolute;
+	display: inline-block; 
+	content: ''; 
+	width:30px; 
+	height: 100%; 
+	background: #eeeeee; 
+	right:0; 
+	z-index: -1;
+}
+
+.sc_middle:before{
+	position: absolute;
+	display: inline-block; 
+	content: ''; 
+	width:100%; 
+	height: 100%; 
+	background: #eeeeee; 
+	right:0; 
+	z-index: -1;
+}
+
+.sc_end:before{
+	position: absolute;
+	display: inline-block; 
+	content: ''; 
+	width:30px; 
+	height: 100%; 
+	background: #eeeeee; 
+	left: 0px; 
+	z-index: -1;
+}
