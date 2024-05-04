@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EmCodeAram">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="emCodeAramSerarchVO" type="egovframework.or.kr.com.service.EmCodeAramDefaultVO"/>
+	
+	<resultMap id="emCodeAram" class="egovframework.or.kr.com.service.EmCodeAramVO">
+		<result property="cdArCode" column="CD_AR_CODE" columnIndex="1"/>
+		<result property="cdArTitle" column="CD_AR_TITLE" columnIndex="2"/>
+		<result property="cdArValue" column="CD_AR_VALUE" columnIndex="3"/>
+	</resultMap>
+	
+	<insert id="emCodeAramDAO.insertEmCodeAram_S">
+		<![CDATA[
+			INSERT INTO em_code_aram 
+				( CD_AR_CODE
+				  , CD_AR_TITLE
+				  , CD_AR_VALUE )
+			VALUES ( #cdArCode#
+				  , #cdArTitle#
+				  , #cdArValue# )
+		]]>
+	</insert>
+	
+	<update id="emCodeAramDAO.updateEmCodeAram_S">
+		<![CDATA[
+			UPDATE em_code_aram
+			SET CD_AR_CODE=#cdArCode#
+				, CD_AR_TITLE=#cdArTitle#
+				, CD_AR_VALUE=#cdArValue#
+			]]>
+	</update>
+	
+	<delete id="emCodeAramDAO.deleteEmCodeAram_S">
+		<![CDATA[
+			DELETE FROM em_code_aram 
+			]]>
+	</delete>
+	
+	<select id="emCodeAramDAO.selectEmCodeAram_S" resultMap="emCodeAram">
+		<![CDATA[
+			SELECT
+				CD_AR_CODE
+				, CD_AR_TITLE
+				, CD_AR_VALUE
+			FROM em_code_aram
+			]]>
+	</select>
+	
+	<select id="emCodeAramDAO.selectEmCodeAramList_D" parameterClass="emCodeAramSerarchVO" resultClass="egovMap">
+			SELECT
+								CD_AR_CODE
+								, CD_AR_TITLE
+								, CD_AR_VALUE
+					FROM em_code_aram
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				CD_AR_CODE = #searchKeyword#
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				CD_AR_TITLE LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+				ORDER BY 
+				limit #firstIndex#, #recordCountPerPage#	
+	</select>	
+	<select id="emCodeAramDAO.selectEmCodeAramListTotCnt_S" parameterClass="emCodeAramSerarchVO" resultClass="int">
+			SELECT COUNT(*) totcnt
+			FROM em_code_aram
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				CD_AR_CODE = #searchKeyword#
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				CD_AR_TITLE LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+	</select>
+
+</sqlMap>

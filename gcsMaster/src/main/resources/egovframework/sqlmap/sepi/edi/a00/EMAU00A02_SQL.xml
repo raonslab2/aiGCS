@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SmtecInfo">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="SmtecVO" type="egovframework.or.kr.TIPA.service.SmtecVO"/>
+	<typeAlias  alias="SmtecVO2" type="egovframework.or.kr.TIPA.service.SmtecVO2"/>
+ 
+	<delete id="SMTECINFODAO.deleteSmtec">
+		<![CDATA[
+		DELETE
+		FROM
+			VI_TM_EDW_DM_SBJT_ADMN_INFO
+		]]>
+	</delete>
+	
+	<delete id="SMTECINFODAO.deleteSmtec2">
+		<![CDATA[
+		DELETE
+		FROM
+			VI_TM_EDW_DM_SBJT_EVAL_INTG_BASIC
+		]]>
+	</delete>
+	
+	<delete id="SMTECINFODAO.deleteSmtec3">
+		<![CDATA[
+		DELETE
+		FROM
+			VI_TM_EDW_DM_SBJT_EVAL_INTG_GOV
+		]]>
+	</delete>
+
+	<insert id="SMTECINFODAO.insertSmtec21" parameterClass="SmtecVO2" >
+	 	<![CDATA[
+				INSERT INTO VI_TM_EDW_DM_SBJT_EVAL_INTG_GOV
+				(
+				 SBJT_ID
+				, BUSI_YY
+				, AORGN_NM
+				, AORGN_AREA_NM
+				, LAST_SBJT_PRG_SE_NM
+				, LCL_IDST_TECL_NM
+				, MCL_IDST_TECL_NM
+				, SCL_IDST_TECL_NM
+				 ) 
+			    VALUES 
+				 (
+				 #sbjtID#
+				 , #busiYy#
+				 , #aorgnNm#
+				 , #aorgnAreaNm#
+				 , #lastSbjtPrgSeNm#
+				 , #lclIdstTeclNm#
+				 , #mclIdstTeclNm#
+				 , #sclIdstTeclNm#
+				 )
+		]]>
+	</insert> 
+	
+	<insert id="SMTECINFODAO.insertSmtec" parameterClass="SmtecVO" >
+	 	<![CDATA[
+				INSERT INTO VI_TM_EDW_DM_SBJT_ADMN_INFO
+				(
+					ANCM_ID
+					, SBJT_ID
+					, BUSI_YY
+					, CHNG_MAX
+					, NRM_BUCL_CD
+					, BUSI_NM
+					, BRDN_BUSI_NM
+					, BBRDN_BUSI_NM
+					, ANCM_NM
+					, DTL_ANCM_NM
+					, LAST_SBJT_PRG_SE_NM
+					, SVORGN_NM
+					, TRST_ORGN_NM
+					, PTCP_ENPR_NM
+					, ASSN_DVLP_ORGN_NM
+					, SBJT_NM
+					, LCL_IDST_TECL_NM
+					, MCL_IDST_TECL_NM
+					, SCL_IDST_TECL_NM
+					, AORGN_NM
+					, AGRE_CNTR_YN
+					, AGRE_CNTR_YMD
+					, TOT_DVLP_SRT_YMD
+					, TOT_DVLP_END_YMD
+					, PRGRT_RPTP_SUBM_YN
+					, PRGRT_RPTP_SUBM_YMD
+					, PRGRT_CHK_YMD
+					, PRGRT_CHK_RSLT_NM
+					, LAST_RPTP_SUBM_YN
+					, LAST_RPTP_SUBM_YMD
+					, LAST_CHK_EFCN_YN
+					, LAST_CHK_YMD
+					, LAST_CHK_RSLT_NM
+					, ACTNG_ADIT_RPTP_SUBM_YN
+					, ACTNG_ADIT_RPTP_SUBM_YMD
+					, TS1_SETL_YMD
+					, TS1_SETL_OBJAP_YN
+					, TS2_SETL_YMD
+					, LAST_EVAL_FIRST_YMD
+					, LAST_EVAL_YMD
+					, LAST_EVAL_RSLT_NM
+					, LAST_EVAL_REVAL_YMD
+					, LAST_EVAL_REVAL_RSLT_NM
+					, LAST_EVAL_OBJAP_YN
+					, LAST_EVAL_OAFO_RCPT_YMD
+					, LAST_EVAL_OBJAP_EVAL_YMD
+					, LAST_EVAL_OBJAP_EVAL_RSLT_NM
+					, FATH_EXE_RPTP_SUBM_GUID_YMD
+					, FATH_EXE_RPTP_RMD_YMD
+					, FATH_EXE_RPTP_SUBM_YMD
+					, FATH_EXE_EVAL_YMD
+					, FATH_EXE_EVAL_RSLT_NM
+					, PRBL_SBJT_YN
+					, PRBL_SBJT_RSN
+					, PRBL_SBJT_RCPT_YMD
+					, SPEC_CHK_YMD
+					, SPEC_CHK_RSLT_NM
+					, SPEVL_YMD
+					, SPEVL_RSLT_NM
+					, SPEVL_OBJAP_YN
+					, SPEVL_OBJAP_RCPT_YMD
+					, SPEVL_OBJAP_EVAL_YMD
+					, SPEVL_OBJAP_EVAL_RSLT_NM
+					, SPEC_SETL_REQ_YMD
+					, TS1_SPEC_SETL_YMD
+					, TS1_SPEC_SETL_OBJAP_YN
+					, TS2_SPEC_SETL_YMD
+					, SACO_OBJT_YN
+					, SACO_DLBR_RSN
+					, SACO_DLBR_YMD_CN
+					, SACO_DLBR_RSLT_CN
+					, SACO_OBJAP_DLBR_RSN
+					, SACO_OBJAP_DLBR_YMD
+					, SACO_OBJAP_DLBR_RSLT_NM
+					, NTIS_TRS_YN
+					, NTIS_TRS_YMD
+					, FIRST_LOAD_DT
+					, LAST_LOAD_DT
+				 ) 
+			    VALUES 
+				 (
+				 #ancmId#
+				 , #sbjtId#
+				 , #busiYy# 
+				 , #chngMax#
+				 , #nrmBuclCd#
+				 , #busiNm#
+				 , #brdnBusiNm#
+				 , #bbrdnBusiNm#
+				 , #ancmNm#
+				 , #dtlAncmNm#
+				 , #lastSbJtPrgSeNm#
+				 , #svorgnNm#
+				 , #trstOrgnNm#
+				 , #ptcpEnprNm#
+				 , #assnDvlpOrgnNm#
+				 , #sbjtNm#
+				 , #lclIdstTeclNm#
+				 , #mclIdstTeclNm#
+				 , #sclIdstTeclNm#
+				 , #aorgnNm#
+				 , #agreCntrYn#
+				 , #agreCntrYmd#
+				 , #totDvlpSrtYmd#
+				 , #totDvlpEndYmd#
+				 , #prgrtRptpSubmYn#
+				 , #prgrtRptpSubmYmd#
+				 , #prgrtchkymd#
+				 , #prgrtchkRsltNm#
+				 , #lastRptpSubmYn#
+				 , #lastRptpSubmYmd#
+				 , #lastChkEfcnYn#
+				 , #lastChkYmd#
+				 , #lastChkRsltNm#
+				 , #actngAditRptpSubmYn#
+				 , #actngAditRptpSubmYmd#
+				 , #ts1SetlYmd#
+				 , #ts1SetlObjapYn#
+				 , #ts2SetlYmd#
+				 , #lastEvalFirstYmd#
+				 , #lastEvalYmd#
+				 , #lastEvalRsltNm#
+				 , #lastEvalRevalYmd#
+				 , #lastEvalRevalRsltNm#
+				 , #lastEvalObjapYn#
+				 , #lastEvalOafoRcptYmd#
+				 , #lastEvalObjapEvalYmd#
+				 , #lastEvalObjapEvalRsltNm#
+				 , #fathExeRptpsubmGuidYmd#
+				 , #fathExeRptpRmdYmd#
+				 , #fathExeRptpSubmYmd#
+				 , #fathExeEvalYmd#
+				 , #fathExeEvalRsltNm#
+				 , #prblSbjtYn#
+				 , #prblSbjtRsn#
+				 , #prblSbjtRcptYmd#
+				 , #specChkYmd#
+				 , #specChkrsltNm#
+				 , #spevlYmd#
+				 , #spevlRsltNm#
+				 , #spevlObjapYn#
+				 , #spevlObjapRcptYmd#
+				 , #spevlObjapEvalYmd#
+				 , #spevlObjapEvalRsltNm#
+				 , #specSetlReqYmd#
+				 , #ts1SpecSetlYmd#
+				 , #ts1SpecSetlObjapYn#
+				 , #ts2SpecSetlYmd#
+				 , #sacoObjtYn#
+				 , #sacoDlbrRsn#
+				 , #sacoDlbrYmdCn#
+				 , #sacoDlbrRsltCn#
+				 , #sacoObjapDlbrRsn#
+				 , #sacoObjapDlbrYmd#
+				 , #sacoObjapDlbrRsltNm#
+				 , #ntisTrsYn#
+				 , #ntisTrsYmd#
+				 , #firstLoadDt#
+				 , #lastLoadDt#
+				 )
+		]]>
+	</insert> 
+	
+	<insert id="SMTECINFODAO.insertSmtec20" parameterClass="SmtecVO2" >
+	 	<![CDATA[
+				INSERT INTO VI_TM_EDW_DM_SBJT_EVAL_INTG_BASIC
+				(
+				  SBJT_ID
+				, SBJT_SN
+				, PRES_SBJT_YLY
+				, BUSI_YY
+				, NRM_BUCL_CD
+				, BUSI_NM
+				, BRDN_BUSI_NM
+				, BBRDN_BUSI_NM
+				, ANCM_YMD
+				, ANCM_NM
+				, DTL_ANCM_NM
+				, DVLP_SRT_YMD
+				, DVLP_END_YMD
+				, DVLP_PRID_MCNT
+				, RCPT_CLOS_YMD
+				, SUBM_CMPT_YMD
+				 ) 
+			    VALUES 
+				 (
+				 #sbjtID#
+				 , #sbjtSn#
+				 , #presSbjtYly#
+				 , #busiYy#
+				 , #nrmBuclCd#
+				 , #busiNm#
+				 , #brdnBusiNm#
+				 , #bbrdnBusiNm#
+				 , #ancmYmd#
+				 , #ancnNm#
+				 , #dtlAncmNm#
+				 , #dvlpSrtYmd#
+				 , #dvlpEndYmd#
+				 , #dvlpPridMcnt#
+				 , #rcptClosYmd#
+				 , #submCmptYmd#
+				 )
+		]]>
+	</insert> 
+</sqlMap>            

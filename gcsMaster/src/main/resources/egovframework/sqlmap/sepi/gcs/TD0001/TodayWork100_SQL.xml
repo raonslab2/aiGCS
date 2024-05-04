@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA03MAINAIR">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="todayWork100VO" type="egovframework.or.kr.TD0001.service.TodayWork100VO"/> 
+ 
+  
+	<resultMap id="TodayWork100ListInfo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="tdNum" column="TD_NUM" columnIndex="1"/>
+		<result property="tdClassification" column="TD_CLASSIFICATION" columnIndex="2"/>
+		<result property="tdService" column="TD_SERVICE" columnIndex="3"/>
+		<result property="tdSubject" column="TD_SUBJECT" columnIndex="4"/>
+		<result property="tdOrder" column="TD_ORDER" columnIndex="5"/>
+		<result property="tdWorker" column="TD_WORKER" columnIndex="6"/>
+		<result property="tdOrderTime" column="TD_ORDER_TIME" columnIndex="7"/> 
+		<result property="tdWorkSt" column="TD_WORK_ST" columnIndex="8"/> 
+		<result property="tdProgressStatus" column="TD_PROGRESS_STATUS" columnIndex="9"/>  
+		<result property="createdAt" column="createdAt" columnIndex="10"/>    
+		<result property="updatedAt" column="updatedAt" columnIndex="11"/>  
+	</resultMap> 
+	<select id="TD0001.TodayWork100List" parameterClass="TodayWork100VO" resultMap="TodayWork100ListInfo" >
+			<![CDATA[
+					SELECT 
+						 a.TD_NUM 
+						,a.TD_CLASSIFICATION  
+						,a.TD_SERVICE  
+						,a.TD_SUBJECT  
+						,a.TD_ORDER  
+						,a.TD_WORKER  
+						,a.TD_ORDER_TIME  
+						,a.TD_WORK_ST  
+						,a.TD_PROGRESS_STATUS  
+						,a.TD_EVENT 
+						,a.createdAt  
+						,a.updatedAt   
+					 FROM tw_today_work a
+					]]> 
+				<![CDATA[
+			 		ORDER BY a.updatedAt DESC
+			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>	
+	</select>
+	
+	<select id="TD0001.TodayWork100ListCnt" parameterClass="TodayWork100VO" resultClass="int" >
+		<![CDATA[   
+			SELECT 
+				COUNT(*)  
+			 FROM tw_today_work a
+		]]>
+ 		
+	</select>  
+	
+	<insert id="TD0001.insertTodayWork100" parameterClass="todayWork100VO" >
+		<![CDATA[
+			INSERT INTO tw_today_work
+			   (
+				 TD_SUBJECT   
+			  ) 
+			  VALUE(#tdSubject#);	
+		]]>
+	</insert>
+	
+	
+	<resultMap id="selectTodayWork901ListVo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="twPk" column="TW_PK" columnIndex="1"/>
+		<result property="twProjectId" column="TW_PROJECT_ID" columnIndex="2"/>
+		<result property="twCategory1" column="TW_CATEGORY1" columnIndex="3"/>
+		<result property="twCategory2" column="TW_CATEGORY2" columnIndex="4"/>
+		<result property="twSubject" column="TW_SUBJECT" columnIndex="5"/>
+		<result property="twStatus" column="CO_CODE_NAME" columnIndex="6"/>
+		<result property="twRequestDate" column="TW_REQUEST_DATE" columnIndex="7"/> 
+		<result property="twRequester" column="TW_REQUESTER" columnIndex="8"/> 
+		<result property="twWorker" column="TW_WORKER" columnIndex="9"/>  
+		<result property="twStartDate" column="TW_START_DATE" columnIndex="10"/>    
+		<result property="twEndDate" column="TW_END_DATE" columnIndex="11"/>      
+		<result property="twUpdatetime" column="TW_UPDATETIME" columnIndex="12"/> 
+		<result property="twStatusName" column="CO_CODE_NAME" columnIndex="13"/> 
+	</resultMap> 
+	<select id="TD0001.selectTodayWork901List" parameterClass="TodayWork100VO" resultMap="selectTodayWork901ListVo" >
+			<![CDATA[
+					 SELECT 
+					       a.TW_PK
+					     , a.TW_PROJECT_ID
+					     , a.TW_CATEGORY1
+					     , a.TW_CATEGORY2
+					     , a.TW_SUBJECT
+					     , a.TW_STATUS
+					     , a.TW_REQUEST_DATE
+					     , a.TW_REQUESTER
+					     , a.TW_WORKER
+					     , a.TW_START_DATE
+					     , a.TW_END_DATE
+					     , a.TW_UPDATETIME
+					     , b.CO_CODE_NAME
+						FROM TW_TASK_LIST a
+							LEFT JOIN TW_CODE b
+							ON a.TW_STATUS = b.CO_CODE
+							AND b.CO_DIV = 'PROCESS'
+						WHERE 1=1
+						AND PA_PK = 0
+					]]> 
+		 			<isNotNull property="searchTwRequestDateSt" prepend="and"> 
+						a.TW_REQUEST_DATE BETWEEN #searchTwRequestDateSt# AND #searchTwRequestDateEd# 
+					</isNotNull>
+		 			<isNotNull property="searchTwWorker" prepend="and"> 
+						a.TW_WORKER = #searchTwWorker# 
+					</isNotNull> 
+		 			<isNotNull property="searchTwStatus" prepend="and"> 
+						a.TW_STATUS = #searchTwStatus# 
+					</isNotNull> 
+				<![CDATA[
+			 		ORDER BY a.TW_UPDATETIME DESC
+			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>	 
+	</select>
+	
+	<select id="TD0001.selectTodayWork901ListCnt" parameterClass="TodayWork100VO" resultClass="int" >
+		<![CDATA[   
+					 SELECT 
+					      count(*)
+						FROM TW_TASK_LIST a
+							LEFT JOIN TW_CODE b
+							ON a.TW_STATUS = b.CO_CODE
+							AND b.CO_DIV = 'PROCESS'
+						WHERE 1=1
+						AND PA_PK = 0
+		]]>
+		 <isNotNull property="searchTwRequestDateSt" prepend="and"> 
+			a.TW_REQUEST_DATE BETWEEN #searchTwRequestDateSt# AND #searchTwRequestDateEd# 
+		</isNotNull>
+			<isNotNull property="searchTwWorker" prepend="and"> 
+			a.TW_WORKER = #searchTwWorker# 
+		</isNotNull>
+	</select>  
+	
+	
+	
+	<resultMap id="selectTodayWork900Vo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="twPk" column="TW_PK" columnIndex="1"/>
+		<result property="twProjectId" column="TW_PROJECT_ID" columnIndex="2"/>
+		<result property="twCategory1" column="TW_CATEGORY1" columnIndex="3"/>
+		<result property="twCategory2" column="TW_CATEGORY2" columnIndex="4"/>
+		<result property="twSubject" column="TW_SUBJECT" columnIndex="5"/>
+		<result property="twStatus" column="CO_CODE_NAME" columnIndex="6"/>
+		<result property="twRequestDate" column="TW_REQUEST_DATE" columnIndex="7"/> 
+		<result property="twRequester" column="TW_REQUESTER" columnIndex="8"/> 
+		<result property="twWorker" column="TW_WORKER" columnIndex="9"/>  
+		<result property="twStartDate" column="TW_START_DATE" columnIndex="10"/>    
+		<result property="twEndDate" column="TW_END_DATE" columnIndex="11"/>      
+		<result property="twUpdatetime" column="TW_UPDATETIME" columnIndex="12"/> 
+		<result property="twStatusName" column="CO_CODE_NAME" columnIndex="13"/> 
+	</resultMap> 
+	<select id="TD0001.selectTodayWork900" parameterClass="TodayWork100VO" resultMap="selectTodayWork900Vo" >
+			<![CDATA[
+					 SELECT 
+					       a.TW_PK
+					     , a.TW_PROJECT_ID
+					     , a.TW_CATEGORY1
+					     , a.TW_CATEGORY2
+					     , a.TW_SUBJECT
+					     , a.TW_STATUS
+					     , a.TW_REQUEST_DATE
+					     , a.TW_REQUESTER
+					     , a.TW_WORKER
+					     , a.TW_START_DATE
+					     , a.TW_END_DATE
+					     , a.TW_UPDATETIME
+					     , b.CO_CODE_NAME
+						FROM TW_TASK_LIST a
+							LEFT JOIN TW_CODE b
+							ON a.TW_STATUS = b.CO_CODE
+							AND b.CO_DIV = 'PROCESS'
+						WHERE 1=1 
+						AND PA_PK = 0
+						AND TW_STATUS not in ('200','500')
+					]]> 
+		 			<isNotNull property="searchTwRequestDateSt" prepend="and"> 
+						a.TW_REQUEST_DATE BETWEEN #searchTwRequestDateSt# AND #searchTwRequestDateEd# 
+					</isNotNull>
+		 			<isNotNull property="searchTwWorker" prepend="and"> 
+						a.TW_WORKER = #searchTwWorker# 
+					</isNotNull>
+
+				<![CDATA[
+			 		ORDER BY a.TW_REQUEST_DATE DESC,a.TW_UPDATETIME DESC
+			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>	 
+	</select>
+	
+	<select id="TD0001.selectTodayWork900Cnt" parameterClass="TodayWork100VO" resultClass="int" >
+			<![CDATA[   
+					SELECT 
+						COUNT(*)  
+						FROM TW_TASK_LIST a
+							LEFT JOIN TW_CODE b
+							ON a.TW_STATUS = b.CO_CODE
+							AND b.CO_DIV = 'PROCESS'
+						WHERE 1=1 
+						AND PA_PK = 0
+						AND TW_STATUS not in ('200','500')
+			]]>
+			 <isNotNull property="searchTwRequestDateSt" prepend="and"> 
+				a.TW_REQUEST_DATE BETWEEN #searchTwRequestDateSt# AND #searchTwRequestDateEd# 
+			</isNotNull>
+				<isNotNull property="searchTwWorker" prepend="and"> 
+				a.TW_WORKER = #searchTwWorker# 
+			</isNotNull>
+	</select>  
+	
+	<insert id="TD0001.insertTodayWork901Write" parameterClass="todayWork100VO" >
+		<![CDATA[
+			 INSERT INTO TW_TASK_LIST
+				(
+				    TW_PROJECT_ID
+				  , TW_CATEGORY1
+				  , TW_CATEGORY2
+				  , TW_SUBJECT
+				  , TW_CONTENT
+				  , TW_STATUS
+				  , TW_REQUEST_DATE
+				  , TW_REQUESTER
+				  , TW_WORKER
+				  , TW_WORKER2
+				  , TW_START_DATE_EXP
+				  , TW_START_DATE
+				  , TW_END_DATE_EXP
+				  , TW_END_DATE
+				  )
+				VALUES (
+				    #twProjectId#
+				  , #twCategory1#
+				  , #twCategory2#
+				  , #twSubject#
+				  , #twContent#
+				  , #twStatus#
+				  , #twRequestDate#
+				  , #twRequester#
+				  , #twWorker#
+				  , #twWorker2#
+				  , #twStartDateExp#
+				  , #twStartDate#
+				  , #twEndDateExp#
+				  , #twEndDate#
+				  )
+		]]>
+	</insert>
+	
+	<update id="TD0001.updateTodayWork901Write" parameterClass="todayWork100VO" >
+		<![CDATA[
+			 UPDATE TW_TASK_LIST
+				SET
+					 TW_PROJECT_ID=#twProjectId#
+					,TW_CATEGORY1=#twCategory1#
+					,TW_CATEGORY2=#twCategory2#
+					,TW_SUBJECT=#twSubject#
+					,TW_CONTENT=#twContent#
+					,TW_STATUS=#twStatus#
+					,TW_REQUEST_DATE=#twRequestDate#
+					,TW_REQUESTER=#twRequester#
+					,TW_WORKER  =#twWorker#
+					,TW_WORKER2 =#twWorker2#
+					,TW_START_DATE_EXP=#twStartDateExp#
+					,TW_END_DATE_EXP  =#twEndDateExp#
+				WHERE TW_PK = #twPk#
+		]]>
+	</update>
+	
+	<resultMap id="selectTodayWork901PkVo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="twPk" column="last_id" columnIndex="1"/> 
+	</resultMap> 
+	<select id="TD0001.selectTodayWork901Pk" parameterClass="TodayWork100VO" resultMap="selectTodayWork901PkVo" >
+			<![CDATA[
+					 SELECT MAX(TW_PK) AS last_id FROM TW_TASK_LIST; 
+					]]>  
+	</select>
+	
+	<insert id="TD0001.insertTwFile" parameterClass="todayWork100VO" >
+		<![CDATA[ 
+				
+				 INSERT INTO TW_FILE
+					(
+					     ORIGINAL_FILENAME
+						, SAVED_FILE_PATH 
+						, FL_TABLE
+						, FL_FILE_PK
+				    )
+					VALUES 
+				   (
+					    #originalFilename#
+					  , #savedFilePath#
+					  , #flTable#
+					  , #flFilePk#
+				   )
+
+		]]>
+	</insert>
+	  
+	<resultMap id="selectTodayWork901WriteVo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="twPk" column="TW_PK" columnIndex="1"/>
+		<result property="twProjectId" column="TW_PROJECT_ID" columnIndex="2"/>
+		<result property="twCategory1" column="TW_CATEGORY1" columnIndex="3"/>
+		<result property="twCategory2" column="TW_CATEGORY2" columnIndex="4"/>
+		<result property="twSubject" column="TW_SUBJECT" columnIndex="5"/>
+		<result property="twStatus" column="TW_STATUS" columnIndex="6"/>
+		<result property="twRequestDate" column="TW_REQUEST_DATE" columnIndex="7"/> 
+		<result property="twRequester" column="TW_REQUESTER" columnIndex="8"/> 
+		<result property="twWorker" column="TW_WORKER" columnIndex="9"/>  
+		<result property="twStartDate" column="TW_START_DATE" columnIndex="10"/>    
+		<result property="twEndDate" column="TW_END_DATE" columnIndex="11"/>      
+		<result property="twUpdatetime" column="TW_UPDATETIME" columnIndex="12"/> 
+		<result property="twContent" column="TW_CONTENT" columnIndex="13"/> 
+		<result property="twStartDateExp" column="TW_START_DATE_EXP" columnIndex="14"/> 
+		<result property="twEndDateExp" column="TW_END_DATE_EXP" columnIndex="15"/> 
+		<result property="twWorker2" column="TW_WORKER2" columnIndex="16"/>  
+	</resultMap> 
+	
+	<select id="TD0001.selectTodayWork901Write" parameterClass="TodayWork100VO" resultMap="selectTodayWork901WriteVo" >
+			<![CDATA[
+					 SELECT 
+					       a.TW_PK
+					     , a.TW_PROJECT_ID
+					     , a.TW_CATEGORY1
+					     , a.TW_CATEGORY2
+					     , a.TW_SUBJECT
+					     , a.TW_STATUS
+					     , a.TW_REQUEST_DATE
+					     , a.TW_REQUESTER
+					     , a.TW_WORKER
+					     , a.TW_WORKER2
+					     , a.TW_START_DATE
+					     , a.TW_END_DATE
+					     , a.TW_UPDATETIME
+					     , a.TW_CONTENT
+					     , a.TW_START_DATE_EXP
+					     , a.TW_END_DATE_EXP
+						FROM TW_TASK_LIST a
+						WHERE a.TW_PK = #twPk#
+					]]>
+	</select>
+	
+	
+	<resultMap id="selectTodayWork900ViewVo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="twPk" column="TW_PK" columnIndex="1"/>
+		<result property="twProjectId" column="TW_PROJECT_ID" columnIndex="2"/>
+		<result property="twCategory1" column="TW_CATEGORY1" columnIndex="3"/>
+		<result property="twCategory2" column="TW_CATEGORY2" columnIndex="4"/>
+		<result property="twSubject" column="TW_SUBJECT" columnIndex="5"/>
+		<result property="twStatus" column="TW_STATUS" columnIndex="6"/>
+		<result property="twRequestDate" column="TW_REQUEST_DATE" columnIndex="7"/> 
+		<result property="twRequester" column="TW_REQUESTER" columnIndex="8"/> 
+		<result property="twWorker" column="TW_WORKER" columnIndex="9"/>  
+		<result property="twStartDate" column="TW_START_DATE" columnIndex="10"/>    
+		<result property="twEndDate" column="TW_END_DATE" columnIndex="11"/>      
+		<result property="twUpdatetime" column="TW_UPDATETIME" columnIndex="12"/> 
+		<result property="twContent" column="TW_CONTENT" columnIndex="13"/> 
+		<result property="twStartDateExp" column="TW_START_DATE_EXP" columnIndex="14"/> 
+		<result property="twEndDateExp" column="TW_END_DATE_EXP" columnIndex="15"/> 
+	</resultMap> 
+	<select id="TD0001.selectTodayWork900View" parameterClass="TodayWork100VO" resultMap="selectTodayWork900ViewVo" >
+			<![CDATA[
+					 SELECT 
+					       a.TW_PK
+					     , a.TW_PROJECT_ID
+					     , a.TW_CATEGORY1
+					     , a.TW_CATEGORY2
+					     , a.TW_SUBJECT
+					     , a.TW_STATUS
+					     , a.TW_REQUEST_DATE
+					     , a.TW_REQUESTER
+					     , a.TW_WORKER
+					     , a.TW_START_DATE
+					     , a.TW_END_DATE
+					     , a.TW_UPDATETIME
+					     , a.TW_CONTENT
+					     , a.TW_START_DATE_EXP
+					     , a.TW_END_DATE_EXP
+						FROM TW_TASK_LIST a
+						WHERE a.TW_PK = #twPk#
+					]]>
+	</select>
+	
+	<resultMap id="selectTodayWork901WriteAtachVo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="flPk" column="FL_PK" columnIndex="1"/>
+		<result property="originalFilename" column="ORIGINAL_FILENAME" columnIndex="2"/>
+		<result property="savedFilePath" column="SAVED_FILE_PATH" columnIndex="3"/>
+		<result property="flTable" column="FL_TABLE" columnIndex="4"/>
+		<result property="flFilePk" column="FL_FILE_PK" columnIndex="5"/> 
+	</resultMap> 
+	<select id="TD0001.selectTodayWork901WriteAtach" parameterClass="TodayWork100VO" resultMap="selectTodayWork901WriteAtachVo" >
+			<![CDATA[
+					 SELECT
+					         FL_PK
+					       , ORIGINAL_FILENAME
+					       , SAVED_FILE_PATH
+					       , FL_TABLE
+					       , FL_FILE_PK
+						FROM TW_FILE
+						WHERE FL_TABLE = #flTable#
+						  AND FL_FILE_PK = #flFilePk#
+					]]> 
+		 		 
+	</select>
+	
+	<select id="TD0001.selectTodayWork901WriteAtachCnt" parameterClass="TodayWork100VO" resultClass="int" >
+		<![CDATA[   
+				SELECT 
+					COUNT(*)   
+				FROM TW_FILE
+				WHERE FL_TABLE = #flTable#
+				  AND FL_FILE_PK = #flFilePk#
+		]]> 
+	</select>
+	
+	<resultMap id="selectTodayWork905Vo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="twPk" column="TW_PK" columnIndex="1"/>
+		<result property="twProjectId" column="TW_PROJECT_ID" columnIndex="2"/>
+		<result property="twCategory1" column="TW_CATEGORY1" columnIndex="3"/>
+		<result property="twCategory2" column="TW_CATEGORY2" columnIndex="4"/>
+		<result property="twSubject" column="TW_SUBJECT" columnIndex="5"/>
+		<result property="twStatus" column="CO_CODE_NAME" columnIndex="6"/>
+		<result property="twRequestDate" column="TW_REQUEST_DATE" columnIndex="7"/> 
+		<result property="twRequester" column="TW_REQUESTER" columnIndex="8"/> 
+		<result property="twWorker" column="TW_WORKER" columnIndex="9"/>  
+		<result property="twStartDate" column="TW_START_DATE" columnIndex="10"/>    
+		<result property="twEndDate" column="TW_END_DATE" columnIndex="11"/>      
+		<result property="twUpdatetime" column="TW_UPDATETIME" columnIndex="12"/> 
+		<result property="twStatusName" column="CO_CODE_NAME" columnIndex="13"/> 
+		<result property="mbName" column="MB_NAME" columnIndex="14"/>
+		<result property="tcCount" column="TC_COUNT" columnIndex="15"/>
+	</resultMap> 
+	<select id="TD0001.selectTodayWork905" parameterClass="TodayWork100VO" resultMap="selectTodayWork905Vo" >
+			<![CDATA[
+					 SELECT 
+					       a.TW_PK
+					     , a.TW_PROJECT_ID
+					     , a.TW_CATEGORY1
+					     , a.TW_CATEGORY2
+					     , a.TW_SUBJECT
+					     , a.TW_STATUS
+					     , a.TW_REQUEST_DATE
+					     , a.TW_REQUESTER
+					     , a.TW_WORKER
+					     , a.TW_START_DATE
+					     , a.TW_END_DATE
+					     , a.TW_UPDATETIME
+					     , b.CO_CODE_NAME
+					     , c.MB_NAME 
+					     , COALESCE(d.TC_COUNT, 0) AS TC_COUNT
+						FROM TW_TASK_LIST a
+							LEFT JOIN TW_CODE b
+							ON a.TW_STATUS = b.CO_CODE
+							AND b.CO_DIV = 'PROCESS'
+							LEFT JOIN em_mb_member c
+							ON a.TW_WORKER = c.USER_ID
+							LEFT JOIN TW_CHAT_UNREAD d
+							ON a.TW_PK = d.TC_TW_PK
+							AND d.TC_USER_ID = 'admin'
+						WHERE 1=1 
+						AND PA_PK = 0
+						AND TW_STATUS not in ('200','500')
+					]]> 
+		 			<isNotNull property="searchTwRequestDateSt" prepend="and"> 
+						a.TW_REQUEST_DATE BETWEEN #searchTwRequestDateSt# AND #searchTwRequestDateEd# 
+					</isNotNull>
+		 			<isNotNull property="searchTwWorker" prepend="and"> 
+						a.TW_WORKER = #searchTwWorker# 
+					</isNotNull>
+		 			<isNotNull property="twRequester" prepend="and"> 
+						a.TW_REQUESTER = #twRequester# 
+					</isNotNull> 
+		 			<isNotNull property="twWorker2" prepend="and"> 
+						( a.TW_REQUESTER = #twWorker2#  or a.TW_WORKER2 = #twWorker2#   ) 
+					</isNotNull> 
+
+				<![CDATA[
+			 		ORDER BY a.TW_REQUEST_DATE DESC,a.TW_UPDATETIME DESC
+			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>	 
+	</select>
+	
+	<select id="TD0001.selectTodayWork905Cnt" parameterClass="TodayWork100VO" resultClass="int" >
+			<![CDATA[   
+					SELECT 
+						COUNT(*)  
+						FROM TW_TASK_LIST a
+							LEFT JOIN TW_CODE b
+							ON a.TW_STATUS = b.CO_CODE
+							AND b.CO_DIV = 'PROCESS'
+							LEFT JOIN em_mb_member c
+							ON a.TW_WORKER = c.USER_ID
+							LEFT JOIN TW_CHAT_UNREAD d
+							ON a.TW_PK = d.TC_TW_PK
+							AND d.TC_USER_ID = 'admin'
+						WHERE 1=1 
+						AND PA_PK = 0
+						AND TW_STATUS not in ('200','500')
+			]]>
+		 			<isNotNull property="searchTwRequestDateSt" prepend="and"> 
+						a.TW_REQUEST_DATE BETWEEN #searchTwRequestDateSt# AND #searchTwRequestDateEd# 
+					</isNotNull>
+		 			<isNotNull property="searchTwWorker" prepend="and"> 
+						a.TW_WORKER = #searchTwWorker# 
+					</isNotNull>
+		 			<isNotNull property="twRequester" prepend="and"> 
+						a.TW_REQUESTER = #twRequester# 
+					</isNotNull> 
+		 			<isNotNull property="twWorker2" prepend="and"> 
+						( a.TW_REQUESTER = #twWorker2#  or a.TW_WORKER2 = #twWorker2#   ) 
+					</isNotNull>
+	</select>  
+	
+	<resultMap id="selectCallChatListVo" class="egovframework.or.kr.TD0001.service.TodayWork100VO">
+		<result property="chPk" column="CH_PK" columnIndex="1"/>
+		<result property="chUserId" column="CH_USER_ID" columnIndex="2"/>
+		<result property="chPaPk" column="CH_PA_PK" columnIndex="3"/>
+		<result property="messageType" column="MessageType" columnIndex="4"/>
+		<result property="chMessage" column="CH_MESSAGE" columnIndex="5"/>
+		<result property="coUpdatetime" column="CO_UPDATETIME" columnIndex="6"/> 
+	</resultMap> 
+	<select id="TD0001.selectCallChatList" parameterClass="TodayWork100VO" resultMap="selectCallChatListVo" >
+			<![CDATA[
+					SELECT 
+					    CH_PK,
+					    CH_USER_ID,
+					    CH_PA_PK,
+					    CASE 
+					        WHEN CH_USER_ID = #chUserId# THEN 's'
+					        ELSE 'r'
+					    END AS MessageType,
+					    CH_MESSAGE,
+					    CO_UPDATETIME 
+					FROM TW_CHAT
+					WHERE CH_PA_PK = #chPaPk#
+					ORDER BY CH_PK ASC;
+					]]>  
+	</select>
+	
+	<select id="TD0001.selectCallChatListCnt" parameterClass="TodayWork100VO" resultClass="int" >
+			<![CDATA[   
+					SELECT 
+						COUNT(*) 
+					FROM TW_CHAT
+					WHERE CH_PA_PK = #chPaPk#
+			]]> 
+	</select>  
+	
+	<insert id="TD0001.insertChatMsg" parameterClass="todayWork100VO" >
+		<![CDATA[ 
+			 INSERT INTO TW_CHAT
+				(
+				    CH_USER_ID
+				  , CH_PA_PK
+				  , CH_MESSAGE
+				)
+				VALUES 
+				(
+				     #chUserId#
+				   , #chPaPk#
+				   , #messageType#
+				 )
+		]]>
+	</insert>
+	
+	<delete id="TD0001.deleteTwChatUnRead" parameterClass="todayWork100VO" >
+		<![CDATA[ 
+			  DELETE FROM TW_CHAT_UNREAD 
+			  WHERE TC_TW_PK= #chPaPk#
+			  AND TC_USER_ID = #tcUserId#
+		]]>
+	</delete>
+	
+	<select id="TD0001.selectUnread" parameterClass="TodayWork100VO" resultClass="int" >
+			<![CDATA[   
+				 SELECT  TC_COUNT
+					FROM TW_CHAT_UNREAD
+					WHERE TC_USER_ID = #tcUserId#
+					  AND TC_TW_PK = #tcTwPk#
+			]]> 
+	</select>  
+	 
+</sqlMap>

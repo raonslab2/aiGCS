@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00G01">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="loginVO"
+		type="egovframework.com.cmm.LoginVO" />
+	<typeAlias alias="dataListVO"
+		type="egovframework.or.kr.EMAU00G.service.EMAU00G01VO" />
+	
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1" />
+		<result property="name" column="name" columnIndex="2" />
+		<result property="ihidNum" column="ihidNum" columnIndex="3" />
+		<result property="email" column="email" columnIndex="4" />
+		<result property="password" column="password" columnIndex="5" />
+		<result property="userSe" column="userSe" columnIndex="6" />
+		<result property="orgnztId" column="orgnztId" columnIndex="7" />
+		<result property="uniqId" column="uniqId" columnIndex="8" />
+	</resultMap>
+
+
+
+	<!-- <resultMap id="searchBusiness" class="egovframework.">
+		<result property="PJ_YEAR" column="PJ_YEAR" columnIndex="1" />
+		<result property="PJ_CODE" column="PJ_CODE" columnIndex="2" />
+		<result property="PJ_CATE_CODE1" column="PJ_CATE_CODE1" columnIndex="3" />
+		<result property="PJ_CATE_CODE2" column="PJ_CATE_CODE2" columnIndex="4" />
+		<result property="GR_M_CODE" column="GR_M_CODE" columnIndex="5" />
+		<result property="AU_CODE" column="AU_CODE" columnIndex="6" />
+		<result property="PJ_TITLE" column="PJ_TITLE" columnIndex="7" />
+		
+	</resultMap> -->
+	
+	<select id="EMAU00G01.searchBusiness" parameterClass = "map" resultClass="java.util.HashMap">
+		<![CDATA[
+			SELECT 
+				 PJ_CODE AS pjCode
+				 , PJ_TITLE AS pjTitle
+			from 
+				em_pj_list_vi
+			WHERE 
+				PJ_TITLE = #pj_title#
+
+		]]>
+	</select>
+
+	
+		<select id="EMAU00G01.businessDepart" parameterClass = "loginVO" resultClass="String">
+		<![CDATA[
+				SELECT 
+					CONCAT(b.GR_M_NAME , " ", a.GR_M_NAME )
+				FROM 
+					em_mb_group a
+				LEFT JOIN em_mb_group b ON a.GR_P_CODE = b.GR_M_CODE
+				WHERE 
+					a.GR_M_CODE = #grmCode#
+				
+		]]>
+	</select>
+
+	<resultMap id="dataList" class="egovframework.or.kr.EMAU00G.service.EMAU00G01VO">
+		<result property="seCode" column="seCode" columnIndex="1"/>
+		<result property="reGubun" column="reGubun" columnIndex="2"/>
+		<result property="pjCode" column="pjCode" columnIndex="3"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="4"/>
+		<result property="pjTitle2" column="pjTitle2" columnIndex="5"/>
+		<result property="mbCode" column="mbCode" columnIndex="6"/>
+		<result property="grmCode" column="grmCode" columnIndex="7"/>
+		<result property="sysWriteTime" column="sysWriteTime" columnIndex="8"/>
+		<result property="rpaPk" column="rpaPk" columnIndex="9"/>
+		<result property="seqCode" column="seqCode" columnIndex="10"/>
+		<result property="successYN" column="successYN" columnIndex="11"/>
+		<result property="failReason" column="failReason" columnIndex="12"/>
+		<result property="resultFile" column="resultFile" columnIndex="13"/>
+		<result property="year" column="year" columnIndex="14"/>
+		<result property="grmName" column="grmName" columnIndex="15"/>
+	</resultMap>
+
+		<select id="EMAU00G01.searchRpaPjList1" parameterClass="Map" resultMap="dataList">
+		<![CDATA[
+					SELECT DISTINCT
+							a.SE_CODE as seCode
+					      , a.RE_GUBUN as reGubun
+					      , a.PJ_CODE as pjCode
+					      , a.PJ_TITLE as pjTitle
+					      , a.PJ_TITLE_NUM as pjTitle2
+					      , a.MB_CODE as mbCode
+				      , a.GR_M_CODE as grmCode
+					      , a.SYS_WRITETIME as sysWriteTime
+					      , b.RPA_PK as rpaPk
+					      , b.SEQ_CODE as seqCode
+					      , b.SUCCESS_YN as successYN
+					      , b.FAIL_REASON as failReason
+					      , b.RESULT_FILE as resultFile
+					      , c.PJ_YEAR as year
+					      , d.GR_M_NAME as grmName
+					FROM 
+						EM_RPA_REQUEST a
+						LEFT JOIN EM_RPA_RESULT b
+						ON a.SE_CODE = b.SEQ_CODE
+						LEFT JOIN em_pj_list_vi c
+						ON a.PJ_TITLE = c.PJ_TITLE
+						LEFT JOIN em_mb_member_vi d
+						ON c.GR_M_CODE = d.GR_M_CODE
+					WHERE 1=1 
+					]]>	
+					<isNotEmpty property="re_gubun">		
+					   AND a.RE_GUBUN = #re_gubun#
+					</isNotEmpty>
+					<isNotEmpty property="pj_title">		
+					   AND a.PJ_TITLE LIKE CONCAT('%',#pj_title#,'%')
+					</isNotEmpty>
+					<![CDATA[
+					   ORDER BY d.GR_M_NAME DESC
+					]]> 
+	</select>
+	
+	<resultMap id="businessList" class="egovframework.or.kr.EMAU00G.service.EMAU00G01VO">
+		<result property="year" column="year" columnIndex="1"/>
+		<result property="pjCode" column="pjCode" columnIndex="2"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="3"/>
+		<result property="pjTitle2" column="pjTitle2" columnIndex="4"/>
+		<result property="grmCode" column="grmCode" columnIndex="5"/>
+		<result property="grmName" column="grmName" columnIndex="6"/>
+	</resultMap>
+	
+	
+	<select id="EMAU00G01.searchRpaPjList" parameterClass="Map" resultMap="businessList">
+		<![CDATA[
+		SELECT DISTINCT
+			a.busi_yy as year
+			, a.ancm_id as pjCode
+			, a.ancm_nm as pjTitle
+			, a.dtl_ancm_nm as pjTitle2  
+			, b.GR_M_CODE as grmCode
+			, c.GR_M_NAME as grmName
+		FROM 
+		VI_EDW_DM_SBJT_ADMN_INFO_GR2 a
+		LEFT JOIN (
+					SELECT DISTINCT
+					ANCM_ID
+				  ,	LGIN_ID2
+				  ,	GR_M_CODE
+		FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST
+		           ) b
+		ON a.ancm_id = b.ANCM_ID
+		LEFT JOIN em_mb_group c
+		ON b.GR_M_CODE = c.GR_M_CODE
+		WHERE ancm_nm LIKE CONCAT('%',#pj_title#,'%') 
+	      AND a.busi_yy = YEAR(NOW())
+		ORDER BY grmName DESC;
+		]]>
+	</select>
+	<!-- a.ancm_nm = #pj_title# AND b.GR_M_CODE != 'NULL' -->
+	<insert id="EMAU00G01.dataRequest" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO EM_RPA_REQUEST
+				(	
+					SE_CODE
+				  , RE_GUBUN
+				  , PJ_CODE
+				  , PJ_TITLE
+				  , PJ_TITLE_NUM
+				  , GR_M_CODE
+				  , MB_CODE
+				  , SYS_WRITETIME
+				  , SE_CALL
+				)
+			VALUES ( 
+					#seCode#
+				  , #reGubun#
+				  , #pjCode#
+				  , #pjTitle# 
+				  , #pjTitleNum# 
+				  , #grmCode# 
+				  , #mbCode# 
+				  , now() 
+				  , 0
+				  )
+		]]>
+	</insert>
+		
+	<resultMap id="autocompleteList" class="egovframework.or.kr.EMAU00B.service.EmpjVO">
+		<result property="pjTitle" column="pjTitle" columnIndex="1"/>
+	</resultMap>
+	
+	<!-- <select id="EMAU00G01.autocomplete" parameterClass="Map" resultMap="autocompleteList">
+		<![CDATA[
+			SELECT
+				ancm_nm AS pjTitle
+			FROM
+				VI_EDW_DM_SBJT_ADMN_INFO_GR2
+			WHERE 
+				ancm_nm LIKE CONCAT('%',#searchRpaPjList#,'%')
+		]]> 
+	</select> -->
+	
+
+	<insert id="EMAU00G01.insertEMAU00G01" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO EM_RPA_RESULT
+				(	
+					SEQ_CODE
+					, SUCCESS_YN
+					, FAIL_REASON
+					, RESULT_FILE
+					, SYS_WRITETIME
+				)
+			VALUES ( 
+					#SeqCode#
+				  , #successYN#
+				  , #failReason#
+				  , #resultFile#
+				  , now() 
+				  )
+		]]>
+	</insert> 
+	
+	<resultMap id="rpaRequest" class="egovframework.or.kr.EMAU00G.service.EMAU00G01VO">
+		<result property="seCode" column="seCode" columnIndex="1"/>
+		<result property="reGubun" column="reGubun" columnIndex="2"/>
+		<result property="pjCode" column="pjCode" columnIndex="3"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="4"/>
+		<result property="pjTitleNum" column="pjTitleNum" columnIndex="5"/>
+		<result property="grmCode" column="grmCode" columnIndex="6"/>
+		<result property="mbCode" column="mbCode" columnIndex="7"/>
+		<result property="sysWriteTime" column="sysWriteTime" columnIndex="8"/>
+		<result property="seCall" column="seCall" columnIndex="9"/>
+	</resultMap>
+	
+	<select id="EMAU00G01.eMAU00RPA10001" parameterClass="Map" resultMap="rpaRequest">
+		<![CDATA[
+		SELECT 
+			SE_CODE AS seCode
+			, RE_GUBUN AS reGubun
+			, PJ_CODE AS pjCode
+			, PJ_TITLE AS pjTitle
+			, PJ_TITLE_NUM AS pjTitleNum
+			, GR_M_CODE AS grmCode
+			, MB_CODE AS mbCode
+			, SYS_WRITETIME AS sysWriteTime
+			, SE_CALL AS seCall
+		FROM 
+			EM_RPA_REQUEST
+		WHERE SE_CALL = 0 AND 
+		ORDER BY SE_CODE ASC
+		LIMIT 1;
+		]]>
+	</select>
+	
+	<update id="EMAU00G01.eMAU00RPA10002" parameterClass="String">
+		<![CDATA[
+			UPDATE 
+				EM_RPA_REQUEST 
+			SET 
+				SE_CALL = 1
+			WHERE 
+				SE_CODE = #SeqCode#
+		]]>
+	</update>
+	
+	<select id="EMAU00G01.selectEMAU00G01" parameterClass="Map" resultClass="java.util.HashMap">
+		<![CDATA[
+		SELECT 
+			MB_CODE AS mbCode
+		FROM 
+			EM_RPA_REQUEST
+		WHERE 
+			SE_CODE = #SeqCode#
+		]]>
+	</select>
+	
+	<insert id="EMAU00G01.insert2EMAU00G01" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_notice
+				(	
+					no_in_day
+					, no_title
+					, no_text
+					, no_etc
+					, no_write_date
+					, no_receive_mb_code
+					, no_request_mb_code
+				)
+			VALUES ( 
+					DATE_ADD(now(), INTERVAL 3 DAY)
+					, 'RPA 알림'
+					, 'RPA 자료 수행이 종료되었습니다.'
+					, 'RPA 자료조회 결과페이지에서 결과를 조회해주세요.'
+					, now()
+					, #mbCode#
+					, #mbCode#
+				  )
+		]]>
+	</insert>
+</sqlMap>

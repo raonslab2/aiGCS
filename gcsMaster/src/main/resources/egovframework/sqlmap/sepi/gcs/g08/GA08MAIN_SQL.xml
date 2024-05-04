@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA08MAIN">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="GA08MAINVO" type="egovframework.or.kr.GA08MAIN.service.GA08MAINVO"/> 
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1"/> 
+	</resultMap>
+	
+ 	<!-- test -->
+	<select id="GA08MAIN.selectTest" resultMap="login">
+			<![CDATA[
+            SELECT '1' AS id
+              from dual
+			]]>
+	</select>
+	
+</sqlMap>

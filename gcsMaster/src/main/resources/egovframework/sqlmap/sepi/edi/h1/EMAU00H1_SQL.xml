@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00H1DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="loginVO" type="egovframework.com.cmm.LoginVO" />
+	<typeAlias alias="eMAU00H1VO" type="egovframework.or.kr.EMAU00H.EMAU00H1VO" />
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1" />
+		<result property="name" column="name" columnIndex="2" />
+		<result property="ihidNum" column="ihidNum" columnIndex="3" />
+		<result property="email" column="email" columnIndex="4" />
+		<result property="password" column="password" columnIndex="5" />
+		<result property="userSe" column="userSe" columnIndex="6" />
+		<result property="orgnztId" column="orgnztId" columnIndex="7" />
+		<result property="uniqId" column="uniqId" columnIndex="8" />
+	</resultMap>
+
+	<resultMap id="searchOption2" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="mbName" column="mbName" columnIndex="1"/>
+		<result property="mbCode" column="mbCode" columnIndex="2"/>
+	</resultMap>
+
+	<select id="EMAU00H1.searchSubOption2" parameterClass="Map" resultMap="searchOption2">
+		<![CDATA[
+			SELECT 
+				MB_CODE AS mbCode
+				,MB_NAME AS mbName
+			FROM
+			 	em_mb_member
+			WHERE
+				GR_M_CODE = #grmCode# AND GR_P_CODE = #grpCode#
+		]]>
+	</select>
+	
+	<resultMap id="requestInfo0" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="tlTitle" column="tlTitle" columnIndex="1"/>
+		<result property="tlTxt" column="tlTxt" columnIndex="2"/>
+		<result property="mbCode" column="mbCode" columnIndex="3"/>
+		<result property="mbName" column="mbName" columnIndex="4"/>
+		<result property="grmName" column="grmName" columnIndex="5"/>
+		<result property="tlConfirm" column="tlConfirm" columnIndex="6"/>
+		<result property="tlWorkDay" column="tlWorkDay" columnIndex="7"/>
+		<result property="tlWorkMbCode" column="tlWorkMbCode" columnIndex="8"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="9"/>
+		<result property="tlWorkGrmCode" column="tlWorkGrmCode" columnIndex="10"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="11"/>
+		<result property="tlWriteTime" column="tlWriteTime" columnIndex="12"/>
+		<result property="tlEndDay" column="tlEndDay" columnIndex="13"/>
+		<result property="tlPk" column="tlPk" columnIndex="14"/>
+		<result property="flPk" column="flPk" columnIndex="15"/>
+		<result property="flName" column="flName" columnIndex="16"/>
+		<result property="flPath" column="flPath" columnIndex="17"/>
+		<result property="flWriteTime" column="flWriteTime" columnIndex="18"/>
+	</resultMap>
+	
+	
+	<select id="EMAU00H1.requestInfo0" parameterClass="Map" resultMap="requestInfo0">
+		<![CDATA[
+			SELECT
+				a.TL_TITLE AS tlTitle
+				,a.TL_TXT AS tlTxt
+				,a.MB_CODE AS mbCode
+				,d.MB_NAME AS tlWorkMbName
+				,c.GR_M_NAME AS grmName
+				,a.TL_CONFIRM AS tlConfirm
+				,a.TL_WORK_DAY AS tlWorkDay
+				,a.TL_WORK_MB_CODE AS tlWorkMbCode
+				,b.MB_NAME AS mbName
+				,a.TL_WORK_GR_M_CODE AS tlWorkGrmCode
+				,e.GR_M_NAME AS tlWorkGrmName
+				, DATE_FORMAT(a.TL_WRITE_TIME, '%Y년 %m월 %d일 %H:%i' ) AS tlWriteTime
+				,a.TL_END_DAY AS tlEndDay
+				,a.Tl_PK AS tlPk
+				,g.FL_PK AS flPk
+				,g.FL_NAME AS flName
+				,g.FL_PATH AS flPath
+				,g.WRITE_TIME AS flWriteTime
+			FROM em_t_link a
+			 	LEFT JOIN em_mb_member b
+			 	ON a.MB_CODE = b.MB_CODE
+			 	LEFT JOIN em_mb_group c
+			 	ON a.GR_M_CODE = c.GR_M_CODE
+			 	LEFT JOIN em_mb_member d
+			 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+			 	LEFT JOIN em_mb_group e
+			 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+			 	LEFT JOIN em_t_link_file g
+			 	ON a.TL_PK = g.TL_PK
+			WHERE a.MB_CODE = #loginMbCode# OR a.TL_WORK_MB_CODE = #loginMbCode#
+		]]>
+	</select>
+	
+	<resultMap id="requestData" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="tlTitle" column="tlTitle" columnIndex="1"/>
+		<result property="mbName" column="mbName" columnIndex="2"/>
+		<result property="grmName" column="grmName" columnIndex="3"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="4"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="5"/>
+		<result property="tlWriteTime" column="tlWriteTime" columnIndex="6"/>
+		<result property="tlEndDay" column="tlEndDay" columnIndex="7"/>
+		<result property="tlPk" column="tlPk" columnIndex="8"/>
+	</resultMap>
+	
+	<select id="EMAU00H1.requestData" parameterClass="Map" resultMap="requestData">
+		<![CDATA[
+			SELECT 
+				a.TL_TITLE AS tlTitle
+				,b.MB_NAME AS tlWorkMbName
+				,e.GR_M_NAME AS grmName
+				,d.MB_NAME AS mbName
+				,c.GR_M_NAME AS tlWorkGrmName
+				, DATE_FORMAT(a.TL_WRITE_TIME, '%Y.%m.%d %H:%m' ) AS tlWriteTime
+				,a.TL_END_DAY AS tlEndDay
+				,a.Tl_PK AS tlPk
+			FROM em_t_link a
+			 	LEFT JOIN em_mb_member b
+			 	ON a.MB_CODE = b.MB_CODE
+			 	LEFT JOIN em_mb_group c
+			 	ON a.GR_M_CODE = c.GR_M_CODE
+			 	LEFT JOIN em_mb_member d
+			 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+			 	LEFT JOIN em_mb_group e
+			 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+		]]>
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="grpCode">
+				e.GR_P_CODE = #grpCode#
+			</isNotEmpty>
+		</dynamic>
+		<isNotEmpty prepend="AND" property="grmCode2">
+				<![CDATA[
+					a.TL_WORK_GR_M_CODE = #grmCode2# 
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="mbCode">
+				<![CDATA[
+					a.TL_WORK_MB_CODE = #mbCode# 
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="mbCode">
+				<![CDATA[
+					a.TL_WORK_MB_CODE = #mbCode# 
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="date1">
+				<![CDATA[
+					a.TL_WRITE_TIME >= #date1# 
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="date2">
+				<![CDATA[
+					a.TL_WRITE_TIME < #date2#
+				]]>
+		</isNotEmpty>
+		
+		<![CDATA[
+			AND a.TL_TITLE LIKE CONCAT('%',#text#,'%')
+			ORDER BY a.TL_WRITE_TIME ASC
+		]]>
+	</select>
+	
+	<insert id="EMAU00H1.businessRequest" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_t_link
+				(	
+					TL_TITLE
+					, TL_TXT
+					, MB_CODE
+					, GR_M_CODE
+					, TL_CONFIRM
+					, TL_WORK_DAY
+					, TL_WORK_MB_CODE
+					, TL_WORK_GR_M_CODE
+					, TL_WRITE_TIME
+					, TL_END_DAY
+				)
+			VALUES (
+					#tlTitle#
+					,#tlText#
+					,#mbCode#
+					,#grmCode#
+					,#tlConfirm#
+					,#date1#
+					,#tlMbCode#
+					,#tlGrmCode#
+					,#time#
+					,#date2#
+				  )
+		]]>
+		<selectKey keyProperty="TL_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		</insert>
+	
+	<update id="EMAU00H1.requestMove" parameterClass="Map">
+		UPDATE
+			em_t_link
+		SET 
+			TL_CONFIRM = #index#
+		WHERE 
+			TL_PK = #tlPk#
+	</update>
+	
+	<delete id="EMAU00H1.deleteRequest" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_t_link
+		WHERE
+			TL_PK = #tlPk#
+		]]>
+	</delete>
+	
+	<resultMap id="requestRelay" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="tlTitle" column="tlTitle" columnIndex="1"/>
+		<result property="mbCode" column="mbCode" columnIndex="2"/>
+		<result property="grmCode" column="grmCode" columnIndex="3"/>
+		<result property="mbName" column="mbName" columnIndex="4"/>
+		<result property="tlWriteTime" column="tlWriteTime" columnIndex="5"/>
+		<result property="tlWorkDay" column="tlWorkDay" columnIndex="6"/>
+		<result property="tlWorkMbCode" column="tlWorkMbCode" columnIndex="7"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="8"/>
+		<result property="tlWorkGrmCode" column="tlWorkGrmCode" columnIndex="9"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="10"/>
+		<result property="tlTxt" column="tlTxt" columnIndex="11"/>
+		<result property="tlConfirm" column="tlConfirm" columnIndex="12"/>
+		<result property="uploadFileName" column="uploadFileName" columnIndex="13"/>
+	</resultMap>
+	
+	<select id="EMAU00H1.requestRelay" parameterClass="Map" resultMap="requestRelay">
+		<![CDATA[
+				SELECT 
+					a.TL_TITLE AS tlTitle
+					,a.MB_CODE AS mbCode
+					,a.GR_M_CODE AS grmCode
+					,c.GR_M_NAME AS grmName
+					,b.MB_NAME AS mbName
+					,a.TL_WRITE_TIME AS tlWriteTime
+					,a.TL_WORK_DAY AS tlWorkDay
+					,a.TL_WORK_MB_CODE AS tlWorkMbCode
+					,d.MB_NAME AS tlWorkMbName
+					,a.TL_WORK_GR_M_CODE AS tlWorkGrmCode
+					,e.GR_M_NAME AS tlWorkGrmName
+					,a.TL_TXT AS tlTxt
+					,a.TL_CONFIRM AS tlConfirm
+					,g.FL_NAME AS uploadFileName
+				FROM
+				 	em_t_link a
+				 	LEFT JOIN em_mb_member b
+				 	ON a.MB_CODE = b.MB_CODE
+				 	LEFT JOIN em_mb_group c
+				 	ON a.GR_M_CODE = c.GR_M_CODE
+				 	LEFT JOIN em_mb_member d
+				 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+				 	LEFT JOIN em_mb_group e
+				 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+				 	LEFT JOIN em_t_link_file g
+				 	ON a.TL_PK = g.TL_PK
+			WHERE
+					a.TL_PK = #tlPk#
+		]]>
+	</select>
+
+	<resultMap id="searchTlink" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="tlTitle" column="tlTitle" columnIndex="1"/>
+		<result property="tlTxt" column="tlTxt" columnIndex="2"/>
+		<result property="mbCode" column="mbCode" columnIndex="3"/>
+		<result property="mbName" column="mbName" columnIndex="4"/>
+		<result property="grmName" column="grmName" columnIndex="5"/>
+		<result property="tlConfirm" column="tlConfirm" columnIndex="6"/>
+		<result property="tlWorkDay" column="tlWorkDay" columnIndex="7"/>
+		<result property="tlWorkMbCode" column="tlWorkMbCode" columnIndex="8"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="9"/>
+		<result property="tlWorkGrmCode" column="tlWorkGrmCode" columnIndex="10"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="11"/>
+		<result property="tlWriteTime" column="tlWriteTime" columnIndex="12"/>
+		<result property="tlEndDay" column="tlEndDay" columnIndex="13"/>
+		<result property="tlPk" column="tlPk" columnIndex="14"/>
+		<result property="flPk" column="flPk" columnIndex="15"/>
+		<result property="flName" column="flName" columnIndex="16"/>
+		<result property="flPath" column="flPath" columnIndex="17"/>
+		<result property="flWriteTime" column="flWriteTime" columnIndex="18"/>
+	</resultMap>
+
+		<select id="EMAU00H1.searchTlink" parameterClass="Map" resultMap="searchTlink">
+		<![CDATA[
+			SELECT
+				a.TL_TITLE AS tlTitle
+				,a.TL_TXT AS tlTxt
+				,a.MB_CODE AS mbCode
+				,d.MB_NAME AS tlWorkMbName
+				,c.GR_M_NAME AS grmName
+				,a.TL_CONFIRM AS tlConfirm
+				,a.TL_WORK_DAY AS tlWorkDay
+				,a.TL_WORK_MB_CODE AS tlWorkMbCode
+				,b.MB_NAME AS mbName
+				,a.TL_WORK_GR_M_CODE AS tlWorkGrmCode
+				,e.GR_M_NAME AS tlWorkGrmName
+				, DATE_FORMAT(a.TL_WRITE_TIME, '%Y년 %m월 %d일 %H:%m' ) AS tlWriteTime
+				,a.TL_END_DAY AS tlEndDay
+				,a.Tl_PK AS tlPk
+				,g.FL_PK AS flPk
+				,g.FL_NAME AS flName
+				,g.FL_PATH AS flPath
+				,g.WRITE_TIME AS flWriteTime
+			FROM em_t_link a
+			 	LEFT JOIN em_mb_member b
+			 	ON a.MB_CODE = b.MB_CODE
+			 	LEFT JOIN em_mb_group c
+			 	ON a.GR_M_CODE = c.GR_M_CODE
+			 	LEFT JOIN em_mb_member d
+			 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+			 	LEFT JOIN em_mb_group e
+			 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+			 	LEFT JOIN em_t_link_file g
+			 	ON a.TL_PK = g.TL_PK
+			WHERE
+				a.MB_CODE = #searchMbCode#
+			ORDER BY TL_END_DAY ASC;
+		]]>
+	</select>
+	
+	<select id="EMAU00H1.searchTlink2" parameterClass="Map" resultMap="searchTlink">
+		<![CDATA[
+			SELECT
+				a.TL_TITLE AS tlTitle
+				,a.TL_TXT AS tlTxt
+				,a.MB_CODE AS mbCode
+				,d.MB_NAME AS tlWorkMbName
+				,c.GR_M_NAME AS grmName
+				,a.TL_CONFIRM AS tlConfirm
+				,a.TL_WORK_DAY AS tlWorkDay
+				,a.TL_WORK_MB_CODE AS tlWorkMbCode
+				,b.MB_NAME AS mbName
+				,a.TL_WORK_GR_M_CODE AS tlWorkGrmCode
+				,e.GR_M_NAME AS tlWorkGrmName
+				, DATE_FORMAT(a.TL_WRITE_TIME, '%Y년 %m월 %d일 %H:%m' ) AS tlWriteTime
+				,a.TL_END_DAY AS tlEndDay
+				,a.Tl_PK AS tlPk
+				,g.FL_PK AS flPk
+				,g.FL_NAME AS flName
+				,g.FL_PATH AS flPath
+				,g.WRITE_TIME AS flWriteTime
+			FROM em_t_link a
+			 	LEFT JOIN em_mb_member b
+			 	ON a.MB_CODE = b.MB_CODE
+			 	LEFT JOIN em_mb_group c
+			 	ON a.GR_M_CODE = c.GR_M_CODE
+			 	LEFT JOIN em_mb_member d
+			 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+			 	LEFT JOIN em_mb_group e
+			 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+			 	LEFT JOIN em_t_link_file g
+			 	ON a.TL_PK = g.TL_PK
+			WHERE
+				a.TL_WORK_MB_CODE = #searchMbCode# 
+		]]>
+	</select>
+	
+	<resultMap id="searchMbCode" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="mbCode" column="mbCode" columnIndex="14"/>
+	</resultMap>
+
+		<select id="EMAU00H1.searchMbCode" parameterClass="Map" resultMap="searchMbCode">
+		<![CDATA[
+			SELECT 
+				MB_CODE AS mbCode
+			FROM 
+				em_mb_member
+			WHERE 
+				MB_NAME = #tlinkRequester#
+		]]>
+	</select>
+	
+	<resultMap id="detailView" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="tlTitle" column="tlTitle" columnIndex="1"/>
+		<result property="mbCode" column="mbCode" columnIndex="2"/>
+		<result property="grmCode" column="grmCode" columnIndex="3"/>
+		<result property="grmName" column="grmName" columnIndex="4"/>
+		<result property="mbName" column="mbName" columnIndex="5"/>
+		<result property="tlWriteTime" column="tlWriteTime" columnIndex="6"/>
+		<result property="tlWorkDay" column="tlWorkDay" columnIndex="7"/>
+		<result property="tlWorkMbCode" column="tlWorkMbCode" columnIndex="8"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="9"/>
+		<result property="tlWorkGrmCode" column="tlWorkGrmCode" columnIndex="10"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="11"/>
+		<result property="tlTxt" column="tlTxt" columnIndex="12"/>
+		<result property="tlConfirm" column="tlConfirm" columnIndex="13"/>
+		<result property="tlWorkOldMbCode" column="tlWorkOldMbCode" columnIndex="14"/>
+		<result property="tlWorkOldGrmCode" column="tlWorkOldGrmCode" columnIndex="15"/>
+		<result property="flPk" column="flPk" columnIndex="16"/>
+		<result property="flName" column="flName" columnIndex="17"/>
+		<result property="flPath" column="flPath" columnIndex="18"/>
+		<result property="flWriteTime" column="flWriteTime" columnIndex="19"/>
+	</resultMap>
+	
+	<select id="EMAU00H1.detailView" parameterClass="Map" resultMap="detailView">
+		<![CDATA[
+			SELECT
+				a.TL_TITLE AS tlTitle
+				,a.MB_CODE AS mbCode
+				,a.GR_M_CODE AS grmCode
+				,c.GR_M_NAME AS grmName
+				,b.MB_NAME AS mbName
+				,a.TL_WRITE_TIME AS tlWriteTime
+				,a.TL_WORK_DAY AS tlWorkDay
+				,a.TL_WORK_MB_CODE AS tlWorkMbCode
+				,d.MB_NAME AS tlWorkMbName
+				,a.TL_WORK_GR_M_CODE AS tlWorkGrmCode
+				,e.GR_M_NAME AS tlWorkGrmName
+				,a.TL_TXT AS tlTxt
+				,a.TL_CONFIRM AS tlConfirm
+				,a.TL_WORK_OLD_MB_CODE AS tlWorkOldMbCode
+				,a.TL_WORK_OLD_GR_M_CODE AS tlWorkOldGrmCode
+				,f.MB_CODE AS tlWorkOldMbCode
+				,g.GR_M_CODE AS tlWorkOldGrmCode
+				,f.MB_NAME AS tlWorkOldMbName
+				,g.GR_M_NAME AS tlWorkOldGrmName
+				,h.FL_PK AS flPk
+				,h.FL_NAME AS flName
+				,h.FL_PATH AS flPath
+				,h.WRITE_TIME AS flWriteTime
+			FROM em_t_link a
+				LEFT JOIN em_mb_member b
+			 	ON a.MB_CODE = b.MB_CODE
+			 	LEFT JOIN em_mb_group c
+			 	ON a.GR_M_CODE = c.GR_M_CODE
+			 	LEFT JOIN em_mb_member d
+			 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+			 	LEFT JOIN em_mb_group e
+			 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+			 	LEFT JOIN em_mb_member f
+			 	ON a.TL_WORK_OLD_MB_CODE = f.MB_CODE
+			 	LEFT JOIN em_mb_group g
+			 	ON a.TL_WORK_OLD_GR_M_CODE = g.GR_M_CODE
+			 	LEFT JOIN em_t_link_file h
+			 	ON a.TL_PK = h.TL_PK
+			 	
+			WHERE
+				a.TL_PK = #tlPk#
+		]]>
+	</select>
+	
+	<update id="EMAU00H1.tlWorkOld" parameterClass="Map">
+		UPDATE
+			em_t_link
+		SET 
+			TL_WORK_OLD_MB_CODE = #tlWorkMbCode#
+			,TL_WORK_MB_CODE = #tlWork#
+			,TL_WORK_OLD_GR_M_CODE = #tlWorkGrmCode#
+			,TL_WORK_GR_M_CODE = #tlWork3#
+		WHERE 
+			TL_PK = #tlPk#
+	</update>
+	
+	<resultMap id="checkChangeManager" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="cnt" column="cnt" columnIndex="1"/>
+		<result property="tlWorkOldMbCode" column="tlWorkOldMbCode" columnIndex="2"/>
+		<result property="tlWorkOldGrmCode" column="tlWorkOldGrmCode" columnIndex="3"/>
+		<result property="tlWorkMbCode" column="tlWorkMbCode" columnIndex="4"/>
+		<result property="tlWorkGrmCode" column="tlWorkGrmCode" columnIndex="5"/>
+		<result property="tlWorkOldMbName" column="tlWorkOldMbName" columnIndex="6"/>
+		<result property="tlWorkOldGrmName" column="tlWorkOldGrmName" columnIndex="7"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="8"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="9"/>
+		
+	</resultMap>
+	
+	<select id="EMAU00H1.checkChangeManager" parameterClass="Map" resultMap="checkChangeManager">
+		<![CDATA[
+			SELECT 
+				COUNT(*) AS cnt
+				,a.TL_WORK_OLD_MB_CODE AS tlWorkOldMbCode
+				,a.TL_WORK_OLD_GR_M_CODE AS tlWorkOldGrmCode
+				,a.TL_WORK_MB_CODE AS tlWorkMbCode
+				,a.TL_WORK_GR_M_CODE AS tlWorkGrmCode
+				,b.MB_NAME AS tlWorkOldMbName
+				,c.GR_M_NAME AS tlWorkOldGrmName
+				,d.MB_NAME AS tlWorkMbName
+				,e.GR_M_NAME AS tlWorkGrmName
+			FROM 
+				em_t_link a
+				LEFT JOIN em_mb_member b
+				ON a.TL_WORK_OLD_MB_CODE = b.MB_CODE
+				LEFT JOIN em_mb_group c
+				ON a.TL_WORK_OLD_GR_M_CODE = c.GR_M_CODE
+				LEFT JOIN em_mb_member d
+				ON a.TL_WORK_MB_CODE = d.MB_CODE
+				LEFT JOIN em_mb_group e
+				ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+				
+			WHERE 
+				TL_PK = #tlPk# AND TL_WORK_OLD_MB_CODE IS NOT NULL
+		]]>
+	</select>
+	
+	<insert id="EMAU00H1.addComment" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_t_link_comment
+				(	
+					TL_PK
+					,TL_COMMENT_MB_CODE
+					,TL_COMMENT_GR_M_CODE
+					,TL_COMMENT_TEXT
+					,TL_COMMENT_DATE
+				)
+			VALUES (
+					#tlPk#
+					,#loginMbCode#
+					,#loginGrmCode#
+					,#comment#
+					,now()
+				  )
+		]]>
+		<selectKey keyProperty="CO_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		</insert>
+		
+		
+		<resultMap id="selectComment" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+			<result property="coPk" column="coPk" columnIndex="1"/>
+			<result property="tlPk" column="tlPk" columnIndex="2"/>
+			<result property="flPk" column="flPk" columnIndex="3"/>
+			<result property="tlCommentMbCode" column="tlCommentMbCode" columnIndex="4"/>
+			<result property="tlCommentText" column="tlCommentText" columnIndex="5"/>
+			<result property="tlCommentDate" column="tlCommentDate" columnIndex="6"/>
+			<result property="tlCommentMbName" column="tlCommentMbName" columnIndex="7"/>
+			<result property="tlCommentgrmName" column="tlCommentgrmName" columnIndex="8"/>
+		</resultMap>
+	
+		<select id="EMAU00H1.selectComment" parameterClass="Map" resultMap="selectComment">
+			<![CDATA[
+				SELECT
+					a.CO_PK AS coPk
+					,a.TL_PK AS tlPk
+					,a.FL_PK AS flPk
+					,a.TL_COMMENT_MB_CODE AS tlCommentMbCode
+					,a.TL_COMMENT_TEXT AS tlCommentText
+					,a.TL_COMMENT_DATE AS tlCommentDate
+					,b.MB_NAME AS tlCommentMbName
+					,c.GR_M_NAME AS tlCommentgrmName
+				FROM 
+					em_t_link_comment a
+					LEFT JOIN em_mb_member b
+					ON a.TL_COMMENT_MB_CODE = b.MB_CODE
+					LEFT JOIN em_mb_group c
+					ON a.TL_COMMENT_GR_M_CODE = c.GR_M_CODE
+				WHERE
+					TL_PK = #tlPk#
+			]]>
+		</select>
+	
+	<select id="EMAU00H1.addCommentDetail" parameterClass="int" resultMap="selectComment">
+		<![CDATA[
+				SELECT
+					a.CO_PK AS coPk
+					,a.TL_PK AS tlPk
+					,a.FL_PK AS flPk
+					,a.TL_COMMENT_MB_CODE AS tlCommentMbCode
+					,a.TL_COMMENT_TEXT AS tlCommentText
+					,a.TL_COMMENT_DATE AS tlCommentDate
+					,b.MB_NAME AS tlCommentMbName
+					,c.GR_M_NAME AS tlCommentgrmName
+				FROM 
+					em_t_link_comment a
+					LEFT JOIN em_mb_member b
+					ON a.TL_COMMENT_MB_CODE = b.MB_CODE
+					LEFT JOIN em_mb_group c
+					ON a.TL_COMMENT_GR_M_CODE = c.GR_M_CODE
+				WHERE
+					CO_PK = #lastInsertId#
+		]]>
+	</select>
+	
+		<select id="EMAU00H1.commentView" parameterClass="Map" resultMap="selectComment">
+			<![CDATA[
+				SELECT
+					a.CO_PK AS coPk
+					,a.TL_PK AS tlPk
+					,a.FL_PK AS flPk
+					,a.TL_COMMENT_MB_CODE AS tlCommentMbCode
+					,a.TL_COMMENT_TEXT AS tlCommentText
+					,a.TL_COMMENT_DATE AS tlCommentDate
+					,b.MB_NAME AS tlCommentMbName
+					,c.GR_M_NAME AS tlCommentgrmName
+				FROM 
+					em_t_link_comment a
+					LEFT JOIN em_mb_member b
+					ON a.TL_COMMENT_MB_CODE = b.MB_CODE
+					LEFT JOIN em_mb_group c
+					ON a.TL_COMMENT_GR_M_CODE = c.GR_M_CODE
+				WHERE
+					TL_PK = #tlPk#
+			]]>
+		</select>
+		
+		<insert id="EMAU00H1.tlinkAlarmSend" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_notice
+				(	
+					no_in_day
+					,no_title
+					,no_text
+					,no_etc
+					,no_write_date	
+					,no_receive_mb_code
+					,no_request_mb_code
+				)
+			VALUES (
+					now()
+					,#tlConfirm#
+					,#taskRequest#
+					,#text#
+					,now()
+					,#tlMbCode#
+					,#loginMbCode#
+				  )
+		]]>
+		<selectKey keyProperty="no_pk" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		</insert>
+		
+	<resultMap id="allListView" class="egovframework.or.kr.EMAU00H.EMAU00H1VO">
+		<result property="tlTitle" column="tlTitle" columnIndex="1"/>
+		<result property="mbName" column="mbName" columnIndex="2"/>
+		<result property="grmName" column="grmName" columnIndex="3"/>
+		<result property="tlWorkMbName" column="tlWorkMbName" columnIndex="4"/>
+		<result property="tlWorkGrmName" column="tlWorkGrmName" columnIndex="5"/>
+		<result property="tlWriteTime" column="tlWriteTime" columnIndex="6"/>
+		<result property="tlEndDay" column="tlEndDay" columnIndex="7"/>
+		<result property="tlPk" column="tlPk" columnIndex="8"/>
+	</resultMap>
+	
+	<select id="EMAU00H1.allListView" parameterClass="Map" resultMap="allListView">
+		<![CDATA[
+			SELECT 
+				a.TL_TITLE AS tlTitle
+				,b.MB_NAME AS tlWorkMbName
+				,e.GR_M_NAME AS grmName
+				,d.MB_NAME AS mbName
+				,c.GR_M_NAME AS tlWorkGrmName
+				, DATE_FORMAT(a.TL_WRITE_TIME, '%Y.%m.%d %H:%m' ) AS tlWriteTime
+				,a.TL_END_DAY AS tlEndDay
+				,a.Tl_PK AS tlPk
+			FROM em_t_link a
+			 	LEFT JOIN em_mb_member b
+			 	ON a.MB_CODE = b.MB_CODE
+			 	LEFT JOIN em_mb_group c
+			 	ON a.GR_M_CODE = c.GR_M_CODE
+			 	LEFT JOIN em_mb_member d
+			 	ON a.TL_WORK_MB_CODE = d.MB_CODE
+			 	LEFT JOIN em_mb_group e
+			 	ON a.TL_WORK_GR_M_CODE = e.GR_M_CODE
+		]]>
+	</select>
+	
+	<insert id="EMAU00H1.uploadFile">
+		<![CDATA[
+			INSERT INTO em_t_link_file
+				(	
+					FL_PK
+					,TL_PK
+					,FL_NAME
+					,FL_PATH
+					,WRITE_TIME
+				)
+			VALUES (
+					#flPk#
+					,#tlPk#
+					,#uploadFileName#
+					,#saveFileName#
+					,now()
+				  )
+		]]>
+		<selectKey keyProperty="FL_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		</insert>
+		
+</sqlMap>

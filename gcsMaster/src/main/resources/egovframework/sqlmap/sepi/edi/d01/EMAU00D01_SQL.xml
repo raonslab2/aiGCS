@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00D01">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/>
+	
+	<resultMap id="pcList" class="egovframework.or.kr.EMAU00D.service.EmauProcessVO">
+		<result property="pcCode" column="pcCode" columnIndex="1"/>
+		<result property="pcName" column="pcName" columnIndex="2"/>
+		<result property="pcPCode" column="pcPCode" columnIndex="3"/>
+		<result property="pcOrderBy" column="pcOrderBy" columnIndex="4"/>
+		<result property="pcScheduleCode" column="pcScheduleCode" columnIndex="5"/>
+		<result property="pcScheduleName" column="pcScheduleName" columnIndex="6"/>
+		<result property="pcUse" column="pcUse" columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="projectList" class="egovframework.or.kr.EMAU00F.service.EmmbgroupVO">
+		<result property="pjAuId" column="pjAuId" columnIndex="1"/>
+		<result property="pjCode" column="pjCode" columnIndex="2"/>
+		<result property="auCode" column="auCode" columnIndex="3"/>
+		<result property="mbCode" column="mbCode" columnIndex="4"/>
+		<result property="auName" column="auName" columnIndex="5"/>
+		<result property="grmCode" column="grmCode" columnIndex="6"/>
+		<result property="mbName" column="mbName" columnIndex="7"/>
+		<result property="pjCateCode1" column="pjCateCode1" columnIndex="8"/>
+		<result property="grpCode" column="grpCode" columnIndex="9"/>
+		<result property="pjYear" column="pjYear" columnIndex="10"/>
+		<result property="grmName" column="grmName" columnIndex="11"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="12"/>
+		<result property="writeTime" column="writeTime" columnIndex="13"/>
+		<result property="pjCateName" column="pjCateName" columnIndex="14"/>
+	</resultMap>
+	
+	<select id="EMAU00D01.loginUserProjectList" parameterClass="loginVO" resultMap="projectList" >
+		<![CDATA[
+			SELECT 
+			   '1' AS pjAuId
+			   ,A.PJ_CODE AS pjCode
+			   ,'CODE00003' AS auCode
+			   ,#mbCode# AS mbCode
+			   ,'담당간사' AS auName
+			   ,B.GR_M_CODE AS grmCode
+			   ,'' AS mbName
+			   ,A.PJ_CATE_CODE1 AS pjCateCode1
+			   ,B.GR_P_CODE AS grpCode
+			   ,A.PJ_YEAR AS pjYear
+			   ,B.GR_M_NAME AS grmName
+			   ,A.PJ_TITLE AS pjTitle
+			   ,CURRENT_TIMESTAMP() AS writeTime
+			   ,A.PJ_CATE_CODE1 AS pjCateName 
+			 FROM em_pj_list_vi A
+			      LEFT JOIN em_mb_group B
+			      ON A.GR_M_CODE = B.GR_M_CODE   
+			WHERE 1=1
+			 AND A.PJ_YEAR = #pjYear#
+			AND A.GR_M_CODE IN (
+								SELECT GR_M_CODE FROM em_mb_member
+								WHERE GR_P_CODE = (SELECT GR_P_CODE FROM em_mb_member WHERE MB_CODE = #mbCode#)	
+									)  
+			AND A.PJ_CODE != 'null'
+		]]>
+	</select>
+	
+	<resultMap id="searchProjectList" class="egovframework.or.kr.EMAU00F.service.EmauProjectVO">
+		<result property="pjYear" column="pjYear" columnIndex="1"/>
+		<result property="pjCode" column="pjCode" columnIndex="2"/>
+		<result property="pjCateCode1" column="pjCateName1" columnIndex="3"/>
+		<result property="pjCateCode2" column="pjCateName2" columnIndex="4"/>
+		<result property="grMCode" column="grMCode" columnIndex="5"/>
+		<result property="auCode" column="auCode" columnIndex="6"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="7"/>
+		<result property="writeTime" column="writeTime" columnIndex="8"/>
+		<result property="grMName" column="grMName" columnIndex="9"/>
+		<!-- <result property="pjCateName1" column="pjCateName1" columnIndex="9"/>
+		<result property="pjCateName2" column="pjCateName2" columnIndex="10"/>
+		 -->
+	</resultMap>
+	
+	<!-- <select id="EMAU00D01.searchProjectList" parameterClass="Map" resultMap="searchProjectList" >
+		<![CDATA[
+		SELECT
+			a.PJ_YEAR AS pjYear
+			, a.PJ_CODE AS pjCode
+			, a.PJ_CATE_CODE1 AS pjCateCode1
+			, a.PJ_CATE_CODE2 AS pjCateCode2
+			, a.GR_M_CODE AS grMCode
+			, a.AU_CODE AS auCode
+			, a.PJ_TITLE AS pjTitle
+			, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+			, b.PJ_CATE_NAME AS pjCateName1
+			, c.PJ_CATE_NAME AS pjCateName2
+			, d.GR_M_NAME AS grMName
+		FROM
+			em_pj_list_vi a
+		LEFT JOIN em_pj_group_vi b ON a.PJ_CATE_CODE1 = b.PJ_CATE_CODE
+		LEFT JOIN em_pj_group_vi c ON a.PJ_CATE_CODE2 = c.PJ_CATE_CODE
+		LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+		WHERE 
+			a.PJ_YEAR = #pjYear#
+		AND 
+			a.PJ_TITLE LIKE CONCAT('%',#pjTitle#,'%')
+		ORDER BY a.PJ_CODE
+		]]>
+	</select> -->
+	
+	<select id="EMAU00D01.searchProjectList" parameterClass="Map" resultMap="searchProjectList" >
+		<![CDATA[
+		SELECT
+			a.PJ_YEAR AS pjYear
+			, a.PJ_CODE AS pjCode
+			, a.PJ_CATE_CODE1 AS pjCateName1
+			, a.PJ_CATE_CODE2 AS pjCateName2
+			, a.GR_M_CODE AS grMCode
+			, a.AU_CODE AS auCode
+			, a.PJ_TITLE AS pjTitle
+			, b.GR_M_NAME AS grMName
+			, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+		FROM
+			em_pj_list_vi a
+			LEFT JOIN em_mb_group b
+			ON a.GR_M_CODE = b.GR_M_CODE
+		]]>
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="pjYear">
+				a.PJ_YEAR = #pjYear#
+			</isNotEmpty>
+		</dynamic>
+		<isNotEmpty prepend="AND" property="grmCode">
+			<![CDATA[
+				a.GR_M_CODE = #grmCode#
+			]]>
+		</isNotEmpty>	
+		<isNotEmpty prepend="AND" property="pjTitle">
+			<![CDATA[
+				a.PJ_TITLE LIKE CONCAT('%',#pjTitle#,'%')
+			]]>
+		</isNotEmpty>	
+		<isNotEmpty prepend="AND" property="pjYear">
+			<![CDATA[
+				a.PJ_YEAR = #pjYear#
+			]]>
+		</isNotEmpty>	
+	</select>
+	
+	<select id="EMAU00D01.selectFetch" parameterClass="Map" resultClass="int" >
+		<![CDATA[
+		SELECT 
+			count(*)
+		FROM
+			em_mb_auth
+		WHERE 
+			PJ_CODE = #pjCode#
+		AND
+			MB_CODE = #mbCode#
+		AND
+			AU_CODE = 'CODE00003'
+		]]>
+	</select>
+	
+	<select id="EMAU00D01.processIsUse" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+		SELECT 
+			PJ_CODE AS pjCode
+		FROM
+			em_pj_list_vi
+		WHERE 
+			PJ_YEAR = #pjYear#
+		AND
+			PJ_TITLE = #pjTitle#
+		]]>
+	</select>
+	
+	<select id="EMAU00D01.processList" resultMap="pcList" >
+		<![CDATA[
+		SELECT
+			PC_CODE AS pcCode
+			, PC_NAME AS pcName
+			, PC_P_CODE AS pcPCode
+			, PC_ORDER_BY AS pcOrderBy
+			, PC_SCHEDULE_CODE AS pcScheduleCode
+			, PC_SCHEDULE_NAME AS pcScheduleName
+			, PC_USE AS pcUse
+		FROM
+			em_pj_ps_process_cate
+		ORDER BY PC_P_CODE, PC_ORDER_BY
+		]]>
+	</select>
+	
+	<resultMap id="projectProcessList" class="egovframework.or.kr.EMAU00D.service.EmauProcessVO">
+		<result property="pjPk" column="pjPk" columnIndex="1"/>
+		<result property="pcCode" column="pcCode" columnIndex="2"/>
+		<result property="pcWorkPoint" column="pcWorkPoint" columnIndex="3"/>
+		<result property="pcUse" column="pcUse" columnIndex="4"/>
+		<result property="pcDayStart" column="pcDayStart" columnIndex="5"/>
+		<result property="pcDayEnd" column="pcDayEnd" columnIndex="6"/>
+		<result property="pcCateCode" column="pcCateCode" columnIndex="7"/>
+	</resultMap>
+	
+	<select id="EMAU00D01.projectProcessMappingList" parameterClass="Map" resultMap="projectProcessList" >
+		<![CDATA[
+		SELECT
+			PJ_PK AS pjPk
+			, PC_CODE AS pcCode
+			, PC_WORK_POINT AS pcWorkPoint
+			, PC_USE AS pcUse
+			, DATE_FORMAT(PC_DAY_START, '%Y.%m.%d') AS pcDayStart
+			, DATE_FORMAT(PC_DAY_END, '%Y.%m.%d') AS pcDayEnd
+			, PJ_CATE_CODE AS pcCateCode
+		FROM
+			em_pj_ps_mapping
+		WHERE 
+			PJ_CODE = #pjCode#
+		]]>
+	</select>
+	
+	<select id="EMAU00D01.processDetail" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+		SELECT 
+			a.PC_CODE AS pcCode
+			, a.PC_NAME AS pcName
+			, a.PC_P_CODE AS pcPCode
+			, b.PC_NAME AS pcNameP
+			, a.PC_SCHEDULE_CODE AS pcScheduleCode
+			, a.PC_SCHEDULE_NAME AS pcScheduleName
+			, a.PC_USE AS pcUse
+		FROM
+			em_pj_ps_process_cate a
+		LEFT JOIN em_pj_ps_process_cate b ON a.PC_P_CODE = b.PC_CODE
+		WHERE a.PC_CODE = #pcCode#
+		]]>
+	</select>
+	
+	<resultMap id="fetchList" class="egovframework.or.kr.EMAU00D.service.EmauProcessVO">
+		<result property="pcCode" column="pcCode" columnIndex="2"/>
+	</resultMap>
+	
+	<select id="EMAU00D01.fetchParentObject" parameterClass="Map" resultMap="fetchList" >
+		<![CDATA[
+		SELECT
+			PC_CODE AS pcCode
+		FROM
+			em_pj_ps_process_cate
+		WHERE
+			PC_P_CODE = #pcCode#
+		]]>
+	</select>
+	
+	
+	<select id="EMAU00D01.hasDataConfirm" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+		SELECT
+			PJ_PK AS pjPk
+			, PJ_CODE AS pjCode
+			, PC_CODE AS pcCode
+			, PC_ORDER_BY AS pcOrderBy
+			, PC_WORK_POINT AS pcWorkPoint
+			, PC_USE AS pcUse
+			, PC_DAY_START AS pcDayStart
+			, PC_DAY_END AS pcDayEnd
+		FROM
+			em_pj_ps_mapping
+		WHERE 
+			PJ_CODE = #pjCode# AND PC_CODE = #pcCode#
+		]]>
+	</select>
+	
+	
+	<resultMap id="checkList" class="egovframework.or.kr.EMAU00D.service.EmauProcessVO">
+		<result property="clPk" column="CL_PK" columnIndex="1"/>
+		<result property="pcCode" column="PC_CODE" columnIndex="2"/>
+		<result property="clTitle" column="CL_TITLE" columnIndex="3"/>
+		<result property="clOrderBy" column="CL_ORDERBY" columnIndex="4"/>
+		<result property="clUse" column="CL_USE" columnIndex="5"/>
+	</resultMap>
+	
+	<select id="EMAU00D01.processCheckList" parameterClass="Map" resultMap="checkList" >
+		<![CDATA[
+		SELECT
+			CL_PK AS CL_PK
+			, PC_CODE AS PC_CODE
+			, CL_TITLE AS CL_TITLE
+			, CL_ORDERBY AS CL_ORDERBY
+			, CL_USE AS CL_USE
+		FROM
+			em_pj_ps_check_list 
+		WHERE 
+			PC_CODE = #pcCode#
+		ORDER BY CL_ORDERBY
+		]]>
+	</select>
+	
+	<delete id="EMAU00D01.checkListDelete" parameterClass="Int">
+		<![CDATA[
+		DELETE
+		FROM
+			em_pj_ps_check_list
+		WHERE
+			CL_PK = #clPk#
+		]]>
+	</delete>
+	
+	<insert id="EMAU00D01.checkListCreate" parameterClass="Map" >
+		INSERT INTO em_pj_ps_check_list
+		(
+			PC_CODE
+			, CL_TITLE
+			, CL_ORDERBY
+			, WRITE_TIME
+		) 
+		VALUES
+		( 
+			#pcCode#
+			, #clTitle# 
+			, #clOrderBy#
+			, now()
+		)
+		
+		<selectKey keyProperty="CL_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<select id="EMAU00D01.createCheckListDetail" parameterClass="int" resultClass="java.util.HashMap" >
+		<![CDATA[
+		SELECT
+			CL_PK AS clPk
+			, PC_CODE AS pcCode
+			, CL_TITLE AS clTitle
+			, CL_ORDERBY AS clOrderBy
+			, CL_USE AS clUse
+		FROM
+			em_pj_ps_check_list 
+		WHERE
+			CL_PK = #lastInsertId#
+		]]>
+	</select>
+	
+	<resultMap id="holidayList" class="egovframework.or.kr.EMAU00D.service.EmauHolidayVO">
+		<result property="hoPk" column="hoPk" columnIndex="1"/>
+		<result property="hoName" column="hoName" columnIndex="2"/>
+		<result property="hoHoliday" column="hoHoliday" columnIndex="3"/>
+		<result property="hoRepeatCycle" column="hoRepeatCycle" columnIndex="4"/>
+		<result property="hoUse" column="hoUse" columnIndex="5"/>
+	</resultMap>
+	
+
+	<select id="EMAU00D01.holidayList" resultMap="holidayList" >
+		<![CDATA[
+				SELECT
+					HO_PK AS hoPk
+					, HO_NAME AS hoName
+					, HO_HOLIDAY AS hoHoliday
+					, HO_REPEAT_CYCLE AS hoRepeatCycle
+					, HO_USE AS hoUse
+				FROM
+					em_pj_ps_holiday
+		]]>
+	</select>
+	
+	<select id="EMAU00D01.choiceholiday" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+				SELECT
+					HO_PK AS hoPk
+					, HO_NAME AS hoName
+					, HO_HOLIDAY AS hoHoliday
+					, HO_REPEAT_CYCLE AS hoRepeatCycle
+					, HO_USE AS hoUse
+				FROM
+					em_pj_ps_holiday
+				WHERE HO_PK = #ho_pk#
+		]]>
+	</select>
+	
+	<update id="EMAU00D01.processUpdate" parameterClass="Map">
+		UPDATE 
+			em_pj_ps_process_cate a
+			, ( 
+				SELECT 
+					PC_SCHEDULE_CODE
+					, PC_SCHEDULE_NAME
+				FROM
+					em_pj_sc_code
+				WHERE
+					PC_SCHEDULE_CODE = #pcScheduleCode# 
+			) b
+		SET 
+		a.PC_NAME = #pcName#
+		, a.PC_SCHEDULE_CODE = b.PC_SCHEDULE_CODE
+		, a.PC_SCHEDULE_NAME = b.PC_SCHEDULE_NAME
+		, a.PC_USE = #pcUse#
+		WHERE 
+		PC_CODE = #pcCode#
+	</update>
+	
+	<update id="EMAU00D01.checkListUseYNUpdate" parameterClass="Map">
+		UPDATE
+			em_pj_ps_check_list
+		SET
+			CL_USE = #clUse#
+		WHERE 
+			CL_PK = #clPk#
+	</update>
+	
+	<insert id="EMAU00D01.processCategorySave" parameterClass="Map">
+		INSERT INTO em_pj_ps_process_cate
+		(
+			PC_NAME
+			, PC_P_CODE
+			, PC_SCHEDULE_CODE
+			, PC_SCHEDULE_NAME
+			, PC_USE
+		) 
+		VALUES
+		(
+			#pcName#
+			, #pcPCode#
+			, ( SELECT PC_SCHEDULE_CODE FROM em_pj_sc_code WHERE PC_SCHEDULE_CODE = #pcScheduleCode# )
+			, ( SELECT PC_SCHEDULE_NAME FROM em_pj_sc_code WHERE PC_SCHEDULE_CODE = #pcScheduleCode# )
+			, #pcUse#
+		)
+		
+		<selectKey keyProperty="PC_CODE" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="EMAU00D01.processOrderByUpdate" parameterClass="Map">
+		UPDATE
+			em_pj_ps_process_cate
+		SET
+			PC_ORDER_BY = #pcCode#
+		WHERE 
+			PC_CODE = #pcCode#
+	</update>
+	
+	<delete id="EMAU00D01.processCategoryDelete" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_pj_ps_process_cate
+		WHERE
+			PC_CODE = #pcCode#
+		]]>
+	</delete>
+	
+	<update id="EMAU00D01.projectProcessCheckUpdate" parameterClass="Map">
+		UPDATE
+			em_pj_ps_mapping
+		SET
+			PJ_CODE = #pjCode#
+			, PC_CODE = #pcCode#
+			, PC_ORDER_BY = #pcOrderBy#
+			, PC_WORK_POINT = #pcWorkPoint#
+			, PC_USE = #pcUse#
+			, PC_NAME = #pcName#
+			, PJ_CATE_CODE = #pjCateCode#
+		WHERE 
+			PJ_PK = #pjPk#
+	</update>
+	
+	<insert id="EMAU00D01.projectProcessCheckInsert" parameterClass="Map">
+		INSERT INTO em_pj_ps_mapping
+		(
+			PJ_PK
+			, PJ_CODE
+			, PC_CODE
+			, PC_ORDER_BY
+			, PC_WORK_POINT
+			, PC_USE
+			, PC_NAME
+			, PJ_CATE_CODE
+		) 
+		VALUES
+		( 
+			#pjPk#
+			, #pjCode#
+			, #pcCode#
+			, #pcCode#
+			, #pcWorkPoint#
+			, #pcUse#
+			, #pcName#
+			, #pjCateCode#
+		)
+		<selectKey keyProperty="PJ_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="EMAU00D01.projectProcessCheckDayUpdate" parameterClass="Map">
+		UPDATE
+			em_pj_ps_mapping
+		SET
+			PJ_CODE = #pjCode#
+			, PC_CODE = #pcCode#
+			, PC_ORDER_BY = #pcOrderBy#
+			, PC_WORK_POINT = #pcWorkPoint#
+			, PC_USE = #pcUse#
+			, PC_NAME = #pcName#
+			, PJ_CATE_CODE = #pjCateCode#
+			, PC_DAY_START = #pcDayStart#
+			, PC_DAY_END = #pcDayEnd#
+		WHERE 
+			PJ_PK = #pjPk#
+	</update>
+	
+	<insert id="EMAU00D01.projectProcessCheckDayInsert" parameterClass="Map">
+		INSERT INTO em_pj_ps_mapping
+		(
+			PJ_PK
+			, PJ_CODE
+			, PC_CODE
+			, PC_ORDER_BY
+			, PC_WORK_POINT
+			, PC_USE
+			, PC_NAME
+			, PJ_CATE_CODE
+			, PC_DAY_START
+			, PC_DAY_END
+		) 
+		VALUES
+		( 
+			#pjPk#
+			, #pjCode#
+			, #pcCode#
+			, #pcCode#
+			, #pcWorkPoint#
+			, #pcUse#
+			, #pcName#
+			, #pjCateCode#
+			, #pcDayStart#
+			, #pcDayEnd#
+		)
+		<selectKey keyProperty="PJ_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	
+	<select id="EMAU00D01.todoAramHasData" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+				SELECT
+					TD_PK AS tdPk
+					, TD_GUBUN AS tdGubun
+					, TD_DAY AS tdDay
+					, PJ_PK AS pjPk
+					, TD_CODE AS tdCode
+					, TD_TITLE AS tdTitle
+					, CD_AR_CODE AS cdArCode
+					, CD_AR_TITLE AS cdArTitle
+					, CD_AR_VALUE AS cdArValue
+					, MB_CODE AS mbCode
+				FROM
+					em_pj_to_do_mapping
+				WHERE
+					PJ_PK = #pjPk# 
+				AND 
+					MB_CODE = #mbCode#
+				AND
+					TD_CODE = #tdCode#
+		]]>
+	</select>
+	<update id="EMAU00D01.todoAramUpdate" parameterClass="Map">
+		UPDATE 
+			em_pj_to_do_mapping a
+			, (
+				SELECT
+					TD_CODE
+					, TD_TITLE
+				FROM
+					em_code_to_do
+				WHERE
+					TD_CODE = #tdCode#
+			) b
+			, (
+				SELECT
+					CD_AR_CODE
+					, CD_AR_TITLE
+					, CD_AR_VALUE
+				FROM
+					em_code_aram
+				WHERE
+					CD_AR_CODE = #cdArCode#
+			) c
+		SET
+			a.TD_GUBUN = #tdGubun#
+			, a.TD_DAY = #tdDay#
+			, a.PJ_PK = #pjPk#
+			, a.TD_CODE = #tdCode#
+			, a.TD_TITLE = b.TD_TITLE
+			, a.CD_AR_CODE = #cdArCode#
+			, a.CD_AR_TITLE = c.CD_AR_TITLE
+			, a.CD_AR_VALUE = c.CD_AR_VALUE
+			, a.MB_CODE = #mbCode#
+		WHERE 
+			a.TD_PK = #tdPk#
+	</update>
+	
+	<insert id="EMAU00D01.todoAramInsert" parameterClass="Map">
+		INSERT INTO em_pj_to_do_mapping
+		(
+			TD_PK
+			, TD_GUBUN
+			, TD_DAY
+			, PJ_PK
+			, TD_CODE
+			, TD_TITLE
+			, CD_AR_CODE
+			, CD_AR_TITLE
+			, CD_AR_VALUE
+			, MB_CODE
+		) 
+		VALUES
+		( 
+			#tdPk#
+			, #tdGubun#
+			, #tdDay#
+			, #pjPk#
+			, #tdCode#
+			, ( SELECT TD_TITLE FROM em_code_to_do WHERE TD_CODE = #tdCode# )
+			, #cdArCode#
+			, ( SELECT CD_AR_TITLE FROM em_code_aram WHERE CD_AR_CODE = #cdArCode#)
+			, ( SELECT CD_AR_VALUE FROM em_code_aram WHERE CD_AR_CODE = #cdArCode#)
+			, #mbCode#
+		)
+		<selectKey keyProperty="TD_PK" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="EMAU00D01.mainProcessMoveUpdate" parameterClass="Map">
+		UPDATE 
+			em_pj_ps_process_cate
+		SET
+			PC_ORDER_BY = #pcOrderBy#
+		WHERE 
+			PC_CODE = #pcCode#
+	</update>
+	
+	<update id="EMAU00D01.subProcessMoveUpdate" parameterClass="Map">
+		UPDATE 
+			em_pj_ps_process_cate
+		SET
+			PC_P_CODE = #subPcPCode#
+			, PC_ORDER_BY = #subPcOrderBy#
+		WHERE 
+			PC_CODE = #subPcCode#
+	</update>
+	
+	<delete id="EMAU00D01.projectProcessMappingDelete" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_pj_ps_mapping
+		WHERE
+			PC_CODE = #pcCode#
+		]]>
+	</delete>
+</sqlMap>

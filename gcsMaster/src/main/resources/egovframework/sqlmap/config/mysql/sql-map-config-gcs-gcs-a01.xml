@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="egovframework/sqlmap/sepi/gcs/g01/GA01MAIN_SQL.xml"/> 
+	<sqlMap resource="egovframework/sqlmap/sepi/gcs/g02/GA02MAIN_SQL.xml"/> 
+	<sqlMap resource="egovframework/sqlmap/sepi/gcs/g03/GA03MAIN_SQL.xml"/> 
+	<sqlMap resource="egovframework/sqlmap/sepi/gcs/g03/GA034MAIN_SQL.xml"/> 
+	<sqlMap resource="egovframework/sqlmap/sepi/gcs/g03/GA03MAINAIR_SQL.xml"/> 
+	<sqlMap resource="egovframework/sqlmap/sepi/gcs/g03/GA03MAINUSER_SQL.xml"/> 
+</sqlMapConfig> 

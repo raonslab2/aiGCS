@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00H01">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/> 
+	<typeAlias  alias="AppProInfo" type="egovframework.or.kr.EMAU00H01.service.AppProInfo"/> 
+	<typeAlias  alias="InsInfoVO" type="egovframework.or.kr.EMAU00H01.service.InsInfoVO"/> 
+	<typeAlias  alias="PartManVO" type="egovframework.or.kr.EMAU00H01.service.PartManVO"/> 
+	<typeAlias  alias="PartOrgVO" type="egovframework.or.kr.EMAU00H01.service.PartOrgVO"/> 
+	<typeAlias  alias="RDCommercialVO" type="egovframework.or.kr.EMAU00H01.service.RDCommercialVO"/> 
+	 
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1"/> 
+	</resultMap>
+ 
+	<!-- test -->
+	<select id="EMAU00H01.selectList" resultMap="login">
+			<![CDATA[
+            SELECT '1' AS id
+              from dual
+			]]>
+	</select>
+	
+	 <insert id="EMAU00H01.insertEMAU00H0101" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_intro_info
+			(
+				BU_CATE
+				, BU_NOTICE
+				, BU_PJ_NAME
+				, BU_PJ_DE_NOTICE
+				, BU_PJ_SERVICE
+				, BU_STEP_ONE_ST
+				, BU_STEP_ONE_ED
+				, BU_STEP_TWO_ST
+				, BU_STEP_TWO_ED
+				, BU_STEP_THR_ST
+				, BU_STEP_THR_ED
+				, BU_DEV_ALL_ST
+				, BU_DEV_ALL_ED
+				, BU_SEC_GRADE
+				, BU_OBJ_SUM_ED
+				, BU_STEP_ONE_SUM
+				, BU_STEP_TWO_SUM
+				, BU_STEP_THR_SUM
+				, BU_KEYWORD_KOR
+				, BU_KEYWORD_KOR2
+				, BU_KEYWORD_KOR3
+				, BU_KEYWORD_KOR4
+				, BU_KEYWORD_KOR5
+				, BU_KEYWORD_ENG
+				, BU_KEYWORD_ENG2
+				, BU_KEYWORD_ENG3
+				, BU_KEYWORD_ENG4
+				, BU_KEYWORD_ENG5
+				, BU_TEC_STA_GRO
+				, BU_TEC_STA_GRO2
+				, BU_TEC_STA_GRO3
+				, BU_APP
+				, BU_6T_GRO
+				, BU_6T_GRO2
+				, BU_6T_GRO3
+				, BU_10M_TECH
+				, BU_NAT_SCI_TEC_GRO
+				, BU_NAT_SCI_TEC_GRO2
+				, BU_NAT_SCI_TEC_GRO3
+				, BU_NAT_EMP_TEC_GRO
+				, BU_NAT_EMP_TEC_GRO2
+				, BU_NAT_EMP_TEC_GRO3
+				, BU_TEC_MAP_STR_GRO
+				, BU_TEC_MAP_STR_GRO2
+				, BU_TEC_MAP_STR_GRO3
+				, BU_KOR_STA_IND_GRO
+				, BU_KOR_STA_IND_GRO2
+				, BU_KOR_STA_IND_GRO3
+				, BU_KOR_STA_IND_GRO4
+				, BU_KOR_STA_IND_GRO5
+			) 
+			VALUES
+				( 
+				#buCate#
+				, #buNotice#
+				, #buPjName#
+				, #buPjDeNotice#
+				, #buPjService#
+				, #buStepOneSt#
+				, #buStepOneEd#
+				, #buStepTwoSt#
+				, #buStepTwoEd#
+				, #buStepThrSt#
+				, #buStepThrEd#
+				, #buDevAllSt#
+				, #buDevAllEd#
+				, #buSecGrade#
+				, #buObjSumEd#
+				, #buStepOneSum#
+				, #buStepTwoSum#
+				, #buStepThrSum#
+				, #buKeywordKor#
+				, #buKeywordKor2#
+				, #buKeywordKor3#
+				, #buKeywordKor4#
+				, #buKeywordKor5#
+				, #buKeywordEng#
+				, #buKeywordEng2#
+				, #buKeywordEng3#
+				, #buKeywordEng4#
+				, #buKeywordEng5#
+				, #buTecStaGro#
+				, #buTecStaGro2#
+				, #buTecStaGro3#
+				, #buApp#
+				, #bu6tGro#
+				, #bu6tGro2#
+				, #bu6tGro3#
+				, #bu10MTech#
+				, #buNatSciTecGro#
+				, #buNatSciTecGro2#
+				, #buNatSciTecGro3#
+				, #buNatEmpTecGro#
+				, #buNatEmpTecGro2#
+				, #buNatEmpTecGro3#
+				, #buTecMapStrGro#
+				, #buTecMapStrGro2#
+				, #buTecMapStrGro3#
+				, #buKorStaIndGro#
+				, #buKorStaIndGro2#
+				, #buKorStaIndGro3#
+				, #buKorStaIndGro4#
+				, #buKorStaIndGro5#
+			)
+		]]>
+	</insert> 
+	 <insert id="EMAU00H01.insertEMAU00H01021" parameterClass="Map" >
+	 	<![CDATA[
+			INSERT INTO br_company_code
+			(
+				CO_PK
+				, BU_AGN_ID
+				, BU_ORG_NAME
+				, BU_COM_REG_NUM
+				, BU_COR_REG_NUM
+				, BU_REP
+				, WRITE_TIME
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buAgnId#
+				, #buOrgName#
+				, #buComRegNum#
+				, #buCorRegNum#
+				, #buRep#
+				, now()
+			)
+		]]>
+	</insert> 
+	
+	 <insert id="EMAU00H01.insertEMAU00H01022" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_company_work
+			(
+				CO_PK
+				, BU_ASS_TYPE
+				, BU_BUS_NAME
+				, BU_PRO_TIT
+				, BU_FIN_GOAL_COR_CON
+				, BU_PAR_ST_DAT
+				, BU_PAR_ED_DAT
+				, BU_BUS_EXP
+				, BU_RES_ROL
+				, BU_TAS_STA
+				, BU_AGN_ID
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buAssType#
+				, #buBusName#
+				, #buProTit#
+				, #buFinGoalCorCon#
+				, #buParStDat#
+				, #buParEdDat#
+				, #buBusExp#
+				, #buResRol#
+				, #buTasSta#
+				, #buAgnId#
+			)
+		]]>
+	</insert> 
+	
+	<insert id="EMAU00H01.insertEMAU00H01023" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_pj_work_mapping
+			(
+				LE_PK
+				, BU_NUM
+			) 
+			VALUES
+			( 
+				#lePk#
+				, #buNum#
+			)
+		]]>
+	</insert> 
+	
+	 <insert id="EMAU00H01.insertEMAU00H01041" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_company_member
+			(
+				CO_PK
+				, BU_NUM
+				, MA_GUBUN
+				, BU_NAME
+				, BU_DATE_BIR
+				, BU_PHO_NUM
+				, BU_EM_ADD
+				, BU_EM_ADD2
+				, BU_FAX_NUM
+				, BU_MOB_PHO_NUM
+				, BU_MOB_PHO_NUM2
+				, BU_MOB_PHO_NUM3
+				, BU_DUR_WOR_SAME_IND
+				, BU_REP_ABL
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buNum#
+				, #maGubun#
+				, #buName#
+				, #buDateBir#
+				, #buPhoNum#
+				, #buEmAdd#
+				, #buEmAdd2#
+				, #buFaxNum#
+				, #buMobPhoNum#
+				, #buMobPhoNum2#
+				, #buMobPhoNum3#
+				, #buDurWorSameInd#
+				, #buRepAbl#
+			)
+		]]>
+		</insert> 
+		<insert id="EMAU00H01.insertEMAU00H01042" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_company_member2
+			(
+				CO_PK
+				, BU_NUM
+				, BU_ORG_NAME
+				, BU_RES_OR_NOT
+				, BU_NAME
+				, BU_DATE_BIR
+				, BU_DATE_ENT
+				, BU_SPOT
+				, BU_TOT_ANN_SAL
+				, BU_FIN_DEG
+				, BU_HOL_CER
+				, BU_PAT_NAT_RD_PRO
+				, BU_PAT_RATE_PRO
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buNum#
+				, #buOrgName#
+				, #buResOrNot#
+				, #buName5#
+				, #buDateBir5#
+				, #buDateEnt#
+				, #buSpot#
+				, #buTotAnnSal#
+				, #buFinDeg#
+				, #buHolCer#
+				, #buPatNatRdPro#
+				, #buPatRatePro#
+			)
+		]]>
+	</insert> 
+	
+	<insert id="EMAU00H01.insertEMAU00H01043" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_company_member3
+			(
+				CO_PK
+				, BU_AFF_TYPE
+				, BU_ORG_NAME
+				, BU_FIN_DEG
+				, BU_NEW_HIR
+				, BU_YON_MAN
+				, BU_TOT_ANN_SAL
+				, BU_PAT_RATE_PRO2
+			)
+			VALUES
+			( 
+				#coPk#
+				, #buAffType#
+				, #buOrgName#
+				, #buFinDeg#
+				, #buNewHir#
+				, #buYonMan#
+				, #buTotAnnSal#
+				, #buPatRatePro2#
+			)
+		]]>
+	</insert> 
+	
+	 <insert id="EMAU00H01.insertEMAU00H0105" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_work_plan
+			(
+				CO_PK
+				, BU_TEC_ROD_CLA_ONE
+				, BU_TEC_ROD_CLA_TWO
+				, BU_TEC_ROD_CLA_THR
+				, BU_ASS_REL_SRL_ROA
+				, BU_SEL_ROA_CON_TEC
+				, BU_ROU_PATH
+				, BU_ROU_PATH2
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buTecRodClaOne#
+				, #buTecRodClaTwo#
+				, #buTecRodClaThr#
+				, #buAssRelSrlRoa#
+				, #buSelRoaConTec#
+				, #buRouPath#
+				, #buRouPath2#
+			)
+		]]>
+		</insert>
+	 <insert id="EMAU00H01.insertEMAU00H01071" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_com_info_manage
+			(
+				CO_PK				
+				, BU_AGN_ID
+				, BU_PW
+				, BU_PW_CON
+				, BU_ACC_MAN_NAME
+				, BU_EM_ADD
+				, BU_MOB_PHO_NUM
+				, BU_COM_REG_NUM
+				, BU_COR_REG_NUM
+				, BU_ORG_NAME
+				, BU_COR_TYPE
+				, BU_DATE_EST
+				, BU_IND_CLA
+				, BU_MAIN_PRO
+				, BU_HOME_PAGE
+				, BU_HEA_ADD
+				, BU_MAIN_BUS_ADD
+				, BU_HEA_AREA
+				, BU_MAIN_BUS_AREA
+				, BU_HEA_OFF_DEP
+				, BU_HEA_OFF_MON_RENT
+				, BU_MAIN_BUS_DEP
+				, BU_MAIN_BUS_MON_RENT
+				, BU_NUM_FT_WOR
+				, BU_NUM_OFF_WOR
+				, BU_NUM_LAB_WOR
+				, BU_NUM_SKI_WOR
+				, BU_NUM_TEC_WOR
+				, BU_OTHER
+				, BU_NAME
+				, BU_DATE_BIR
+				, BU_PHO_NUM
+				, BU_EM_ADD2
+				, BU_FAX_NUM
+				, BU_MOB_PHO_NUM2
+				, BU_BASE_FIS_YEAR
+				, BU_EAPORTS
+				, BU_EAPORTS2
+				, BU_TOT_DEBT
+				, BU_OPE_PRO
+				, BU_CUR_ASS
+				, BU_TOT_EQU
+				, BU_RnD_INV
+				, BU_CUR_LSA
+				, BU_TOT_ASS
+				, BU_IVN
+				, BU_CUR_FIX_ASS
+				, BU_NET_INC
+				, BU_CUR_SAL
+				, BU_RLE_SAL
+				, BU_COM_DES_NUM
+				, BU_COM_VAL_PER
+				, BU_VEN_COM_DES_NUM
+				, BU_VEN_COM_VAL_PER
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buAgnId#
+				, #buPw#
+				, #buPwCon#
+				, #buAccManName#
+				, #buEmAdd#
+				, #buMobPhoNum#
+				, #buComRegNum#
+				, #buCorRegNum#
+				, #buOrgName#
+				, #buCorType#
+				, #buDateEst#
+				, #buIndCla#
+				, #buMainPro#
+				, #buHomePage#
+				, #buHeaAdd#
+				, #buMainBusAdd#
+				, #buHeaArea#
+				, #buMainBusArea#
+				, #buHeaOffDep#
+				, #buHeaOffMonRent#
+				, #buMainBusDep#
+				, #buMainBusMonRent#
+				, #buNumFtWor#
+				, #buNumOffWor#
+				, #buNumLabWor#
+				, #buNumSkiWor#
+				, #buNumTecWor#
+				, #buOther#
+				, #buName#
+				, #buDateBir#
+				, #buPhoNum#
+				, #buEmAdd2#
+				, #buFaxNum#
+				, #buMobPhoNum2#
+				, #buBaseFisYear#
+				, #buEaports#
+				, #buEaports2#
+				, #buTotDebt#
+				, #buOpePro#
+				, #buCurAss#
+				, #buTotInv#
+				, #buRndInv#
+				, #buCurLsa#
+				, #buTotAss#
+				, #buIvn#
+				, #buCurFixAss#
+				, #buNetInc#
+				, #buCurSal#
+				, #buRleSal#
+				, #buComDesNum#
+				, #buComValPer#
+				, #buVenComDesNum#
+				, #buVenComValPer#
+			)
+		]]>
+	</insert>
+	
+	 <insert id="EMAU00H01.insertEMAU00H01072" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_com_fi
+			(
+				CO_PK
+				, BU_SHA_NAME
+				, BU_REL_MAN
+				, BU_HOL_STO_ORD_STO
+				, BU_HOL_STO_STO
+				, BU_AMO_STO_HEL
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buShaName#
+				, #buRelMan#
+				, #buHolStoOrdSto#
+				, #buHolStoSto#
+				, #buAmoStoHel#
+			)
+		]]>
+	</insert>
+	
+	 <insert id="EMAU00H01.insertEMAU00H01073" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_com_st_date
+			(
+				CO_PK
+				, BU_PRO_NAME
+				, BU_PRO_TIT
+				, BU_FIN_GOAL_COR_CON
+				, BU_ASS_STA_DAT
+				, BU_ASS_END_DAT
+				, BU_PAR_STA_DAT
+				, BU_PAR_END_DAT
+				, BU_TOT_GOV_APP
+				, BU_RES_ROLE
+				, BU_INT_GOV_APP
+				, BU_TASK_STA
+				, BU_COM_RES
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buProName#
+				, #buProTit#
+				, #buFinGoalCorCon#
+				, #buAssStaDat#
+				, #buAssEndDat#
+				, #buParStaDat#
+				, #buParEndDat#
+				, #buTotGovApp#
+				, #buResRole#
+				, #buIntGovApp#
+				, #buTaskSta#
+				, #buComRes#
+			)
+		]]>
+	</insert> 
+	
+	 <insert id="EMAU00H01.insertEMAU00H01074" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_com_gn_res
+			(
+				CO_PK
+				, BU_BUS_NAME
+				, BU_PRO_TIT2
+				, BU_FIN_GOAL_COR_CON2
+				, BU_BUS_ST_DATE
+				, BU_BUS_END_DATE
+				, BU_PAR_ST_DATE
+				, BU_PAR_END_DATE
+				, BU_TOT_PRO_COST
+				, BU_RES_ROLE2
+				, BU_INS_BUS_EXP
+				, BU_BUS_STA
+				, BU_COM_RES2
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buBusName#
+				, #buProTit2#
+				, #buFinGoalCorCon2#
+				, #buBusStDate#
+				, #buBusEndDate#
+				, #buParStDate#
+				, #buParEndDate#
+				, #buTotProCost#
+				, #buResRole2#
+				, #buInsBusExp#
+				, #buBusSta#
+				, #buComRes2#
+			)
+		]]>
+	</insert> 
+	
+	 <insert id="EMAU00H01.insertEMAU00H01075" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_com_eq
+			(
+				CO_PK
+				, BU_FAC_EQU_NAME
+				, BU_STANDARD
+				, BU_PUR_PRI
+				, BU_TEAR_PUR
+				, BU_PUR
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buFacEquName#
+				, #buStandard#
+				, #buPurPri#
+				, #buTearPur#
+				, #buPur#
+			)
+		]]>
+	</insert> 
+	
+	 <insert id="EMAU00H01.insertEMAU00H01076" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_com_sal
+			(
+				CO_PK
+				, BU_COM_ITEM_NAME
+				, BU_COM_YEAR
+				, BU_ITEM_USE
+				, BU_QUA_PRI_COM
+				, BU_EXP_NOT
+				, BU_SAL_CHA
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #buComItemName#
+				, #buComYear#
+				, #buItemUse#
+				, #buQuaPriCom#
+				, #buExpNot#
+				, #buSalCha#
+			)
+		]]>
+	</insert> 
+	
+	
+	<resultMap id="PkList" class="egovframework.or.kr.EMAU00H01.service.AppProInfo">
+		<result property="coPk" column="coPk" columnIndex="1"/>
+		<result property="buPjName" column="buPjName" columnIndex="2"/>
+	</resultMap>
+	
+	<select id="EMAU00H01.searchPk" parameterClass="AppProInfo" resultMap="PkList" >
+		<![CDATA[      
+		SELECT     
+          CO_PK AS coPk	
+          ,BU_PJ_NAME AS buPjName	
+	    FROM
+		br_intro_info
+		WHERE BU_PJ_NAME = #buPjName#
+		ORDER BY CO_PK LIMIT 1
+		]]>
+	</select>
+	
+	<select id="EMAU00H01.searchPk2" parameterClass="AppProInfo" resultMap="PkList" >
+		<![CDATA[      
+		SELECT     
+          CO_PK AS coPk	
+         ,BU_PJ_NAME AS buPjName	
+	    FROM
+		br_intro_info
+		WHERE CO_PK = #coPk#
+		ORDER BY CO_PK LIMIT 1
+		]]>
+	</select>
+	
+	<resultMap id="PkList1" class="egovframework.or.kr.EMAU00H01.service.AppProInfo">
+		<result property="coPk" column="coPk" columnIndex="1"/>
+		<result property="buPjName" column="buPjName" columnIndex="2"/>
+		<result property="buAgnId" column="buAgnId" columnIndex="3"/>
+		<result property="buOrgName" column="buOrgName" columnIndex="4"/>
+	</resultMap>
+	
+	 <select id="EMAU00H01.searchPk3" parameterClass="AppProInfo" resultMap="PkList1" >
+		<![CDATA[      
+		SELECT
+			a.CO_PK AS coPk	
+			, a.BU_PJ_NAME AS buPjName	
+			, b.BU_AGN_ID AS buAgnId
+			, b.BU_ORG_NAME AS buOrgName
+		FROM
+			br_intro_info a
+		LEFT JOIN br_company_code b ON a.CO_PK = b.CO_PK
+		WHERE b.BU_AGN_ID = '1' AND b.CO_PK = #coPk#
+		ORDER BY b.CO_PK LIMIT 1
+		]]>
+	</select> 
+	
+	<resultMap id="PkList2" class="egovframework.or.kr.EMAU00H01.service.AppProInfo">
+		<result property="coPk" column="coPk" columnIndex="1"/>
+		<result property="tlPk" column="tlPk" columnIndex="2"/>
+	</resultMap>
+	
+	 <select id="EMAU00H01.searchPk4" parameterClass="AppProInfo" resultMap="PkList2" >
+		<![CDATA[      
+		SELECT
+			CO_PK AS coPk	
+			, TL_PK AS tlPk	
+		FROM
+			br_work_plan 
+		WHERE CO_PK = #coPk#
+		ORDER BY CO_PK LIMIT 1
+		]]>
+	</select> 
+	
+	<insert id="EMAU00H01.uploadFile">
+		<![CDATA[
+			INSERT INTO br_uploadFile_file
+				(	
+					TL_PK
+					,FL_PK
+					,FL_NAME
+					,FL_PATH
+					,WRITE_TIME
+				)
+			VALUES (
+					#tlPk#
+					,#flPk#
+					,#uploadFileName#
+					,#saveFileName#
+					,now()
+				  )
+		]]>
+	</insert>
+</sqlMap>

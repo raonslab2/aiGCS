@@ -1,0 +1,1772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00C01">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="loginVO"
+		type="egovframework.com.cmm.LoginVO" />
+	<typeAlias alias="availableVO"
+		type="egovframework.or.kr.EMAU00C.service.AvailableVO" />
+	<typeAlias alias="eMAU00C01VO"
+		type="egovframework.or.kr.EMAU00C.service.EMAU00C01VO" />
+
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1" />
+		<result property="name" column="name" columnIndex="2" />
+		<result property="ihidNum" column="ihidNum" columnIndex="3" />
+		<result property="email" column="email" columnIndex="4" />
+		<result property="password" column="password" columnIndex="5" />
+		<result property="userSe" column="userSe" columnIndex="6" />
+		<result property="orgnztId" column="orgnztId" columnIndex="7" />
+		<result property="uniqId" column="uniqId" columnIndex="8" />
+	</resultMap>
+
+	<!-- 강용자원 처리를 위한 resultMap -->
+	<resultMap id="available"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="pjTitle" column="pjTitle" columnIndex="1" />
+		<result property="paPk" column="paPk" columnIndex="2" />
+		<result property="pjYear" column="pjYear" columnIndex="3" />
+		<result property="pjCode" column="pjCode" columnIndex="4" />
+		<result property="vuReCode" column="vuReCode" columnIndex="5" />
+		<result property="vuDiCode" column="vuDiCode" columnIndex="6" />
+		<result property="vuDayStart" column="vuDayStart"
+			columnIndex="7" />
+		<result property="vuDayEnd" column="vuDayEnd" columnIndex="8" />
+		<result property="vuDayWrite" column="vuDayWrite"
+			columnIndex="9" />
+		<result property="mbName" column="mbName" columnIndex="9" />
+		<result property="coPk" column="coPk" columnIndex="10" />
+		<result property="coCateCode" column="coCateCode"
+			columnIndex="11" />
+		<result property="coCateName" column="coCateName"
+			columnIndex="12" />
+		<result property="emVuTitle" column="emVuTitle"
+			columnIndex="14" />
+		<result property="pjState" column="pjState" columnIndex="15" />
+	</resultMap>
+
+	<resultMap id="availableNew"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="pjTitle" column="pjTitle" columnIndex="1" />
+		<result property="paPk" column="paPk" columnIndex="2" />
+		<result property="pjYear" column="pjYear" columnIndex="3" />
+		<result property="pjCode" column="pjCode" columnIndex="4" />
+		<result property="vuReCode" column="vuReCode" columnIndex="5" />
+		<result property="vuDiCode" column="vuDiCode" columnIndex="6" />
+		<result property="vuDayStart" column="vuDayStart"
+			columnIndex="7" />
+		<result property="vuDayEnd" column="vuDayEnd" columnIndex="8" />
+		<result property="vuDayWrite" column="vuDayWrite"
+			columnIndex="9" />
+		<result property="mbName" column="mbName" columnIndex="10" />
+		<result property="emVuTitle" column="emVuTitle"
+			columnIndex="11" />
+		<result property="pjState" column="pjState" columnIndex="12" />
+		<result property="coCateName" column="coCateName"
+			columnIndex="13" />
+		<result property="pjGubun" column="pjGubun" columnIndex="14" />
+		<result property="coCateCode" column="coCateCode"
+			columnIndex="15" />
+	</resultMap>
+
+	<!-- <resultMap id="availableList" class="egovframework.or.kr.EMAU00C.service.AvailableVO"> 
+		<result property="pjTitle" column="pjTitle" columnIndex="1" /> <result property="paPk" 
+		column="paPk" columnIndex="2" /> <result property="pjYear" column="pjYear" 
+		columnIndex="3" /> <result property="pjCode" column="pjCode" columnIndex="4" 
+		/> <result property="vuReCode" column="vuReCode" columnIndex="5" /> <result 
+		property="vuDiCode" column="vuDiCode" columnIndex="6" /> <result property="vuDayStart" 
+		column="vuDayStart" columnIndex="7" /> <result property="vuDayEnd" column="vuDayEnd" 
+		columnIndex="8" /> <result property="vuDayWrite" column="vuDayWrite" columnIndex="9" 
+		/> <result property="mbName" column="mbName" columnIndex="9" /> <result property="coPk" 
+		column="coPk" columnIndex="10" /> <result property="coCateCode" column="coCateCode" 
+		columnIndex="11" /> <result property="coCateCode" column="coCateCode" columnIndex="12" 
+		/> <result property="emVuPk" column="emVuPk" columnIndex="13" /> <result 
+		property="emVuTitle" column="emVuTitle" columnIndex="14" /> <result property="pjState" 
+		column="pjState" columnIndex="15" /> </resultMap> -->
+
+	<resultMap id="searchEmPjDiCode"
+		class="egovframework.or.kr.EMAU00C.service.EmPaDiVO">
+		<result property="vuDiCode" column="vuDiCode" columnIndex="1" />
+		<result property="vuDiTitle" column="vuDiTitle" columnIndex="2" />
+	</resultMap>
+
+	<resultMap id="searchCommonCode"
+		class="egovframework.or.kr.EMAU00C.service.CommonVO">
+		<result property="comKey" column="comKey" columnIndex="1" />
+		<result property="comValue" column="comValue" columnIndex="2" />
+	</resultMap>
+
+
+	<!-- test -->
+	<select id="EMAU00C01.test" resultMap="login">
+		<isEqual property="userSe" compareValue="USR">
+			<![CDATA[
+            SELECT EMPLYR_ID AS id
+                 , USER_NM AS name
+                 , PASSWORD AS password
+                 , IHIDNUM AS ihidNum
+                 , EMAIL_ADRES AS email
+                 , 'USR' AS userSe
+                 , ORGNZT_ID AS orgnztId
+                 , ESNTL_ID AS uniqId
+              FROM LETTNEMPLYRINFO
+             WHERE EMPLYR_ID = #id#
+               AND PASSWORD = #password#
+               AND EMPLYR_STTUS_CODE = 'P'
+			]]>
+		</isEqual>
+	</select>
+
+	<select id="EMAU00C01.selectAvailableList"
+		resultMap="availableNew">
+ 
+			<![CDATA[
+					SELECT 
+						   tt.pjTitle
+						   ,(
+							   CASE 
+							      WHEN date_format(current_timestamp(),'%Y.%m.%d') > date_format(tt.vuDayEnd,'%Y.%m.%d') 
+									 THEN '2'
+							      WHEN ( 
+									       ( date_format(current_timestamp(),'%Y.%m.%d') < date_format(tt.vuDayEnd,'%Y.%m.%d') )
+											  and
+									       ( date_format(current_timestamp(),'%Y.%m.%d') >= date_format(tt.vuDayStart,'%Y.%m.%d') )
+							            )
+									 THEN '1'
+						        ELSE '0'
+						      END
+						     ) pjState 
+						  ,tt.paPk
+						  ,tt.pjYear
+						  ,tt.pjCode
+						  ,tt.vuReCode
+						  ,tt.vuDiCode
+						  ,tt.vuDayStart
+						  ,tt.vuDayEnd
+						  ,tt.vuDayWrite
+						  ,tt.mbName 
+						  ,tt.emVuTitle
+						  ,tt.coCateName
+						  ,tt.pjGubun
+						  ,tt.coCateCode
+					FROM (
+							SELECT
+							   pjTitle
+							  ,pjState 
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,MIN(vuDayStart) AS vuDayStart
+							  ,MAX(vuDayStart) AS vuDayEnd
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							  ,coCateCode
+							FROM em_pj_area_vi  
+							 WHERE grmCode = #grMCode#
+							GROUP BY    
+							   pjTitle
+							  ,pjState
+							  ,pjState
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							  ,coCateCode
+					 	) tt  
+					ORDER BY tt.vuDayStart desc
+					LIMIT #recordCountPerPage# OFFSET #firstIndex#
+			]]>
+	</select>
+
+	<select id="EMAU00C01.selectCount" resultClass="int">
+		<![CDATA[
+					SELECT 
+						  COUNT(*)
+					FROM (
+							SELECT
+							   pjTitle
+							  ,pjState 
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,MIN(vuDayStart) AS vuDayStart
+							  ,MAX(vuDayStart) AS vuDayEnd
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							FROM em_pj_area_vi  
+							GROUP BY    
+							   pjTitle
+							  ,pjState
+							  ,pjState
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun  
+					 	) tt  
+					ORDER BY tt.vuDayStart desc
+					LIMIT 50
+		]]>
+	</select>
+
+
+	<select id="EMAU00C01.searchEmPjDiCode"
+		resultMap="searchEmPjDiCode">
+		<![CDATA[
+			SELECT 
+			     a.VU_DI_CODE as vuDiCode
+			    ,a.VU_DI_TITLE as vuDiTitle
+			from em_pj_di_code a
+		]]>
+	</select>
+
+	<select id="EMAU00C01.searchEmPjVuCode"
+		resultMap="searchEmPjDiCode">
+		<![CDATA[
+			SELECT 
+			     a.VU_RE_CODE as vuDiCode
+			    ,a.VU_RE_TITLE as vuDiTitle
+			from em_pj_vu_code a
+			WHERE 1=1 
+		]]>
+	</select>
+
+	<select id="EMAU00C01.searchUserPjList"
+		resultMap="searchCommonCode">
+		<![CDATA[
+			SELECT 
+			     a.PJ_CODE as comKey
+			    ,a.PJ_TITLE as comValue
+			from em_pj_list_vi a
+			WHERE 1=1 
+		]]>
+	</select>
+
+	<resultMap id="autocompleteList"
+		class="egovframework.or.kr.EMAU00F.service.EmmbgroupVO">
+		<result property="grmName" column="grmName" columnIndex="1" />
+		<result property="grmCode" column="grmCode" columnIndex="2" />
+	</resultMap>
+
+	<select id="EMAU00C01.autocomplete" parameterClass="Map"
+		resultMap="autocompleteList">
+		<![CDATA[
+					SELECT 
+					     aa.grmCode
+					     ,aa.grmName
+					FROM (
+							SELECT a.GR_M_CODE grmCode
+							     , CONCAT(b.GR_M_NAME , " ", a.GR_M_NAME ) AS grmName 
+							FROM em_mb_group a
+							    LEFT JOIN em_mb_group b
+							   ON a.GR_P_CODE = b.GR_M_CODE
+							WHERE a.GR_P_CODE != '00000'  
+							) aa
+					WHERE aa.grmName LIKE CONCAT('%',#searchName#,'%')  
+		]]>
+	</select>
+
+	<resultMap id="autocompleteList2"
+		class="egovframework.or.kr.EMAU00B.service.EmpjVO">
+		<result property="pjTitle" column="pjTitle" columnIndex="1" />
+	</resultMap>
+
+	<select id="EMAU00C01.autocomplete2" parameterClass="Map"
+		resultMap="autocompleteList2">
+		<![CDATA[
+			SELECT
+				PJ_TITLE AS pjTitle
+			FROM
+				em_pj_list_vi
+			WHERE 
+				PJ_TITLE LIKE CONCAT('%',#searchName#,'%')
+		]]>
+	</select>
+
+	<resultMap id="autocompleteList3"
+		class="egovframework.or.kr.EMAU00B.service.EmpjVO">
+		<result property="pjTitle" column="pjTitle" columnIndex="1" />
+		<result property="pjCode" column="pjCode" columnIndex="2" />
+	</resultMap>
+
+	<select id="EMAU00C01.autocomplete3" parameterClass="Map"
+		resultMap="autocompleteList3">
+		<![CDATA[
+			SELECT
+				PJ_TITLE AS pjTitle
+				,PJ_CODE AS pjCode
+			FROM
+				em_pj_list_vi
+			WHERE 
+				PJ_TITLE LIKE CONCAT('%',#businessname#,'%')
+		]]>
+	</select>
+
+	<resultMap id="selectAreaList2"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="emVuPk" column="emVuPk" columnIndex="1" />
+		<result property="vuTitle" column="vuTitle" columnIndex="2" />
+		<result property="vuUse" column="vuUse" columnIndex="3" />
+		<result property="writeTime" column="writeTime" columnIndex="4" />
+		<result property="addrCode" column="addrCode" columnIndex="5" />
+		<result property="addrName" column="addrName" columnIndex="6" />
+	</resultMap>
+
+	<select id="EMAU00C01.selectAreaList2"
+		resultMap="selectAreaList2">
+		<![CDATA[
+			SELECT
+				a.EM_VU_PK as emVuPk
+				, a.EM_VU_TITLE as vuTitle
+				,a.EM_VU_USE as vuUse
+				, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+				,b.AR_ADDR_CODE as addrCode
+				,b.AR_ADDR_NAME as addrName
+			FROM
+				em_pj_area_info a
+				LEFT JOIN em_pj_area_code b ON a.AR_ADDR_CODE = b.AR_ADDR_CODE
+			ORDER BY a.EM_VU_PK
+				
+		]]>
+	</select>
+
+	<resultMap id="addrCodeOption"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="addrName" column="addrName" columnIndex="1" />
+		<result property="addrCode" column="addrCode" columnIndex="2" />
+
+	</resultMap>
+
+	<select id="EMAU00C01.selectAreaCateList"
+		resultMap="addrCodeOption">
+		<![CDATA[
+			SELECT 
+				AR_ADDR_NAME AS addrName
+				,AR_ADDR_CODE AS addrCode
+			FROM
+			 	em_pj_area_code
+		]]>
+	</select>
+
+	<insert id="EMAU00C01.insertArea" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_pj_area_info
+				(
+				AR_ADDR_CODE
+				,EM_VU_TITLE
+				,WRITE_TIME
+				)
+			VALUES 
+			( 
+				#addrCode#
+				,#vuTitle#
+				,now()
+			)
+		]]>
+		<selectKey keyProperty="EM_VU_PK" resultClass="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<select id="EMAU00C01.hasDataConfirm" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+		SELECT
+			EM_VU_TITLE as vuTitle
+			,EM_VU_USE as vuUse
+			,WRITE_TIME as writeTime
+			,AR_ADDR_CODE as addrCode
+			,AR_ADDR_NAME as addrName
+		FROM
+			em_pj_area_info
+		WHERE 
+			AR_ADDR_CODE = #addrCode#
+		]]>
+	</select>
+
+	<!-- <update id="EMAU00C01.updateArea" parameterClass="Map"> UPDATE em_pj_area_info 
+		SET AR_ADDR_CODE = #addrCode# ,EM_VU_TITLE = #vuTitle# ,EM_VU_POST = #postNumber# 
+		,EM_VU_ADDR = CONCAT(#address#, #detailAddress#) ,EM_VU_USE = #vuUse# WHERE 
+		EM_VU_PK = #emVuPk# </update> -->
+
+	<update id="EMAU00C01.updateArea" parameterClass="Map">
+		<![CDATA[
+			UPDATE
+				em_pj_area_info
+			SET
+				AR_ADDR_CODE = #addrCode#
+				, EM_VU_TITLE = #vuTitle#
+				, EM_VU_USE = #vuUse#
+			WHERE 
+				EM_VU_PK = #emVuPk#
+		]]>
+	</update>
+
+
+	<resultMap id="autocompleteList4"
+		class="egovframework.or.kr.EMAU00B.service.EmpjVO">
+		<result property="pjTitle" column="pjTitle" columnIndex="1" />
+	</resultMap>
+
+	<select id="EMAU00C01.autocomplete4" parameterClass="Map"
+		resultMap="autocompleteList4">
+		<![CDATA[
+			SELECT
+				PJ_TITLE AS pjTitle
+			FROM
+				em_pj_list_vi
+			WHERE 
+				PJ_TITLE LIKE CONCAT('%',#businessname#,'%')
+		]]>
+	</select>
+
+	<insert id="EMAU00C01.insertUser" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_pj_user_mapping
+				(
+				PJ_YEAR
+				,PJ_CODE
+				,GS_REQ_MB_CODE
+				,GS_TXT
+				WRITE_TIME
+				)
+			VALUES 
+			( 
+			#pjYear#
+			,#pjCode#
+			,#gsReqMbCode#
+			,#gsTxt#
+			,now()
+					)
+		]]>
+	</insert>
+
+
+	<resultMap id="selectPjUsertList"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="gsPk" column="gsPk" columnIndex="1" />
+		<result property="pjInDate" column="pjInDate" columnIndex="2" />
+		<result property="pjTitle" column="pjTitle" columnIndex="3" />
+		<result property="grmName" column="grmName" columnIndex="4" />
+		<result property="mbName" column="mbName" columnIndex="5" />
+		<result property="pjInUse" column="pjInUse" columnIndex="6" />
+		<result property="pjInConfirm" column="pjInConfirm"
+			columnIndex="7" />
+		<result property="writeTime" column="writeTime" columnIndex="8" />
+		<result property="pjInRepleDate" column="pjInRepleDate"
+			columnIndex="9" />
+		<result property="reqMbName" column="reqMbName"
+			columnIndex="10" />
+	</resultMap>
+
+	<select id="EMAU00C01.selectPjUsertList"
+		parameterClass="eMAU00C01VO" resultMap="selectPjUsertList">
+		<![CDATA[
+					SELECT     
+						  a.GS_PK AS gsPk
+					      ,a.PJ_IN_DATE AS pjInDate 
+					      ,b.PJ_TITLE AS pjTitle
+					      ,c.GR_M_NAME AS grmName
+					      ,d.MB_NAME AS mbName
+					      ,a.PJ_IN_USE AS pjInUse
+					      ,ifnull(a.PJ_IN_CONFIRM,'') AS pjInConfirm
+					      ,a.WRITE_TIME AS writeTime
+					      ,a.PJ_IN_REPLE_DATE AS pjInRepleDate
+					      ,a.REQ_MB_NAME AS reqMbName
+					FROM em_pj_user_mapping a
+						LEFT JOIN em_pj_list_vi b
+						ON a.PJ_CODE = b.PJ_CODE
+						LEFT JOIN em_mb_group c
+						ON a.GR_M_CODE = c.GR_M_CODE
+						LEFT JOIN em_mb_member d
+						ON a.PJ_IN_MB_CODE = d.MB_CODE
+					WHERE 
+						b.PJ_YEAR = #pjYear#
+					AND a.REQ_MB_NAME = #reqMbName#
+		]]>
+		<isNotEmpty prepend="AND" property="date1">
+			<![CDATA[
+				a.PJ_IN_DATE >= #date1#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="date2">
+			<![CDATA[
+				a.PJ_IN_DATE < #date2#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="pjTitle">
+			<![CDATA[
+				b.PJ_TITLE LIKE CONCAT('%',#pjTitle#,'%') 
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="part1">
+			<![CDATA[
+				a.GR_P_CODE = #part1#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="part2">
+			<![CDATA[
+				a.GR_M_CODE = #part2#
+			]]>
+		</isNotEmpty>
+		<![CDATA[
+			ORDER BY a.GS_PK, a.PJ_IN_DATE
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+
+	<select id="EMAU00C01.selectAreaDetailList" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+		SELECT
+				EM_VU_TITLE AS vuTitle 
+				,EM_VU_PK AS vuPk
+				,PA_USE_DAY AS useDay
+		FROM
+				em_pj_area_mapping
+		WHERE 
+				PA_USE_DAY BETWEEN #Day1# AND #Day2#
+		]]>
+	</select>
+
+	<select id="EMAU00C01.selectAreaList" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+		SELECT
+				EM_VU_TITLE AS vuTitle 
+				,EM_VU_USE AS vuUse
+				,AR_ADDR_CODE AS addrCode
+		FROM
+				em_pj_area_info
+		WHERE 
+				AR_ADDR_CODE = #addrCode#
+				
+		]]>
+	</select>
+
+	<select id="selectUserList" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+				SELECT 
+					MB_NAME AS mbName
+					, MB_HP AS mbHp
+					, MB_RANK_NAME AS mbRankName
+				FROM 
+					em_mb_member
+				WHERE 
+					GR_P_CODE = #grpCode#
+		]]>
+	</select>
+
+	<select id="selectWeekUserList" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+				SELECT 
+					IN_STATE AS inState
+					,IN_STATE_CODE AS inStateCode
+					,SYS_DATE AS sysDate
+				FROM 
+					em_pj_input_user
+				WHERE 
+					MB_CODE = #mbCode#
+		]]>
+	</select>
+
+	<select id="EMAU00C01.searchBusinessList"
+		parameterClass="AvailableVO" resultMap="availableNew">
+			<![CDATA[
+				SELECT 
+						   tt.pjTitle
+						   ,(
+							   CASE 
+							      WHEN date_format(current_timestamp(),'%Y.%m.%d') > date_format(tt.vuDayEnd,'%Y.%m.%d') 
+									 THEN '2'
+							      WHEN ( 
+									       ( date_format(current_timestamp(),'%Y.%m.%d') < date_format(tt.vuDayEnd,'%Y.%m.%d') )
+											  and
+									       ( date_format(current_timestamp(),'%Y.%m.%d') >= date_format(tt.vuDayStart,'%Y.%m.%d') )
+							            )
+									 THEN '1'
+						        ELSE '0'
+						      END
+						     ) pjState 
+						  ,tt.paPk
+						  ,tt.pjYear
+						  ,tt.pjCode
+						  ,tt.vuReCode
+						  ,tt.vuDiCode
+						  ,tt.vuDayStart
+						  ,tt.vuDayEnd
+						  ,tt.vuDayWrite
+						  ,tt.mbName 
+						  ,tt.emVuTitle
+						  ,tt.coCateName
+						  ,tt.pjGubun
+						  ,tt.coCateCode
+					FROM (
+							SELECT
+							   pjTitle
+							  ,pjState 
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,MIN(vuDayStart) AS vuDayStart
+							  ,MAX(vuDayStart) AS vuDayEnd
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							  ,coCateCode
+							FROM em_pj_area_vi  
+							GROUP BY    
+							   pjTitle
+							  ,pjState
+							  ,pjState
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							  ,coCateCode  
+					 	) tt  
+					WHERE tt.pjYear = #searchYear# 
+					AND tt.pjTitle LIKE CONCAT('%',#searchName#,'%') 
+					ORDER BY tt.vuDayStart desc
+					LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>
+	</select>
+
+	<select id="EMAU00C01.searchAddList"
+		parameterClass="AvailableVO" resultMap="availableNew">
+ 
+			<![CDATA[
+				SELECT 
+						   tt.pjTitle
+						   ,(
+							   CASE 
+							      WHEN date_format(current_timestamp(),'%Y.%m.%d') > date_format(tt.vuDayEnd,'%Y.%m.%d') 
+									 THEN '2'
+							      WHEN ( 
+									       ( date_format(current_timestamp(),'%Y.%m.%d') < date_format(tt.vuDayEnd,'%Y.%m.%d') )
+											  and
+									       ( date_format(current_timestamp(),'%Y.%m.%d') >= date_format(tt.vuDayStart,'%Y.%m.%d') )
+							            )
+									 THEN '1'
+						        ELSE '0'
+						      END
+						     ) pjState 
+						  ,tt.paPk
+						  ,tt.pjYear
+						  ,tt.pjCode
+						  ,tt.vuReCode
+						  ,tt.vuDiCode
+						  ,tt.vuDayStart
+						  ,tt.vuDayEnd
+						  ,tt.vuDayWrite
+						  ,tt.mbName 
+						  ,tt.emVuTitle
+						  ,tt.coCateName
+						  ,tt.pjGubun
+					FROM (
+							SELECT
+							   pjTitle
+							  ,pjState 
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,MIN(vuDayStart) AS vuDayStart
+							  ,MAX(vuDayStart) AS vuDayEnd
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							FROM em_pj_area_vi  
+							GROUP BY    
+							   pjTitle
+							  ,pjState
+							  ,pjState
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun  
+					 	) tt  
+				WHERE 1=1
+				]]>
+		<isNotEmpty property="searchYear">
+			AND tt.pjYear = #searchYear#
+		</isNotEmpty>
+		<isNotEmpty property="searchName">
+			AND tt.pjTitle LIKE CONCAT('%',#searchName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchVuDiCode">
+				<![CDATA[
+					tt.vuDiCode = #searchVuDiCode#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchVuDayStart">
+				<![CDATA[
+					tt.vuDayStart >= #searchVuDayStart#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchVuDayEnd">
+				<![CDATA[
+					tt.vuDayEnd <= #searchVuDayEnd#
+				]]>
+		</isNotEmpty>
+				<![CDATA[
+	 			ORDER BY tt.vuDayStart desc
+				LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		  		]]>
+	</select>
+
+	<select id="EMAU00C01.searchBusinessAllList"
+		parameterClass="AvailableVO" resultMap="available">
+			<![CDATA[
+				SELECT
+					c.PJ_TITLE AS pjTitle
+						,CASE 
+						WHEN a.VU_DAY_END is null
+						THEN 0
+						WHEN (a.VU_DAY_END > date(now())) AND (a.VU_DAY_START <= date(now())) 
+						THEN 1
+						WHEN (a.VU_DAY_END <= date(now())) 
+						THEN 2
+						ELSE 0
+					END as pjState
+					, a.PA_PK AS paPk 
+					, a.PJ_YEAR AS pjYear
+					, a.PJ_CODE AS pjCode
+					, a.VU_RE_CODE as vuReCode 
+					, a.VU_DI_CODE as vuDiCode 
+					, ifnull(DATE_FORMAT(a.VU_DAY_START, '%y.%m.%d %H:%i'),'') as vuDayStart
+					, ifnull(DATE_FORMAT(a.VU_DAY_END, '%y.%m.%d %H:%i'),'') as vuDayEnd
+					, ifnull(DATE_FORMAT(a.VU_DAY_WRITE, '%y.%m.%d'),'') AS vuDayWrite
+					, ifnull(b.MB_NAME,'') AS mbName
+					, d.CO_PK AS coPk
+					, d.CO_CATE_CODE AS coCateCode
+					, ifnull(e.CO_CATE_NAME,'') AS coCateName
+					, f.EM_VU_PK AS emVuPk
+					, ifnull(f.EM_VU_TITLE,'') AS emVuTitle
+				FROM
+					em_pj_area a
+				LEFT JOIN em_mb_member b ON a.MB_CODE = b.MB_CODE
+				LEFT JOIN em_pj_list_vi c ON a.PJ_YEAR = c.PJ_YEAR AND a.PJ_CODE = c.PJ_CODE
+				LEFT JOIN em_pj_com_mapping d ON a.PA_PK = d.PA_PK
+				LEFT JOIN em_pj_com_code e ON d.CO_CATE_CODE = e.CO_CATE_CODE
+				LEFT JOIN em_pj_area_mapping f ON a.PA_PK = f.PA_PK
+				WHERE 1=1
+				ORDER BY a.PJ_CODE ASC
+				]]>
+	</select>
+
+	<resultMap id="clickArea"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="emVuPk" column="emVuPk" columnIndex="1" />
+		<result property="vuTitle" column="vuTitle" columnIndex="2" />
+		<result property="vuUse" column="vuUse" columnIndex="3" />
+		<result property="writeTime" column="writeTime" columnIndex="4" />
+		<result property="addrCode" column="addrCode" columnIndex="5" />
+		<result property="addrName" column="addrName" columnIndex="6" />
+		<result property="vuPost" column="vuPost" columnIndex="7" />
+		<result property="vuAddr" column="vuAddr" columnIndex="8" />
+	</resultMap>
+
+	<select id="EMAU00C01.clickArea" resultMap="clickArea">
+		<![CDATA[
+			SELECT
+				a.EM_VU_PK as emVuPk
+				,a.EM_VU_TITLE as vuTitle
+				,a.EM_VU_USE as vuUse
+				,a.EM_VU_POST as vuPost
+				,a.EM_VU_ADDR as vuAddr
+				, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+				,b.AR_ADDR_CODE as addrCode
+				,b.AR_ADDR_NAME as addrName
+			FROM
+				em_pj_area_info a
+				LEFT JOIN em_pj_area_code b ON a.AR_ADDR_CODE = b.AR_ADDR_CODE
+			WHERE a.EM_VU_PK = #emVuPk#
+			
+				
+		]]>
+	</select>
+
+	<resultMap id="searchOption"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="vuReCode" column="VU_RE_CODE" columnIndex="1" />
+		<result property="vuReTitle" column="VU_RE_TITLE"
+			columnIndex="2" />
+	</resultMap>
+
+	<select id="EMAU00C01.searchOption" resultMap="searchOption">
+		<![CDATA[
+			SELECT 
+				VU_RE_CODE AS VU_RE_CODE
+			  , VU_RE_TITLE AS VU_RE_TITLE
+			FROM
+			 	em_pj_vu_code
+		]]>
+	</select>
+
+	<insert id="EMAU00C01.insertDivision">
+		<![CDATA[
+			INSERT INTO em_pj_area
+				( PJ_YEAR
+				  , PJ_CODE
+				  , VU_DI_CODE
+				  , VU_RE_CODE
+				  , VU_DAY_START
+				  , VU_DAY_END
+				  , VU_DAY_WRITE
+				   )
+			VALUES ( #pjYear#
+				  , #pjCode#
+				  , #vuDiCode#
+				  , #vuReCode#
+				  , #vuDayStart#
+				  , #vuDayEnd# 
+				  , now()
+				  )
+		]]>
+		<selectKey keyProperty="PA_PK" resultClass="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="EMAU00C01.updateDivision" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_pj_area
+			SET 
+				VU_DI_CODE = #vuDiCode#
+				, VU_RE_CODE = #vuReCode#
+				, VU_DAY_START = #vuDayStart#
+				, VU_DAY_END = #vuDayEnd#
+			WHERE
+				PA_PK = #paPk#
+		]]>
+	</update>
+
+
+	<!-- <resultMap id="divisionList" class="egovframework.or.kr.EMAU00C.service.AvailableVO"> 
+		<result property="coPk" column="coPk" columnIndex="1"/> <result property="paPk" 
+		column="paPk" columnIndex="2"/> <result property="coCateCode" column="coCateCode" 
+		columnIndex="3"/> <result property="coCateName" column="coCateName" columnIndex="4"/> 
+		</resultMap> <select id="EMAU00C01.divisionList" resultMap="divisionList" 
+		> <![CDATA[ SELECT a.CO_PK AS coPk , a.PA_PK AS paPk , a.CO_CATE_CODE AS 
+		coCateCode , b.CO_CATE_NAME AS coCateName FROM em_pj_com_mapping a LEFT JOIN 
+		em_pj_com_code b ON a.CO_CATE_CODE = b.CO_CATE_CODE ORDER BY a.CO_CATE_CODE 
+		ASC ]]> </select> -->
+
+	<resultMap id="divisionList"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="coCateCode" column="coCateCode"
+			columnIndex="1" />
+		<result property="coCateName" column="coCateName"
+			columnIndex="2" />
+	</resultMap>
+
+	<select id="EMAU00C01.divisionList" resultMap="divisionList">
+		<![CDATA[
+		SELECT 
+ 		  CO_CATE_CODE AS coCateCode
+ 		  , CO_CATE_NAME AS coCateName
+		FROM 
+			em_pj_com_code
+		ORDER BY CO_CATE_CODE ASC
+		]]>
+	</select>
+
+	<resultMap id="areaList"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="paPk" column="paPk" columnIndex="1" />
+		<result property="pjCode" column="pjCode" columnIndex="2" />
+		<result property="emVuPk" column="emVuPk" columnIndex="3" />
+		<result property="emVuTitle" column="emVuTitle" columnIndex="4" />
+
+	</resultMap>
+
+	<select id="EMAU00C01.searchAreaList"
+		parameterClass="AvailableVO" resultMap="areaList">
+ 
+			<![CDATA[
+				SELECT 
+		  			  PA_PK AS paPk
+		  			, PJ_CODE AS pjCode
+ 		  			, EM_VU_PK AS emVuPk
+ 		  			, EM_VU_TITLE AS emVuTitle
+   					FROM em_pj_area_mapping
+  					WHERE EM_VU_TITLE LIKE CONCAT('%',#searchAreaName#,'%')
+		  		]]>
+	</select>
+
+	<resultMap id="memberList"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="mbCode" column="mbCode" columnIndex="1" />
+		<result property="grPCode" column="grPCode" columnIndex="1" />
+		<result property="mbName" column="mbName" columnIndex="2" />
+		<result property="mbRName" column="mbRName" columnIndex="3" />
+		<result property="grMName" column="grMName" columnIndex="4" />
+		<result property="grMCode" column="grMCode" columnIndex="5" />
+
+	</resultMap>
+
+	<select id="EMAU00C01.searchMemberList" parameterClass="Map"
+		resultMap="memberList">
+ 
+			<![CDATA[
+					SELECT 
+						a.MB_CODE AS mbCode
+			  			, a.GR_P_CODE AS grPcode
+	 		  			, a.MB_NAME AS  mbName
+	 		  			, a.MB_RANK_NAME AS mbRName
+	 		  			, b.GR_M_NAME AS grMName
+	 		  			, b.GR_M_CODE AS grMCode
+   					FROM em_mb_member a
+   					LEFT JOIN em_mb_group b
+   					ON a.GR_M_CODE = b.GR_M_CODE
+		  		]]>
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="groupPart1">
+				a.GR_P_CODE = #groupPart1#
+			</isNotEmpty>
+		</dynamic>
+
+		<isNotEmpty property="groupPart2">
+			AND a.GR_M_CODE = #groupPart2#
+		</isNotEmpty>
+
+		<isEmpty property="groupPart1">
+			<isNotEmpty prepend="WHERE" property="searchName">
+						<![CDATA[
+							a.MB_NAME LIKE CONCAT('%',#searchName#,'%')
+						]]>
+			</isNotEmpty>
+		</isEmpty>
+		<isNotEmpty property="groupPart1">
+			<isNotEmpty prepend="AND" property="searchName">
+						<![CDATA[
+							a.MB_NAME LIKE CONCAT('%',#searchName#,'%')
+						]]>
+			</isNotEmpty>
+		</isNotEmpty>
+		ORDER BY a.MB_CODE ASC
+	</select>
+
+	<resultMap id="searchGrmName"
+		class="egovframework.or.kr.EMAU00F.service.EmmbgroupVO">
+		<result property="grmName" column="grmName" columnIndex="1" />
+		<result property="grmCode" column="grmCode" columnIndex="2" />
+	</resultMap>
+
+	<select id="EMAU00C01.searchGrmName" parameterClass="Map"
+		resultMap="searchGrmName">
+		<![CDATA[
+					SELECT 
+					     aa.grmCode
+					     ,aa.grmName
+					FROM (
+							SELECT a.GR_M_CODE grmCode
+							     , CONCAT(b.GR_M_NAME , " ", a.GR_M_NAME ) AS grmName 
+							FROM em_mb_group a
+							    LEFT JOIN em_mb_group b
+							   ON a.GR_P_CODE = b.GR_M_CODE
+							WHERE a.GR_P_CODE != '00000'  
+							) aa
+					WHERE aa.grmName LIKE CONCAT('%',#grmName#,'%')  
+		]]>
+	</select>
+
+	<resultMap id="possibleStatus"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="grmName" column="grmName" columnIndex="1" />
+		<result property="mbName" column="mbName" columnIndex="2" />
+		<result property="mbRank" column="mbRank" columnIndex="3" />
+		<result property="mbHp" column="mbHp" columnIndex="4" />
+		<result property="inState" column="inState" columnIndex="5" />
+		<result property="mbCode" column="mbCode" columnIndex="6" />
+		<result property="grpCode" column="grpCode" columnIndex="7" />
+		<result property="grmCode" column="grmCode" columnIndex="8" />
+	</resultMap>
+
+	<!-- 사람의 이름 -->
+	<select id="EMAU00C01.possibleStatus" parameterClass="Map"
+		resultMap="possibleStatus">
+		<![CDATA[
+			SELECT
+				b.GR_M_NAME AS grmName
+				,c.MB_NAME AS mbName
+				,c.MB_RANK_NAME AS mbRank
+				,c.MB_HP AS mbHp
+				,a.IN_STATE as inState
+				,c.MB_CODE as mbCode
+				,b.GR_P_CODE AS grpCode
+				,b.GR_M_CODE AS grmCode
+			FROM 
+				em_pj_input_user a
+				LEFT JOIN em_mb_group b
+				ON a.GR_M_CODE = b.GR_M_CODE
+				LEFT JOIN em_mb_member c
+				ON a.MB_CODE = c.MB_CODE
+			WHERE 
+				a.GR_M_CODE = #grmCode#
+		]]>
+	</select>
+
+	<insert id="EMAU00C01.workRequest" parameterClass="Map">
+		<![CDATA[
+				INSERT INTO em_pj_user_mapping
+				(
+					PJ_YEAR 
+					,PJ_CODE
+					,GS_REQ_MB_CODE
+					,REQ_MB_NAME 
+					,GS_TXT 
+					,WRITE_TIME
+					,PJ_IN_DATE
+					,PJ_IN_MB_CODE
+					,PJ_IN_USE
+					,GR_M_CODE
+					,GR_P_CODE
+				)
+				VALUE(
+					#pjYear#
+					,#pjCode#
+					,#gsReqMbCode#
+					,#reqMbName#
+					,#gsTxt#
+					,NOW()
+					,#pjInDate#
+					,#pjInMbCode#
+					,1
+					,#grmCode#
+					,#grpCode#
+				)
+		]]>
+		<selectKey keyProperty="GS_PK" resultClass="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<!-- <insert id="EMAU00C01.inStateInsert" parameterClass="Map"> <![CDATA[ 
+		INSERT INTO em_pj_input_user ( PJ_YEAR , SYS_DATE , GR_M_CODE , MB_CODE , 
+		IN_STATE , IN_STATE_CODE ) VALUE( #pjYear# , #pjIn Date# , #grmCode# , #pjInMbCode# 
+		, 0 , 0 ) ]]> </insert> -->
+
+
+	<resultMap id="businessInfo"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="pjYear" column="pjYear" columnIndex="1" />
+		<result property="pjCode" column="pjCode" columnIndex="2" />
+	</resultMap>
+
+	<select id="EMAU00C01.businessInfo" parameterClass="Map"
+		resultMap="businessInfo">
+		<![CDATA[
+			SELECT
+				PJ_YEAR AS pjYear
+				,PJ_CODE AS pjCode
+			FROM
+				em_pj_list_vi
+			WHERE 
+				PJ_YEAR = #pjYear#
+			AND
+				PJ_TITLE = #businessname#
+		]]>
+	</select>
+
+	<update id="EMAU00C01.confirmUpdate" parameterClass="int">
+		<![CDATA[
+			UPDATE 
+				em_pj_user_mapping
+			SET 
+				PJ_IN_CONFIRM = 1
+			WHERE
+				GS_PK = #id#
+		]]>
+	</update>
+
+	<resultMap id="grmInfo"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="grpCode" column="grpCode" columnIndex="1" />
+		<result property="grmCode" column="grmCode" columnIndex="2" />
+		<result property="grmName" column="grmName" columnIndex="3" />
+	</resultMap>
+
+	<select id="EMAU00C01.grmInfo" resultMap="grmInfo">
+		<![CDATA[
+			SELECT
+				a.GR_P_CODE AS grpCode
+				, a.GR_M_CODE AS grmCode
+				, a.GR_M_NAME AS grmName
+			FROM
+				em_mb_group a
+			WHERE
+				 NOT a.GR_P_CODE IN ('00000')
+		]]>
+	</select>
+
+	<resultMap id="memberInfo"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="grpCode" column="grpCode" columnIndex="1" />
+		<result property="grmCode" column="grmCode" columnIndex="2" />
+		<result property="grmName" column="grmName" columnIndex="3" />
+		<result property="mbCode" column="mbCode" columnIndex="4" />
+		<result property="mbName" column="mbName" columnIndex="5" />
+		<result property="plcNm" column="plcNm" columnIndex="6" />
+		<result property="pjYmd" column="pjYmd" columnIndex="7" />
+		<result property="pjWeek" column="pjWeek" columnIndex="8" />
+	</resultMap>
+
+	<select id="EMAU00C01.memberInfo" resultMap="memberInfo">
+		<![CDATA[
+				SELECT DISTINCT
+								b.GR_P_CODE AS grpCode
+								, a.GR_M_CODE AS grmCode
+								, c.GR_M_NAME AS grmName
+								, b.MB_CODE AS mbCode
+								, b.MB_NAME AS mbName 
+								, a.PLC_NM AS plcNm
+								, a.PJ_YMD AS pjYmd
+								, WEEKDAY(a.PJ_YMD) AS pjWeek
+				FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST a
+				      LEFT JOIN em_mb_member b
+				    ON a.LGIN_ID2 = b.USER_ID
+				      LEFT JOIN em_mb_group c
+				    ON a.GR_M_CODE = c.GR_M_CODE
+				WHERE a.PJ_YMD BETWEEN DATE_FORMAT(#searchDateSt#, '%Y%m%d') AND  DATE_FORMAT(#searchDateEd#, '%Y%m%d')
+		]]>
+	</select>
+
+	<select id="EMAU00C01.isDataArea" resultClass="int">
+		<![CDATA[
+			SELECT
+				count(*)
+			FROM
+				em_pj_area_info
+			WHERE
+				AR_ADDR_CODE = #addrCode#
+			AND
+				EM_VU_TITLE = #vuTitle#
+		]]>
+	</select>
+
+	<delete id="EMAU00C01.deleteArea" parameterClass="int">
+		<![CDATA[
+		DELETE
+		FROM
+			em_pj_area_info
+		WHERE
+			EM_VU_PK = #id#
+		]]>
+	</delete>
+
+	<resultMap id="areaList1"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="addrCode" column="addrCode" columnIndex="1" />
+		<result property="addrName" column="addrName" columnIndex="2" />
+	</resultMap>
+
+	<!-- 사람의 이름 -->
+	<select id="EMAU00C01.areaList" resultMap="areaList1">
+		<![CDATA[
+			SELECT
+				AR_ADDR_CODE AS addrCode
+				, AR_ADDR_NAME AS addrName
+			FROM 
+				em_pj_area_code
+			ORDER BY AR_ADDR_CODE
+		]]>
+	</select>
+
+	<select id="EMAU00C01.paDataDetail" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+			SELECT 
+				a.PA_PK AS paPk
+				, a.PJ_YEAR AS pjYear
+				, a.PJ_CODE AS pjCode
+				, a.VU_RE_CODE AS vuReCode
+				, a.VU_DI_CODE AS vuDiCode
+				, a.VU_DAY_START AS vuDayStart
+				, a.VU_DAY_END AS vuDayEnd
+				, a.VU_DAY_WRITE AS vuDayWrite
+				, a.MB_CODE AS mbCode
+				, b.PJ_TITLE AS pjTitle
+				, c.VU_RE_TITLE AS vuReTitle
+				, d.EM_VU_PK AS emVuPk
+				, d.EM_VU_TITLE AS emVuTitle
+				, e.MB_NAME AS mbName
+				, e.MB_RANK_NAME AS mbRankName
+				, e.GR_M_CODE AS grmCode
+				, f.GR_M_NAME AS grmName
+			FROM
+				em_pj_area a
+			LEFT JOIN em_pj_list_vi b ON a.PJ_CODE = b.PJ_CODE
+			LEFT JOIN em_pj_vu_code c ON a.VU_RE_CODE = c.VU_RE_CODE
+			LEFT JOIN em_pj_area_mapping d ON a.PA_PK = d.PA_PK
+			LEFT JOIN em_mb_member e ON a.MB_CODE = e.MB_CODE
+			LEFT JOIN em_mb_group f ON e.GR_M_CODE = f.GR_M_CODE
+			WHERE a.PJ_YEAR = #pjYear# 
+			AND a.PJ_CODE = #pjCode#
+			GROUP BY a.PA_PK
+		]]>
+	</select>
+
+	<select id="EMAU00C01.isCommonResource" parameterClass="Map"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+			SELECT 
+				PA_PK AS paPk
+			FROM
+				em_pj_area
+			WHERE PJ_YEAR = #pjYear# 
+			AND PJ_CODE = #pjCode#
+		]]>
+	</select>
+
+	<resultMap id="placeAutocomplete"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="emVuTitle" column="emVuTitle" columnIndex="1" />
+	</resultMap>
+
+	<select id="EMAU00C01.placeAutocomplete" parameterClass="Map"
+		resultMap="placeAutocomplete">
+		<![CDATA[
+			SELECT
+				EM_VU_TITLE AS emVuTitle
+			FROM
+				em_pj_area_info
+			WHERE
+				EM_VU_TITLE LIKE CONCAT('%',#emVuTitle#,'%')
+			GROUP BY EM_VU_TITLE
+		]]>
+	</select>
+
+	<!-- <resultMap id="searchPlaceList" class="egovframework.or.kr.EMAU00C.service.AvailableVO"> 
+		<result property="emVuPk" column="emVuPk" columnIndex="1" /> <result property="emVuTitle" 
+		column="emVuTitle" columnIndex="2" /> <result property="emVuUse" column="emVuUse" 
+		columnIndex="3" /> <result property="arAddrName" column="arAddrName" columnIndex="4" 
+		/> <result property="vuDayStart" column="vuDayStart" columnIndex="5" /> <result 
+		property="vuDayEnd" column="vuDayEnd" columnIndex="6" /> </resultMap> -->
+
+	<resultMap id="searchPlaceList"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="emVuPk" column="emVuPk" columnIndex="1" />
+		<result property="emVuTitle" column="emVuTitle" columnIndex="2" />
+		<result property="emVuUse" column="emVuUse" columnIndex="3" />
+		<result property="arAddrName" column="arAddrName"
+			columnIndex="4" />
+		<!-- <result property="vuDayStart" column="vuDayStart" columnIndex="5" 
+			/> <result property="vuDayEnd" column="vuDayEnd" columnIndex="6" /> -->
+	</resultMap>
+
+	<!-- <select id="EMAU00C01.searchPlaceList" parameterClass="Map" resultMap="searchPlaceList"> 
+		<![CDATA[ SELECT a.EM_VU_PK AS emVuPk , a.EM_VU_TITLE AS emVuTitle , a.EM_VU_USE 
+		AS emVuUse , b.AR_ADDR_NAME AS arAddrName , d.VU_DAY_START AS vuDayStart 
+		, d.VU_DAY_END AS vuDayEnd FROM em_pj_area_info a LEFT JOIN em_pj_area_code 
+		b ON a.AR_ADDR_CODE = b.AR_ADDR_CODE LEFT JOIN em_pj_area_mapping c ON a.EM_VU_PK 
+		= c.EM_VU_PK LEFT JOIN em_pj_area d ON c.PA_PK = d.PA_PK GROUP BY a.EM_VU_PK 
+		SELECT a.EM_VU_PK AS emVuPk , a.EM_VU_TITLE AS emVuTitle , a.EM_VU_USE AS 
+		emVuUse , b.AR_ADDR_NAME AS arAddrName , d.VU_DAY_START AS vuDayStart , d.VU_DAY_END 
+		AS vuDayEnd FROM em_pj_area_info a LEFT JOIN em_pj_area_code b ON a.AR_ADDR_CODE 
+		= b.AR_ADDR_CODE LEFT JOIN em_pj_area_mapping c ON a.EM_VU_PK = c.EM_VU_PK 
+		LEFT JOIN em_pj_area d ON c.PA_PK = d.PA_PK WHERE a.EM_VU_TITLE LIKE CONCAT(#emVuTitle#,'%') 
+		]]> </select> -->
+
+	<select id="EMAU00C01.searchPlaceList" parameterClass="Map"
+		resultMap="searchPlaceList">
+		<![CDATA[
+			SELECT
+				a.EM_VU_PK AS emVuPk
+				, a.EM_VU_TITLE AS emVuTitle
+				, a.EM_VU_USE AS emVuUse
+				, b.AR_ADDR_NAME AS arAddrName
+			FROM
+				em_pj_area_info a
+			LEFT JOIN em_pj_area_code b ON a.AR_ADDR_CODE = b.AR_ADDR_CODE
+			WHERE
+				a.EM_VU_TITLE LIKE CONCAT('%',#emVuTitle#,'%')
+		]]>
+	</select>
+
+	<select id="EMAU00C01.placeIsUse" parameterClass="Map"
+		resultClass="HashMap">
+		<![CDATA[
+			SELECT
+			a.EM_VU_PK AS emVuPk
+				, a.EM_VU_TITLE AS emVuTitle
+				, a.EM_VU_USE AS emVuUse
+				, b.AR_ADDR_NAME AS arAddrName
+			FROM
+				em_pj_area_info a
+			LEFT JOIN em_pj_area_code b ON a.AR_ADDR_CODE = b.AR_ADDR_CODE
+			LEFT JOIN em_pj_area_mapping c ON a.EM_VU_TITLE= c.EM_VU_TITLE
+			WHERE a.EM_VU_TITLE = #emVuTitle#			
+			AND c.PA_USE_DAY BETWEEN #vuDayStart# AND #vuDayEnd#
+			GROUP BY a.EM_VU_PK
+		]]>
+	</select>
+
+	<insert id="EMAU00C01.placeSave" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_pj_area_mapping
+				(
+				PA_PK
+				, PJ_YEAR
+				, PJ_CODE
+				, EM_VU_PK
+				, EM_VU_TITLE
+				, PA_USE_DAY
+				, WRITE_TIME
+				)
+			VALUES 
+			( 
+				#paPk#
+				, #pjYear#
+				, #pjCode#
+				, #emVuPk#
+				, #emVuTitle#
+				, #paUseDay#
+				, now()
+			)
+		]]>
+	</insert>
+
+	<update id="EMAU00C01.memberSave" parameterClass="Map">
+		UPDATE
+		em_pj_area
+		SET
+		MB_CODE = #mbCode#
+		WHERE
+		PA_PK = #paPk#
+	</update>
+
+	<select id="EMAU00C01.coCateMappingCount" parameterClass="Map"
+		resultClass="HashMap">
+		<![CDATA[
+			SELECT
+				CO_PK AS coPk
+			FROM
+				em_pj_com_mapping
+			WHERE
+				PA_PK = #paPk#
+			AND
+				CO_CATE_CODE = #coCateCode#
+		]]>
+	</select>
+
+	<insert id="EMAU00C01.coCateInsert" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_pj_com_mapping
+				(
+				PA_PK
+				, CO_CATE_CODE
+				)
+			VALUES 
+			( 
+				#paPk#
+				, #coCateCode#
+			)
+		]]>
+		<selectKey keyProperty="CO_PK" resultClass="int">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<delete id="EMAU00C01.placeDelete" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_pj_area_mapping
+		WHERE
+			PA_PK = #paPk#
+		AND
+			PJ_YEAR = #pjYear#
+		AND
+			PJ_CODE = #pjCode#
+		]]>
+	</delete>
+
+	<delete id="EMAU00C01.coCateDelete" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_pj_com_mapping
+		WHERE
+			PA_PK = #paPk#
+		]]>
+	</delete>
+
+	<resultMap id="divisionDataList"
+		class="egovframework.or.kr.EMAU00C.service.AvailableVO">
+		<result property="coPk" column="coPk" columnIndex="1" />
+		<result property="paPk" column="paPk" columnIndex="2" />
+		<result property="coCateCode" column="coCateCode"
+			columnIndex="3" />
+		<result property="coCateName" column="coCateName"
+			columnIndex="4" />
+
+	</resultMap>
+
+	<select id="EMAU00C01.coCateDetail" parameterClass="Map"
+		resultMap="divisionDataList">
+		<![CDATA[
+			SELECT	
+				a.CO_PK AS coPk
+				, a.PA_PK AS paPk
+				, a.CO_CATE_CODE AS coCateCode
+				, b.CO_CATE_NAME AS coCateName
+			FROM
+				em_pj_com_mapping a
+			LEFT JOIN em_pj_com_code b ON a.CO_CATE_CODE = b.CO_CATE_CODE
+			WHERE a.PA_PK = #paPk#
+		]]>
+	</select>
+
+	<resultMap id="isUsePlace"
+		class="egovframework.or.kr.EMAU00C.service.EMAU00C01VO">
+		<result property="emVuPk" column="emVuPk" columnIndex="1" />
+		<result property="vuTitle" column="vuTitle" columnIndex="2" />
+		<result property="vuUse" column="vuUse" columnIndex="3" />
+		<result property="writeTime" column="writeTime" columnIndex="4" />
+		<result property="addrCode" column="addrCode" columnIndex="5" />
+		<result property="addrName" column="addrName" columnIndex="6" />
+		<result property="paPk" column="paPk" columnIndex="7" />
+	</resultMap>
+
+	<select id="EMAU00C01.isUsePlace" parameterClass="Map"
+		resultMap="isUsePlace">
+		<![CDATA[
+			SELECT 
+				a.EM_VU_PK AS emVuPk
+				, a.EM_VU_TITLE AS vuTitle
+				, a.EM_VU_USE AS vuUse
+				, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+				, c.AR_ADDR_CODE AS addrCode
+				, c.AR_ADDR_NAME AS addrName
+				, ifnull(b.PA_PK, '') AS paPk
+			FROM em_pj_area_info a
+			LEFT JOIN (
+				SELECT * FROM em_pj_area_mapping b
+				WHERE b.PA_USE_DAY BETWEEN #dateStart# AND #dateEnd#
+			) b
+			ON a.EM_VU_PK = b.EM_VU_PK
+			LEFT JOIN em_pj_area_code c ON a.AR_ADDR_CODE = c.AR_ADDR_CODE
+			GROUP BY a.EM_VU_PK
+			ORDER BY c.AR_ADDR_CODE, a.EM_VU_PK
+		]]>
+	</select>
+
+	<select id="EMAU00C01.selectAreaDetail" parameterClass="Map"
+		resultMap="isUsePlace">
+		<![CDATA[
+			SELECT 
+				a.EM_VU_PK as emVuPk
+				, a.EM_VU_TITLE as vuTitle
+				, a.EM_VU_USE as vuUse
+				, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+				, ifnull(b.PA_PK, '') paPk
+				, c.AR_ADDR_CODE as addrCode
+				, c.AR_ADDR_NAME as addrName
+			FROM em_pj_area_info a
+			LEFT JOIN (
+				SELECT * FROM em_pj_area_mapping b
+				WHERE date_format(b.PA_USE_DAY, '%Y-%m-%d') = #dateDay#
+			) b
+			ON a.EM_VU_PK = b.EM_VU_PK
+			LEFT JOIN em_pj_area_code c ON a.AR_ADDR_CODE = c.AR_ADDR_CODE
+			WHERE a.AR_ADDR_CODE = #addrCode#
+			GROUP BY a.EM_VU_PK
+			ORDER BY c.AR_ADDR_CODE, a.EM_VU_PK
+				
+		]]>
+	</select>
+
+
+
+	<select id="EMAU00C01.selectSearch1Count" resultClass="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*)
+					FROM (
+							SELECT
+							   pjTitle
+							  ,pjState 
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,MIN(vuDayStart) AS vuDayStart
+							  ,MAX(vuDayStart) AS vuDayEnd
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							FROM em_pj_area_vi  
+							GROUP BY    
+							   pjTitle
+							  ,pjState
+							  ,pjState
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun  
+					 	) tt  
+					WHERE tt.pjYear = #searchYear# 
+					AND tt.pjTitle LIKE CONCAT('%',#searchName#,'%') 
+					ORDER BY tt.vuDayStart desc
+				]]>
+	</select>
+
+	<select id="EMAU00C01.selectSearch2Count" resultClass="int">
+		<![CDATA[
+				SELECT 
+						   COUNT(*)
+					FROM (
+							SELECT
+							   pjTitle
+							  ,pjState 
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,MIN(vuDayStart) AS vuDayStart
+							  ,MAX(vuDayStart) AS vuDayEnd
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun
+							FROM em_pj_area_vi  
+							GROUP BY    
+							   pjTitle
+							  ,pjState
+							  ,pjState
+							  ,paPk
+							  ,pjYear
+							  ,pjCode
+							  ,vuReCode
+							  ,vuDiCode
+							  ,vuDayWrite
+							  ,mbName
+							  ,emVupk
+							  ,emVuTitle
+							  ,coCateName
+							  ,pjGubun  
+					 	) tt  
+				WHERE 1=1
+				]]>
+		<isNotEmpty property="searchYear">
+			AND tt.pjYear = #searchYear#
+		</isNotEmpty>
+		<isNotEmpty property="searchName">
+			AND tt.pjTitle LIKE CONCAT('%',#searchName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchVuDiCode">
+				<![CDATA[
+					tt.vuDiCode = #searchVuDiCode#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchVuDayStart">
+				<![CDATA[
+					tt.vuDayStart >= #searchVuDayStart#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchVuDayEnd">
+				<![CDATA[
+					tt.vuDayEnd <= #searchVuDayEnd#
+				]]>
+		</isNotEmpty>
+				<![CDATA[
+	 			ORDER BY tt.vuDayStart desc
+		  		]]>
+	</select>
+
+	<select id="EMAU00C01.selectPjUserCount" resultClass="int">
+		<![CDATA[
+			SELECT     
+				COUNT(*)
+			FROM em_pj_user_mapping a
+				LEFT JOIN em_pj_list_vi b
+				ON a.PJ_CODE = b.PJ_CODE
+				LEFT JOIN em_mb_group c
+				ON a.GR_M_CODE = c.GR_M_CODE
+				LEFT JOIN em_mb_member d
+				ON a.PJ_IN_MB_CODE = d.MB_CODE
+			WHERE 
+				b.PJ_YEAR = #pjYear#
+			AND a.REQ_MB_NAME = #reqMbName#
+		]]>
+		<isNotEmpty prepend="AND" property="date1">
+			<![CDATA[
+				a.PJ_IN_DATE >= #date1#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="date2">
+			<![CDATA[
+				a.PJ_IN_DATE < #date2#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="pjTitle">
+			<![CDATA[
+				b.PJ_TITLE LIKE CONCAT('%',#pjTitle#,'%') 
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="part1">
+			<![CDATA[
+				a.GR_P_CODE = #part1#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="part2">
+			<![CDATA[
+				a.GR_M_CODE = #part2#
+			]]>
+		</isNotEmpty>
+		<![CDATA[
+			ORDER BY a.GS_PK, a.PJ_IN_DATE
+		]]>
+	</select>
+
+	<select id="EMAU00C01.excelDownloadList" parameterClass="Map" resultMap="available">
+			<![CDATA[
+				SELECT 
+				tt.pjTitle
+				,(
+				CASE 
+				WHEN date_format(current_timestamp(),'%Y.%m.%d') > date_format(tt.vuDayEnd,'%Y.%m.%d') THEN '2'
+				WHEN ( 
+				(date_format(current_timestamp(),'%Y.%m.%d') < date_format(tt.vuDayEnd,'%Y.%m.%d'))
+				and
+				(
+				date_format(current_timestamp(),'%Y.%m.%d') >= date_format(tt.vuDayStart,'%Y.%m.%d'))
+				)
+				THEN '1'
+				ELSE '0'
+				END
+				) pjState
+				,tt.paPk
+				,tt.pjYear
+				,tt.pjCode
+				,tt.vuReCode
+				,tt.vuDiCode
+				,tt.vuDayStart
+				,tt.vuDayEnd
+				,tt.vuDayWrite
+				,tt.mbName 
+				,tt.emVuTitle
+				,tt.coCateName
+				,tt.pjGubun
+				,tt.coCateCode
+				,tt.coPk
+				FROM (
+				SELECT
+				pjTitle
+				,pjState 
+				,paPk
+				,pjYear
+				,pjCode 
+				,vuReCode
+				,vuDiCode
+				,MIN(vuDayStart) AS vuDayStart
+				,MAX(vuDayStart) AS vuDayEnd
+				,vuDayWrite
+				,mbName
+				,emVupk
+				,emVuTitle
+				,coCateName
+				,pjGubun
+				,coCateCode
+				,coPk
+				FROM em_pj_area_vi
+				) tt
+				WHERE 1=1 
+				]]>
+				<isNotEmpty prepend="AND" property="pjTitle">
+				<![CDATA[
+					tt.pjTitle = #pjTitle#
+				]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="coCateName">
+				<![CDATA[
+					tt.coCateName = #coCateName#
+				]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="mbName">
+				<![CDATA[
+					tt.mbName = #mbName#
+				]]>
+				</isNotEmpty>
+				<![CDATA[
+				ORDER BY tt.vuDayStart desc
+				]]>
+				</select>
+
+</sqlMap>

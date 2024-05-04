@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA03MAINAIR">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="gA03MAINAIRVO" type="egovframework.or.kr.GA03MAIN.service.GA03MAINAIRVO"/> 
+  
+	<resultMap id="GmainAirList" class="egovframework.or.kr.GA03MAIN.service.GA03MAINAIRVO">
+		<result property="aiPk" column="ai_pk" columnIndex="1"/>
+		<result property="aiDevicecode" column="ai_devicecode" columnIndex="2"/>
+		<result property="aiDevicename" column="ai_devicename" columnIndex="3"/>
+		<result property="aiDevicealias" column="ai_devicealias" columnIndex="4"/>
+		<result property="aiDevicetype" column="ai_devicetype" columnIndex="5"/>
+		<result property="aiAgency" column="ai_agency" columnIndex="6"/>
+		<result property="aiMemo" column="ai_memo" columnIndex="7"/>
+		<result property="aiRegisterid" column="ai_registerid" columnIndex="8"/>
+		<result property="aiRegistername" column="ai_registername" columnIndex="9"/> 
+		<result property="aiWritetime" column="ai_writetime" columnIndex="10"/>  
+		<result property="aiUse" column="ai_use" columnIndex="11"/>  
+	</resultMap> 
+	<select id="GA03MAINAIR.selectAirList" parameterClass="GA03MAINAIRVO" resultMap="GmainAirList" >
+			<![CDATA[
+					SELECT 
+					   a.ai_pk
+					   ,a.ai_devicecode
+					   ,a.ai_devicename
+					   ,a.ai_devicealias
+					   ,a.ai_devicetype
+					   ,a.ai_agency
+					   ,a.ai_memo
+					   ,a.ai_registerid
+					   ,a.ai_registername
+					   ,a.ai_writetime 
+					   ,a.ai_use
+					 FROM br_tb_aircraft a
+					]]>
+				<isNotEmpty property="aiRegisterid">		
+				where a.ai_registerid LIKE CONCAT('%',#aiRegisterid#,'%') 
+				</isNotEmpty> 
+				<![CDATA[
+			 		ORDER BY ai_devicecode ASC
+			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>	
+	</select>
+	
+	<select id="GA03MAINAIR.selectAirList2" parameterClass="GA03MAINAIRVO" resultMap="GmainAirList" >
+			<![CDATA[
+					SELECT 
+					   a.ai_pk
+					   ,a.ai_devicecode
+					   ,a.ai_devicename
+					   ,a.ai_devicealias
+					   ,a.ai_devicetype
+					   ,a.ai_agency
+					   ,a.ai_memo
+					   ,a.ai_registerid
+					   ,a.ai_registername
+					   ,a.ai_writetime 
+					   ,a.ai_use
+					 FROM br_tb_aircraft a
+					 ORDER BY a.ai_devicename ASC
+					]]>
+	</select>
+	
+	<select id="GA03MAINAIR.selectAirListCnt" parameterClass="GA03MAINAIRVO" resultClass="int" >
+		<![CDATA[      
+		SELECT     
+        	COUNT(*)
+	    FROM
+			br_tb_aircraft a
+		]]>
+				<isNotEmpty property="aiRegisterid">		
+				where a.ai_registerid LIKE CONCAT('%',#aiRegisterid#,'%') 
+				</isNotEmpty> 		
+	</select>
+	
+	<resultMap id="getDrone" class="egovframework.or.kr.GA03MAIN.service.GA03MAINAIRVO">
+		<result property="aiPk" column="ai_pk" columnIndex="1"/>
+		<result property="aiDevicecode" column="ai_devicecode" columnIndex="2"/>
+		<result property="aiDevicename" column="ai_devicename" columnIndex="3"/>
+		<result property="aiDevicealias" column="ai_devicealias" columnIndex="4"/>
+		<result property="aiDevicetype" column="ai_devicetype" columnIndex="5"/>
+		<result property="aiAgency" column="ai_agency" columnIndex="6"/>
+		<result property="aiMemo" column="ai_memo" columnIndex="7"/>
+		<result property="aiRegisterid" column="ai_registerid" columnIndex="8"/>
+		<result property="aiRegistername" column="ai_registername" columnIndex="9"/> 
+		<result property="aiWritetime" column="ai_writetime" columnIndex="10"/>  
+		<result property="aiUse" column="ai_use" columnIndex="11"/>  
+	</resultMap> 
+	<select id="GA03MAINAIR.getDroneList" parameterClass="GA03MAINAIRVO" resultMap="getDrone" >
+			<![CDATA[
+					SELECT 
+					   a.ai_pk
+					   ,a.ai_devicecode
+					   ,a.ai_devicename
+					   ,a.ai_devicealias
+					   ,a.ai_devicetype
+					   ,a.ai_agency
+					   ,a.ai_memo
+					   ,a.ai_registerid
+					   ,a.ai_registername
+					   ,a.ai_writetime 
+					   ,a.ai_use
+					 FROM br_tb_aircraft a
+					 where a.ai_use = 'Y'
+					 ORDER BY ai_devicecode ASC
+					]]>  
+	</select>
+	
+	
+	
+	<resultMap id="getDroneMission" class="egovframework.or.kr.GA03MAIN.service.GA03MAINAIRVO">
+		<result property="aiPk" column="ai_pk" columnIndex="1"/>
+		<result property="aiDevicecode" column="ai_devicecode" columnIndex="2"/>
+		<result property="aiDevicename" column="ai_devicename" columnIndex="3"/>
+		<result property="aiDevicealias" column="ai_devicealias" columnIndex="4"/>
+		<result property="aiDevicetype" column="ai_devicetype" columnIndex="5"/>
+		<result property="aiAgency" column="ai_agency" columnIndex="6"/>
+		<result property="aiMemo" column="ai_memo" columnIndex="7"/>
+		<result property="aiRegisterid" column="ai_registerid" columnIndex="8"/>
+		<result property="aiRegistername" column="ai_registername" columnIndex="9"/> 
+		<result property="aiWritetime" column="ai_writetime" columnIndex="10"/>  
+		<result property="aiUse" column="ai_use" columnIndex="11"/>  
+	</resultMap> 
+	<select id="GA03MAINAIR.getDroneMission" parameterClass="GA03MAINAIRVO" resultMap="getDroneMission" >
+			<![CDATA[
+					SELECT 
+					   a.ai_pk
+					   ,a.ai_devicecode
+					   ,a.ai_devicename
+					   ,a.ai_devicealias
+					   ,a.ai_devicetype
+					   ,a.ai_agency
+					   ,a.ai_memo
+					   ,a.ai_registerid
+					   ,a.ai_registername
+					   ,a.ai_writetime 
+					   ,a.ai_use
+					 FROM br_tb_aircraft a
+					 where a.ai_use = 'Y'
+					 ORDER BY ai_devicecode ASC
+					]]>  
+	</select>
+	
+	
+	<resultMap id="getDroneAction" class="egovframework.or.kr.GA03MAIN.service.GA03MAINAIRVO">
+		<result property="swPk" column="sw_pk" columnIndex="1"/>
+		<result property="droneCnt" column="drone_cnt" columnIndex="2"/>
+		<result property="droneAction" column="drone_action" columnIndex="3"/>
+		<result property="droneTitle" column="drone_title" columnIndex="4"/> 
+	</resultMap> 
+	<select id="GA03MAINAIR.getDroneAction" parameterClass="GA03MAINAIRVO" resultMap="getDroneAction" >
+			<![CDATA[
+					SELECT 
+					     sw_pk
+					    ,drone_cnt
+					    ,drone_action
+					    ,drone_title
+					    FROM br_drone_swarm
+					    WHERE drone_cnt = #searchDroneCnt#  
+					      AND drone_action = #searchDroneAction# 
+					    LIMIT 1
+					]]>  
+	</select>
+	
+</sqlMap>

@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00E01DAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="BusinessPjInf" type="egovframework.or.kr.EMAU00E.service.BusinessPjInf"/>
+	<typeAlias  alias="BusinessPjInfVO" type="egovframework.or.kr.EMAU00E.service.BusinessPjInfVO"/> 
+	
+	<resultMap id="SysUpdate" class="egovframework.or.kr.EMAU00E.service.BusinessPjInf">
+		<result property="sysUpdate" column="sysUpdate" columnIndex="1"/> 
+	</resultMap>
+	 
+
+	<resultMap id="BoardUseList" class="egovframework.or.kr.EMAU00E.service.BusinessPjInfVO">
+		<result property="pjYear" column="pjYear" columnIndex="1"/>
+		<result property="pjCode" column="PJCode" columnIndex="2"/>
+		<result property="pjCateCode1" column="pjCateCode1" columnIndex="3"/>
+		<result property="pjCateCode2" column="pjCateCode2" columnIndex="4"/>
+		<result property="pjCateCode3" column="pjCateCode3" columnIndex="5"/>
+		<result property="grMCode" column="grMcode" columnIndex="6"/>
+		<result property="auCode" column="auCode" columnIndex="7"/>
+		<result property="pjCateName1" column="pjCateName1" columnIndex="8"/>
+		<result property="pjCateName2" column="pjCateName2" columnIndex="9"/>
+		<result property="pjCateName3" column="pjCateName3" columnIndex="10"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="11"/>
+		<result property="orderBy" column="ORDER_BY" columnIndex="12"/>
+		<result property="writeTime" column="WRITE_TIME" columnIndex="13"/>
+		<result property="sysUpdate" column="SYS_UPDATE" columnIndex="14"/>
+		<result property="pjUse" column="pjUse" columnIndex="15"/> 
+		<result property="grMname" column="grMname" columnIndex="16"/> 
+	</resultMap>
+	
+	
+	<resultMap id="AuthList" class="egovframework.or.kr.EMAU00E.service.BusinessPjInfVO">
+		<result property="authName" column="authName" columnIndex="1"/>
+		<result property="authCode" column="authCode" columnIndex="2"/> 
+		<result property="pjTitle" column="pjTitle" columnIndex="3"/> 
+	</resultMap>
+ 
+	
+		 <select id="EMAU00E01DAO.selectBBSUseInfs" parameterClass="BusinessPjInfVO" resultMap="BoardUseList" >
+		<![CDATA[      
+		SELECT     
+          a.PJ_YEAR AS pjYear	
+  		, a.PJ_CODE AS PJCode
+  		, a.PJ_CATE_CODE1 AS pjCateCode1
+  		, a.PJ_CATE_CODE2 AS pjCateCode2
+  		, a.PJ_CATE_CODE3 AS pjCateCode3
+		, a.GR_M_CODE AS grMcode
+		, a.AU_CODE AS auCode 
+		, b.PJ_CATE_NAME AS pjCateName1
+		, c.PJ_CATE_NAME AS pjCateName2
+		, a.PJ_CATE_CODE2 AS pjCateName3
+		, a.PJ_TITLE AS pjTitle
+		, a.ORDER_BY  AS ORDER_BY
+		, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS WRITE_TIME
+		, a.SYS_UPDATE AS SYS_UPDATE
+		, a.PJ_USE AS pjUse
+		, d.GR_M_NAME AS grMname
+	    FROM
+		 em_pj_list_vi a
+		LEFT JOIN em_pj_group_vi_vi b ON a.PJ_CATE_CODE1 = b.PJ_CATE_CODE
+		LEFT JOIN em_pj_group_vi_vi c ON a.PJ_CATE_CODE2 = c.PJ_CATE_CODE
+		LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+		]]>
+			<isEqual prepend="AND" property="searchCnd" compareValue="0">
+				<![CDATA[	e.PJ_TITLE LIKE CONCAT ('%', #searchPjTitle#,'%') 		]]>
+			</isEqual>
+		<![CDATA[
+	 		ORDER BY PJ_CODE ASC
+		]]>				
+	</select>
+	
+	
+	<resultMap id="BoardUseListByTrget" class="egovframework.or.kr.EMAU00E.service.BusinessPjInfVO">
+		<result property="bbsId" column="BBS_ID" columnIndex="1"/>
+		<result property="bbsNm" column="BBS_NM" columnIndex="2"/>
+		<result property="trgetId" column="TRGET_ID" columnIndex="3"/>
+		<result property="userNm" column="USER_NM" columnIndex="4"/>
+		<result property="registSeCode" column="REGIST_SE_CODE" columnIndex="5"/>
+		<result property="registSeCodeNm" column="REGIST_SE_CODE_NM" columnIndex="6"/>
+		<result property="useAt" column="USE_AT" columnIndex="7"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="8"/>
+		<result property="frstRegisterPnttm" column="FRST_REGIST_PNTTM" columnIndex="9"/>
+	</resultMap>	
+	
+	<resultMap id="selectBBSUse" class="egovframework.or.kr.EMAU00E.service.BusinessPjInfVO">
+		<result property="bbsId" column="BBS_ID" columnIndex="1"/>
+	</resultMap>
+
+	<update id="EMAU00E01DAO.deleteBBSUseInf" parameterClass="BusinessPjInf" >
+		<![CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE BBS_ID = #bbsId#
+			AND TRGET_ID = #trgetId#	
+		]]>
+	</update>
+
+	<select id="EMAU00E01DAO.selectBBSUseInfByCmmnty" parameterClass="BusinessPjInfVO"  resultMap="selectBBSUse" >
+		<![CDATA[
+			SELECT BBS_ID FROM LETTNBBSUSE
+					WHERE TRGET_ID = #cmmntyId# 
+		]]>
+	</select>
+
+	<select id="EMAU00E01DAO.selectBBSUseInfByClub" parameterClass="BusinessPjInfVO" resultMap="selectBBSUse" >
+		<![CDATA[
+			SELECT BBS_ID FROM LETTNBBSUSE
+					WHERE TRGET_ID = #clbId# 
+		]]>
+	</select>
+
+	<update id="EMAU00E01DAO.deleteAllBBSUseInfByCmmnty" parameterClass="BusinessPjInfVO" >
+		<!-- [CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE BBS_ID IN 
+				(SELECT BBS_ID FROM LETTNBBSUSE
+					WHERE TRGET_ID = #cmmntyId# )
+		]]-->
+		<![CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE TRGET_ID = #cmmntyId#
+		]]>
+	</update>
+
+	<update id="EMAU00E01DAO.deleteAllBBSUseInfByClub" parameterClass="BusinessPjInfVO" >
+		<!-- [CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE BBS_ID IN 
+				(SELECT BBS_ID FROM LETTNBBSUSE
+					WHERE TRGET_ID = #clbId# )
+		]]-->
+		<![CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE TRGET_ID = #clbId#
+		]]>
+	</update>
+	
+	<insert id="EMAU00E01DAO.insertBBSUseInf" parameterClass="BusinessPjInf" >
+		<![CDATA[
+			INSERT INTO LETTNBBSUSE 
+			(BBS_ID, TRGET_ID, REGIST_SE_CODE, USE_AT, 
+			 FRST_REGISTER_ID, FRST_REGIST_PNTTM )
+			VALUES
+			(#bbsId#, #trgetId#, #registSeCode#, #useAt#, #frstRegisterId#, SYSDATE())
+		]]>
+	</insert>
+	
+	<!-- <select id="EMAU00E01DAO.selectBBSUseInfs" parameterClass="BusinessPjInfVO" resultMap="BoardUseList" >
+		<![CDATA[           
+           SELECT 
+                PJ_YEAR
+              , PJ_CODE
+              , PJ_CATE_CODE1
+              , PJ_CATE_CODE2
+              , GR_M_CODE
+              , AU_CODE
+              , PJ_TITLE
+              , ORDER_BY
+              , DATE_FORMAT(WRITE_TIME, '%y.%m.%d') AS WRITE_TIME
+              , SYS_UPDATE
+              , PJ_USE
+	        FROM em_pj_list
+		]]>
+			<isEqual prepend="AND" property="searchCnd" compareValue="0">
+				<![CDATA[	e.PJ_TITLE LIKE CONCAT ('%', #searchPjTitle#,'%') 		]]>
+			</isEqual>
+		<![CDATA[
+	 		ORDER BY PJ_CODE ASC
+		]]>				
+	</select>	 -->
+	
+
+ 
+	
+    <select id="EMAU00E01DAO.selectBBSUseInfsCnt" parameterClass="BusinessPjInfVO" resultClass="java.lang.Integer" >
+		<![CDATA[
+		    SELECT COUNT(PJ_CODE) 
+	         FROM em_pj_list_vi e
+		]]>
+			<isEqual prepend="AND" property="searchCnd" compareValue="0">
+				<![CDATA[	e.PJ_TITLE LIKE CONCAT ('%', #searchWrd#,'%') 		]]>
+			</isEqual>
+	</select>
+    
+ 
+ 
+ 	<update id="EMAU00E01DAO.updateBBSUseInf" parameterClass="BusinessPjInf">
+ 		<![CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = #useAt#,
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE BBS_ID = #bbsId#
+ 		]]>
+ 	</update>
+
+	<update id="EMAU00E01DAO.deleteBBSUseInfByBoardId" parameterClass="BusinessPjInf" >
+		<![CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE BBS_ID = #bbsId#
+		]]>
+	</update>
+
+ 
+
+	<update id="EMAU00E01DAO.updateBBSUseInfByTrget" parameterClass="BusinessPjInf" >
+		<![CDATA[
+			UPDATE LETTNBBSUSE SET 
+				USE_AT = #useAt#,
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDT_PNTTM = SYSDATE()
+			WHERE BBS_ID = #bbsId#
+			AND TRGET_ID = #trgetId#	
+		]]>
+	</update>
+	
+	
+	<resultMap id="pjDetail" class="egovframework.or.kr.EMAU00E.service.BusinessPjInf">
+		<result property="pjYear" column="PJ_YEAR" columnIndex="1"/>
+		<result property="pjCode" column="PJ_CODE" columnIndex="2"/>
+		<result property="pjTitle" column="PJ_TITLE" columnIndex="3"/>
+		<result property="grMCode" column="GR_M_CODE" columnIndex="4"/>
+		<result property="auCode" column="AU_CODE" columnIndex="5"/>
+		<result property="pjUse" column="PJ_USE" columnIndex="6"/>
+		<result property="pjCateName1" column="PJ_CATE_NAME" columnIndex="7"/>
+	</resultMap>
+	
+	
+	<select id="EMAU00E01.projectDetail" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+		
+		SELECT
+			a.PJ_YEAR AS pjYear
+			, a.PJ_CODE AS pjCode
+			, a.PJ_TITLE AS pjTitle
+			, a.GR_M_CODE AS grmCode
+			, b.GR_M_NAME AS grmName
+			, a.AU_CODE AS auCode
+			, a.PJ_USE AS pjUse
+			, a.PJ_CATE_CODE2 AS pjCateName
+		FROM
+			em_pj_list_vi a
+		LEFT JOIN em_mb_group b ON a.GR_M_CODE = b.GR_M_CODE
+		WHERE 
+			a.PJ_CODE = #pjCode#
+		AND
+			a.GR_M_CODE = #grmCode#
+		]]>
+	</select>
+	
+	<resultMap id="searchOption" class="egovframework.or.kr.EMAU00E.service.BusinessPjInf">
+		<result property="grmCode" column="GR_M_CODE" columnIndex="2"/>
+		<result property="grmName" column="GR_M_NAME" columnIndex="3"/>
+		<result property="grOrderBy" column="GR_ORDER_BY" columnIndex="4"/>
+	</resultMap>
+	
+	<select id="EMAU00E01.searchFirstOption" resultMap="searchOption">
+		<![CDATA[
+			SELECT 
+				GR_P_CODE AS GR_P_CODE
+				, GR_M_CODE AS GR_M_CODE
+				, GR_M_NAME AS GR_M_NAME
+				, GR_ORDER_BY AS GR_ORDER_BY
+			FROM
+			 	em_mb_group
+			WHERE
+				GR_P_CODE = '00000'
+		]]>
+	</select>
+	<select id="EMAU00E01.searchSubOption" parameterClass="Map" resultMap="searchOption">
+		<![CDATA[
+			SELECT 
+				GR_P_CODE AS GR_P_CODE
+				, GR_M_CODE AS GR_M_CODE
+				, GR_M_NAME AS GR_M_NAME
+				, GR_ORDER_BY AS GR_ORDER_BY
+			FROM
+			 	em_mb_group
+			WHERE
+				GR_P_CODE = #grpCode#
+		]]>
+	</select>
+	<resultMap id="mbList" class="egovframework.or.kr.EMAU00E.service.BusinessPjInf">
+		<result property="mbName" column="mbName" columnIndex="1"/>
+		<result property="mbRankName" column="mbRankName" columnIndex="2"/>
+		<result property="mbCode" column="mbCode" columnIndex="3"/>
+		<result property="grmCode" column="grmCode" columnIndex="4"/>
+		<result property="grmName" column="grmName" columnIndex="5"/>
+		<result property="pjAuId" column="pjAuId" columnIndex="6"/>
+	</resultMap>
+	
+	 <select id="EMAU00E01.searchManagerList"  parameterClass="Map"  resultMap="mbList" >
+		<![CDATA[
+		SELECT 
+			a.MB_NAME AS mbName
+			, a.MB_RANK_NAME AS mbRankName
+			, a.MB_CODE AS mbCode
+			, b.GR_M_CODE AS grmCode
+			, b.GR_M_NAME AS grmName
+			, c.PJ_AU_ID AS pjAuId
+		FROM
+		 	em_mb_member a
+		LEFT JOIN em_mb_group b ON a.GR_M_CODE = b.GR_M_CODE
+		LEFT JOIN em_mb_auth c ON a.MB_CODE = c.MB_CODE
+		]]>
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="groupPart1">
+				a.GR_P_CODE = #groupPart1#
+			</isNotEmpty>
+		</dynamic>
+		<isNotEmpty property="groupPart2">
+		AND a.GR_M_CODE = #groupPart2#
+		</isNotEmpty>
+		
+		<isEmpty property="groupPart1">
+			<isNotEmpty prepend="WHERE" property="searchName">
+				<![CDATA[
+					a.MB_NAME LIKE CONCAT('%',#searchName#,'%')
+				]]>			
+			</isNotEmpty>
+		</isEmpty>
+		<isNotEmpty property="groupPart1">
+			<isNotEmpty prepend="AND" property="searchName">
+				<![CDATA[
+					a.MB_NAME LIKE CONCAT('%',#searchName#,'%')
+				]]>			
+			</isNotEmpty>
+		</isNotEmpty>
+		ORDER BY a.MB_CODE ASC
+	</select>
+	
+	<resultMap id="memberList" class="egovframework.or.kr.EMAU00E.service.BusinessPjInf">
+		<result property="pjAuId" column="pjAuId" columnIndex="1"/>
+		<result property="pjCode" column="pjCode" columnIndex="2"/>
+		<result property="auCode" column="auCode" columnIndex="3"/>
+		<result property="auName" column="auName" columnIndex="4"/>
+		<result property="mbName" column="mbName" columnIndex="5"/>
+		<result property="mbCode" column="mbCode" columnIndex="6"/>
+		<result property="pjYear" column="pjYear" columnIndex="7"/>
+		<result property="grmName" column="grmName" columnIndex="8"/>
+		<result property="writeTime" column="WRITE_TIME" columnIndex="9"/>
+		
+	</resultMap>
+	
+	<select id="EMAU00E01.memberList" parameterClass="Map" resultMap="memberList" >
+		<![CDATA[
+		SELECT 
+		  a.PJ_AU_ID AS pjAuId
+		  , a.PJ_CODE AS pjCode
+ 		  , a.AU_CODE AS auCode
+ 	 	  , e.AU_NAME AS auName
+ 		  , b.MB_NAME AS mbName
+ 		  , b.MB_CODE AS mbCode
+ 		  , a.PJ_YEAR AS pjYear
+ 	 	  , b.GR_M_NAME AS grmName
+  		  , DATE_FORMAT(WRITE_TIME, '%y.%m.%d') WRITE_TIME
+		FROM em_mb_auth a
+  		LEFT JOIN em_mb_member b
+  		   ON a.MB_CODE = b.MB_CODE
+   		LEFT JOIN em_mb_group c
+           ON b.GR_M_CODE = c.GR_M_CODE
+   		LEFT JOIN em_mb_group d
+           ON c.GR_P_CODE = d.GR_M_CODE
+        LEFT JOIN em_code_auth e
+           ON a.AU_CODE = e.AU_CODE
+ 		WHERE a.PJ_CODE = #pjCode#
+		ORDER BY WRITE_TIME ASC
+		]]>
+	</select>
+	
+	<delete id="EMAU00E01.authDelete" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_mb_auth
+		WHERE
+			PJ_AU_ID = #pjAuId#
+		]]>
+	</delete>
+	
+	<insert id="EMAU00E01.authInsert" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_mb_auth
+			(
+				PJ_YEAR
+				, PJ_CODE
+				, AU_CODE
+				, MB_CODE
+				, WRITE_TIME
+			) 
+			VALUES
+			( 
+				#pjYear#
+				, #pjCode#
+				, #auCode#
+				, #mbCode#
+				, now()
+			)
+		]]>
+		<selectKey keyProperty="PJ_AU_ID" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="EMAU00E01.authUpdate" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				AU_CODE = #auCode#
+			WHERE
+				PJ_AU_ID = #pjAuId#
+		]]>
+	</update>
+	
+	<select id="EMAU00E01.authDetail" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+		SELECT
+			a.PJ_AU_ID AS pjAuId
+			, a.PJ_CODE AS pjCode
+			, a.AU_CODE AS auCode
+			, a.MB_CODE AS mbCode
+			, b.PJ_YEAR AS pjYear
+			, b.PJ_TITLE AS pjTitle
+			, c.AU_NAME AS auName
+			, d.MB_NAME AS mbName
+			, d.MB_CODE AS mbCode
+			, concat(f.GR_M_NAME, " ", e.GR_M_NAME ) AS grSumName
+			, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS writeTime
+		FROM
+			em_mb_auth a
+		LEFT JOIN em_pj_list_vi b ON a.PJ_CODE = b.PJ_CODE
+		LEFT JOIN em_code_auth c ON a.AU_CODE = c.AU_CODE
+		LEFT JOIN em_mb_member d ON a.MB_CODE = d.MB_CODE
+		LEFT JOIN em_mb_group e ON d.GR_M_CODE = e.GR_M_CODE
+   		LEFT JOIN em_mb_group f ON e.GR_P_CODE = f.GR_M_CODE
+		WHERE a.PJ_AU_ID = #pjAuId#
+		]]>
+	</select>
+	
+
+	
+	
+   <select id="EMAU00E01.searchBusinessList" parameterClass="BusinessPjInf" resultMap="BoardUseList" >
+		<![CDATA[      
+		SELECT     
+          a.PJ_YEAR AS pjYear	
+  		, a.PJ_CODE AS PJCode
+  		, a.PJ_CATE_CODE1 AS pjCateCode1
+  		, a.PJ_CATE_CODE2 AS pjCateCode2
+  		, a.PJ_CATE_CODE3 AS pjCateCode3
+		, a.GR_M_CODE AS grMcode
+		, a.AU_CODE AS auCode 
+		, a.PJ_CATE_CODE1 AS pjCateName1
+		, a.PJ_CATE_CODE2 AS pjCateName2
+		, a.PJ_CATE_CODE3 AS pjCateName3
+		, a.PJ_TITLE AS pjTitle
+		, a.ORDER_BY  AS ORDER_BY
+		, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS WRITE_TIME
+		, a.SYS_UPDATE AS SYS_UPDATE
+		, a.PJ_USE AS pjUse
+		, ifnull(d.GR_M_NAME,'') AS grMname
+	    FROM
+		 em_pj_list_vi a 
+		LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+	    WHERE 1=1
+	    AND a.PJ_YEAR = #searchYear#
+	    AND a.PJ_CODE IS NOT null
+	    AND a.GR_M_CODE = #grmCode#
+		]]>
+		<isNotEmpty property="searchName">		
+		AND a.PJ_TITLE LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+	 		ORDER BY a.PJ_YEAR DESC,a.PJ_CATE_CODE1 ASC,a.PJ_CATE_CODE2 ASC,a.PJ_CATE_CODE3 ASC ,a.PJ_TITLE ASC
+	 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>				
+	</select>
+	
+	<select id="EMAU00E01.searchBusinessListCnt" parameterClass="BusinessPjInf" resultClass="int" >
+		<![CDATA[      
+		SELECT     
+        	COUNT(*)
+	    FROM
+			em_pj_list_vi a 
+		LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+	    WHERE 1=1
+	    AND a.PJ_YEAR = #searchYear#
+	    AND a.PJ_CODE IS NOT null
+		]]>
+		<isNotEmpty property="searchName">		
+		AND a.PJ_TITLE LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+	 		ORDER BY a.PJ_YEAR DESC,a.PJ_CATE_CODE1 ASC,a.PJ_CATE_CODE2 ASC,a.PJ_CATE_CODE3 ASC ,a.PJ_TITLE ASC
+		]]>				
+	</select>
+	
+	
+   
+	<select id="EMAU00E01.searchDeptList" parameterClass="BusinessPjInf" resultMap="BoardUseList" >
+		<![CDATA[      
+			SELECT     
+			          a.PJ_YEAR AS pjYear	
+			  		, a.PJ_CODE AS PJCode
+			  		, a.PJ_CATE_CODE1 AS pjCateCode1
+			  		, a.PJ_CATE_CODE2 AS pjCateCode2
+			  		, a.PJ_CATE_CODE3 AS pjCateCode3
+					, a.GR_M_CODE AS grMcode
+					, a.AU_CODE AS auCode 
+					, a.PJ_CATE_CODE1 AS pjCateName1
+					, a.PJ_CATE_CODE2 AS pjCateName2
+					, a.PJ_CATE_CODE3 AS pjCateName3
+					, a.PJ_TITLE AS pjTitle
+					, a.ORDER_BY  AS ORDER_BY
+					, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS WRITE_TIME
+					, a.SYS_UPDATE AS SYS_UPDATE
+					, a.PJ_USE AS pjUse
+					, ifnull(d.GR_M_NAME,'') AS grMname
+		    FROM
+			 	em_pj_list_vi a 
+			LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+		    WHERE 1=1
+		    	AND a.PJ_YEAR = #searchYear#
+		    	AND a.PJ_CODE IS NOT null
+		    	AND a.GR_M_CODE = #grmCode#
+			]]>
+			<isNotEmpty property="searchName">		
+			AND d.GR_M_NAME LIKE CONCAT('%',#searchName#,'%') 
+			</isNotEmpty>
+			<![CDATA[
+		 		ORDER BY a.PJ_YEAR DESC,a.PJ_CATE_CODE1 ASC,a.PJ_CATE_CODE2 ASC,a.PJ_CATE_CODE3 ASC ,a.PJ_TITLE ASC
+		 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+			]]>				
+	</select>
+	
+	<select id="EMAU00E01.searchDeptListCnt" parameterClass="BusinessPjInf" resultClass="int" >
+		<![CDATA[      
+		SELECT     
+        	COUNT(*)
+	    FROM
+			em_pj_list_vi a
+		LEFT JOIN em_pj_group_vi b ON a.PJ_CATE_CODE1 = b.PJ_CATE_CODE
+		LEFT JOIN em_pj_group_vi c ON a.PJ_CATE_CODE2 = c.PJ_CATE_CODE
+		LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+	    WHERE a.PJ_YEAR = #searchYear#
+	    AND a.PJ_CODE IS NOT null
+		]]>
+		<isNotEmpty property="searchName"> 	
+		AND d.GR_M_NAME LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+	 		ORDER BY PJ_CODE ASC
+		]]>				
+	</select>
+	
+	<select id="EMAU00E01.getSysUpdate" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+			SELECT max(a.SYS_UPDATE) as sysUpdate
+			FROM  em_pj_list_vi a
+		]]>
+	</select>
+	
+	<select id="EMAU00E01.searchAuthList" parameterClass="BusinessPjInf" resultMap="BoardUseList" >
+		<![CDATA[      
+		SELECT     
+          a.PJ_YEAR AS pjYear	
+  		, a.PJ_CODE AS PJCode
+  		, a.PJ_CATE_CODE1 AS pjCateCode1
+  		, a.PJ_CATE_CODE2 AS pjCateCode2
+		, a.GR_M_CODE AS grMcode
+		, a.AU_CODE AS auCode 
+		, b.PJ_CATE_NAME AS pjCateName1
+		, c.PJ_CATE_NAME AS pjCateName2
+		, a.PJ_TITLE AS pjTitle
+		, a.ORDER_BY  AS ORDER_BY
+		, DATE_FORMAT(a.WRITE_TIME, '%y.%m.%d') AS WRITE_TIME
+		, a.SYS_UPDATE AS SYS_UPDATE
+		, a.PJ_USE AS pjUse
+		, d.GR_M_NAME AS grMname
+		, e.AU_NAME AS auName
+	    FROM
+		 em_pj_list_vi a
+		LEFT JOIN em_pj_group_vi_vi b ON a.PJ_CATE_CODE1 = b.PJ_CATE_CODE
+		LEFT JOIN em_pj_group_vi_vi c ON a.PJ_CATE_CODE2 = c.PJ_CATE_CODE
+		LEFT JOIN em_mb_group d ON a.GR_M_CODE = d.GR_M_CODE
+	 	LEFT JOIN em_code_auth e ON a.AU_CODE = e.AU_CODE
+	    WHERE a.PJ_YEAR = #searchYear#
+		AND a.PJ_TITLE LIKE CONCAT('%',#searchName#,'%') 
+		GROUP BY a.PJ_CODE	
+	 	ORDER BY a.PJ_CODE ASC
+	 	]]>
+	</select>
+	
+	<update id="EMAU00E01.authBusinessUpdate" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_pj_list_vi 
+			SET 
+				AU_CODE = #auCode#
+			WHERE
+				PJ_CODE = #pjCode#
+		]]>
+	</update>
+	
+	
+</sqlMap>

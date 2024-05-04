@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA03MAINUSER">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="gA03MAINUSERVO" type="egovframework.or.kr.GA03MAIN.service.GA03MAINUSERVO"/>
+	<typeAlias  alias="userVO" type="egovframework.or.kr.TD0001.service.UserVO"/>
+	 
+  
+	<resultMap id="GmainUserList" class="egovframework.or.kr.GA03MAIN.service.GA03MAINUSERVO">
+		<result property="grPcode" column="GR_P_CODE" columnIndex="1"/>
+		<result property="grMcode" column="GR_M_CODE" columnIndex="2"/>
+		<result property="grMname" column="GR_M_NAME" columnIndex="3"/>
+		<result property="mbCode" column="MB_CODE" columnIndex="4"/>
+		<result property="userId" column="USER_ID" columnIndex="5"/> 
+		<result property="mbName" column="MB_NAME" columnIndex="6"/>
+		<result property="mbRankcode" column="MB_RANK_CODE" columnIndex="7"/> 
+		<result property="mbRankname" column="MB_RANK_NAME" columnIndex="8"/> 
+		<result property="mbTel" column="MB_TEL" columnIndex="9"/>  
+		<result property="mbHp" column="MB_HP" columnIndex="10"/>  
+		<result property="mbEmail" column="MB_EMAIL" columnIndex="11"/>  
+		<result property="mbState" column="MB_STATE" columnIndex="12"/>  
+		<result property="mbPwer" column="MB_PW_ER" columnIndex="13"/>   
+		<result property="timeWrite" column="TIME_WRITE" columnIndex="14"/>   
+		<result property="timeUpdate" column="TIME_UPDATE" columnIndex="15"/>   
+		<result property="mbAuth" column="MB_AUTH" columnIndex="16"/>   
+	</resultMap> 
+	<select id="GA03MAINUSER.selectUserList" parameterClass="gA03MAINUSERVO" resultMap="GmainUserList" >
+			<![CDATA[
+					SELECT 
+					   a.GR_P_CODE
+					   ,a.GR_M_CODE
+					   ,a.GR_M_NAME
+					   ,a.MB_CODE
+					   ,a.USER_ID 
+					   ,a.MB_NAME
+					   ,a.MB_RANK_CODE
+					   ,a.MB_RANK_NAME 
+					   ,a.MB_TEL 
+					   ,a.MB_HP 
+					   ,a.MB_EMAIL 
+					   ,a.MB_STATE 
+					   ,a.MB_PW_ER 
+					   ,a.TIME_WRITE 
+					   ,a.TIME_UPDATE 
+					   ,a.MB_AUTH  
+					 FROM em_mb_member a
+					]]> 
+				<![CDATA[
+			 		ORDER BY a.TIME_WRITE desc 
+			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+				]]>	
+	</select>
+	
+	<select id="GA03MAINUSER.selectUserListCnt" parameterClass="gA03MAINUSERVO" resultClass="int" >
+		<![CDATA[      
+		SELECT     
+        	COUNT(*)
+	    FROM
+			em_mb_member a
+		]]>		
+	</select>
+	
+	<resultMap id="selectTwCodeVo" class="egovframework.or.kr.TD0001.service.UserVO">
+		<result property="coPsPk" column="CO_PS_PK" columnIndex="1"/>
+		<result property="coDiv" column="CO_DIV" columnIndex="2"/>
+		<result property="coCode" column="CO_CODE" columnIndex="3"/>
+		<result property="coCodeName" column="CO_CODE_NAME" columnIndex="4"/>
+		<result property="coOrderby" column="CO_ORDERBY" columnIndex="5"/> 
+		<result property="coUpdatetime" column="CO_UPDATETIME" columnIndex="6"/>      
+	</resultMap> 
+	<select id="USER.selectTwCode" parameterClass="userVO" resultMap="selectTwCodeVo" >
+			<![CDATA[
+					SELECT  
+					    CO_PS_PK
+					  , CO_DIV
+					  , CO_CODE
+					  , CO_CODE_NAME
+					  , CO_ORDERBY
+					  , CO_UPDATETIME
+					FROM TW_CODE
+					WHERE CO_DIV = #coDiv#
+					order by CO_ORDERBY asc;
+					]]> 
+	</select>
+	
+	<select id="USER.selectTwCodeCnt" parameterClass="gA03MAINUSERVO" resultClass="int" >
+		<![CDATA[      
+			SELECT     
+	        	COUNT(*)
+		    FROM
+				TW_CODE a
+			 WHERE CO_DIV = #coDiv#
+		]]>		
+	</select>
+	
+	<update id="USER.updateTwStatus" parameterClass="userVO">
+		<![CDATA[
+			 UPDATE TW_TASK_LIST 
+				SET 
+				    TW_STATUS=#twStatus#
+				WHERE TW_PK= #twPk#
+		]]>
+	</update>
+</sqlMap>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA034MAIN">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/>
+	<typeAlias  alias="DeviceVo" type="egovframework.or.kr.GA03MAIN.service.DeviceVO"/>
+ 
+  
+	<insert id="GA034MAIN.GA034MainInsert" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO br_tb_aircraft
+			(
+				  ai_devicename
+				, ai_devicealias
+				, ai_devicetype
+				, ai_agency
+				, ai_memo
+				, ai_registername
+				, ai_writetime
+				, ai_devicecode
+				, ai_registerid
+			) 
+			VALUES
+			( 
+				  #aiDeviceName# 
+				, #aiDeviceAlias# 
+				, #aiDeviceType#
+				, #aiAgency#
+				, #aiRegisterId#
+				, #aiMemo#
+				, now()
+				, #aiDeviceName#
+				, #userId#
+			)
+		]]>
+		<selectKey keyProperty="ai_pk" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="GA034MAIN.GA034MainUpdate" parameterClass="Map">
+		<![CDATA[
+			UPDATE
+				br_tb_aircraft
+			SET
+				 ai_devicename     = #aiDeviceName#
+				,ai_devicealias    = #aiDeviceAlias#
+				,ai_devicetype     = #aiDeviceType#
+				,ai_agency         = #aiAgency#
+				,ai_memo           = #aiMemo#
+				,ai_registername   = #aiRegisterId#
+				,ai_writetime      = now()
+				,ai_devicecode     = #aiDeviceName#
+				,ai_registerid     = #userId#
+			WHERE 
+				ai_pk = #aiPk#
+		]]>
+	</update> 
+	
+	<update id="GA034MAIN.gA034MainYNUpdate" parameterClass="Map">
+		<![CDATA[
+			UPDATE
+				br_tb_aircraft
+			SET
+				 ai_use = #aiUse# 
+			WHERE 
+				ai_pk = #aiPk#
+		]]>
+	</update> 
+	
+	<delete id="GA034MAIN.GA034MainDelete" parameterClass="Map"> 
+		<![CDATA[
+		DELETE
+		FROM
+			br_tb_aircraft
+		WHERE
+			ai_pk = #aiPk#
+		]]>
+	</delete>
+	
+	
+	<delete id="GA034MAIN.GA03MainDelete" parameterClass="Map"> 
+		<![CDATA[
+		DELETE
+		FROM
+			br_drone_waypoints
+		WHERE
+			dl_pk = #dlPk#
+		]]>
+	</delete>
+	
+	<resultMap id="deviceInfo" class="egovframework.or.kr.GA03MAIN.service.DeviceVO">
+		<result property="aiPk" column="ai_pk" columnIndex="1"/>
+		<result property="aiDeviceName" column="ai_devicename" columnIndex="2"/>
+		<result property="aiDeviceAlias" column="ai_devicealias" columnIndex="3"/>
+		<result property="aiDeviceType" column="ai_devicetype" columnIndex="4"/>
+		<result property="aiAgency" column="ai_agency" columnIndex="5"/>
+		<result property="aiMemo" column="ai_memo" columnIndex="6"/>
+		<result property="aiRegisterName" column="ai_registername" columnIndex="7"/>
+		<result property="aiDeviceCode" column="ai_devicecode" columnIndex="8"/>
+		<result property="aiRegisterId" column="ai_registerid" columnIndex="9"/>
+	</resultMap>
+ 
+	<select id="GA034MAIN.GA034MainDetail" parameterClass="Map" resultClass="java.util.HashMap" >
+		<![CDATA[
+			SELECT
+				 ai_pk AS aiPk
+				,ai_devicename AS aiDeviceName
+				,ai_devicealias AS aiDeviceAlias
+				,ai_devicetype AS aiDeviceType
+				,ai_agency AS aiAgency
+				,ai_memo AS aiMemo
+				,ai_registername AS aiRegisterName
+				,ai_devicecode AS aiDeviceCode
+				,ai_registerid AS aiRegisterId
+			FROM
+				br_tb_aircraft
+			WHERE 
+				ai_pk = #aiPk#
+		]]>
+	</select>
+	
+</sqlMap>

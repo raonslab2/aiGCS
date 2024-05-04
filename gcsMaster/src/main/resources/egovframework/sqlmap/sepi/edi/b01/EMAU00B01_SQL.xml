@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00B01">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/>
+	<typeAlias  alias="empjVO" type="egovframework.or.kr.EMAU00B.service.EmpjVO"/>
+	<typeAlias  alias="empjPsVO" type="egovframework.or.kr.EMAU00B.service.EmpjPsVO"/> 
+	<typeAlias  alias="dashboardVO" type="egovframework.or.kr.EMAU00A.service.DashboardVO"/> 
+	 
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1"/>
+		<result property="name" column="name" columnIndex="2"/>
+		<result property="ihidNum" column="ihidNum" columnIndex="3"/>
+		<result property="email" column="email" columnIndex="4"/>
+		<result property="password" column="password" columnIndex="5"/>
+		<result property="userSe" column="userSe" columnIndex="6"/>
+		<result property="orgnztId" column="orgnztId" columnIndex="7"/>
+		<result property="uniqId" column="uniqId" columnIndex="8"/>		
+	</resultMap>
+	
+	<resultMap id="empj" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="pjYear" column="pjYear" columnIndex="1"/>
+		<result property="pjCode" column="pjCode" columnIndex="2"/>
+		<result property="pjCateCode1" column="pjCateCode1" columnIndex="3"/>
+		<result property="pjCateCode2" column="pjCateCode2" columnIndex="4"/>
+		<result property="grMCode" column="grMCode" columnIndex="5"/>
+		<result property="auCode" column="auCode" columnIndex="6"/>
+		<result property="pjTitle" column="pjTitle" columnIndex="7"/> 
+		<result property="pjStart" column="pjStart" columnIndex="8"/> 
+		<result property="pjEnd" column="pjEnd" columnIndex="9"/> 
+	</resultMap>
+	
+
+	
+ 
+	<!-- test -->
+	<select id="EMAU00B01.test" resultMap="login">
+		<isEqual property="userSe" compareValue="USR">
+			<![CDATA[
+            SELECT EMPLYR_ID AS id
+                 , USER_NM AS name
+                 , PASSWORD AS password
+                 , IHIDNUM AS ihidNum
+                 , EMAIL_ADRES AS email
+                 , 'USR' AS userSe
+                 , ORGNZT_ID AS orgnztId
+                 , ESNTL_ID AS uniqId
+              FROM LETTNEMPLYRINFO
+             WHERE EMPLYR_ID = #id#
+               AND PASSWORD = #password#
+               AND EMPLYR_STTUS_CODE = 'P'
+			]]>
+		</isEqual>
+	</select>
+	
+	<!-- <select id="EMAU00B01.selectPjList" resultMap="empj">
+			<![CDATA[
+				SELECT 
+				     a.PJ_YEAR as pjYear
+				     ,a.PJ_CODE as pjCode
+				     ,a.PJ_CATE_CODE1 as pjCateCode1
+				     ,a.PJ_CATE_CODE2 as pjCateCode2
+				     ,a.GR_M_CODE as grMCode
+				     ,a.AU_CODE as auCode
+				     ,a.PJ_TITLE as pjTitle 
+				     ,(SELECT  MIN( p.PC_DAY_START )   FROM em_pj_ps_mapping p 	 WHERE p.pj_code = a.PJ_CODE AND p.PC_DAY_END LIKE CONCAT('%',#pjYear#,'%')) AS pjStart 
+				     ,(SELECT  MAX( p.PC_DAY_END )   FROM em_pj_ps_mapping p 	 WHERE p.pj_code = a.PJ_CODE AND p.PC_DAY_END LIKE CONCAT('%',#pjYear#,'%')) AS pjEnd
+				 FROM em_pj_list_vi a
+				 where a.PJ_YEAR = #pjYear#
+				 ORDER BY a.PJ_CATE_CODE1,a.PJ_CATE_CODE2,a.ORDER_BY, a.WRITE_TIME ,a.ORDER_BY
+			]]>
+	</select> -->
+	
+	<resultMap id="brdnBusi" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="BUSI_YY" columnIndex="1"/> 
+		<result property="busiNm" column="BUSI_NM" columnIndex="2"/>
+		<result property="brdnBusiNm" column="BRDN_BUSI_NM" columnIndex="3"/>
+		<result property="bbrdnBusiNm" column="BBRDN_BUSI_NM" columnIndex="4"/>
+	</resultMap>
+	
+	<select id="EMAU00B01.selectPjList" resultMap="brdnBusi">
+			<![CDATA[
+					SELECT 
+					  t.BUSI_YY
+					  ,t.BUSI_NM
+					  ,t.BRDN_BUSI_NM
+					  ,t.BBRDN_BUSI_NM 
+					FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST t
+					 WHERE t.PJ_YMD LIKE CONCAT('%',#pjYear#,'%')  	
+					   AND t.GR_M_CODE = #grMCode#	   
+					 GROUP by
+					  t.BUSI_YY
+					  ,t.BUSI_NM -- 사업명
+					  ,t.BRDN_BUSI_NM -- 내역 사업명
+					  ,t.BBRDN_BUSI_NM -- 내내역 사업명  
+			]]>
+	</select>
+	
+	<resultMap id="empjps" class="egovframework.or.kr.EMAU00B.service.EmpjPsVO"> 	
+		<result property="grMcode" column="GR_M_CODE" columnIndex="1"/>  
+		<result property="busiNm" column="BUSI_NM" columnIndex="2"/>
+		<result property="brdnBusiNm" column="BRDN_BUSI_NM" columnIndex="3"/>
+		<result property="bbrdnBusiNm" column="BBRDN_BUSI_NM" columnIndex="4"/> 
+		<result property="pjGubun" column="PJ_GUBUN" columnIndex="5"/>   
+		<result property="pmMonth" column="PM_MONTH" columnIndex="6"/> 
+		<result property="pjYmdSt" column="PJ_YMD_ST" columnIndex="7"/> 
+		<result property="pjYmdEd" column="PJ_YMD_ED" columnIndex="8"/>  
+	</resultMap>
+	
+	<select id="EMAU00B01.selectPjPsList" parameterClass="empjPsVO"  resultMap="empjps">
+			<![CDATA[
+ SELECT 
+	  T.GR_M_CODE  				  
+	 ,T.BUSI_NM
+	 ,T.BRDN_BUSI_NM
+	 ,T.BBRDN_BUSI_NM 
+	 ,T.PJ_GUBUN 
+	 ,T.PM_MONTH
+	 ,T.PJ_YMD_ST
+	 ,T.PJ_YMD_ED
+  FROM (
+				SELECT DISTINCT
+				  GR_M_CODE  				  
+				 ,BUSI_NM
+				 ,BRDN_BUSI_NM
+				 ,BBRDN_BUSI_NM 
+				 ,PJ_GUBUN 
+				 ,PM_MONTH
+ 				 ,DATE_FORMAT(PJ_YMD_ST, '%m.%d') AS   PJ_YMD_ST
+ 				 ,DATE_FORMAT(PJ_YMD_ED, '%m.%d') AS PJ_YMD_ED
+				FROM 
+				VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST2 
+				WHERE 1=1
+				   AND BBRDN_BUSI_NM = #bbrdnBusiNm#
+				  AND PM_MONTH = #pmMonth#
+				  AND GR_M_CODE = (SELECT GR_M_CODE FROM em_mb_member WHERE MB_CODE = #mbCode#)
+				  AND PJ_YMD_ST LIKE CONCAT(#busiYy#,'%')
+			UNION ALL
+			SELECT DISTINCT
+			  B.GR_M_CODE
+			 ,A.BUSI_NM
+			 ,A.BRDN_BUSI_NM
+			 ,A.BBRDN_BUSI_NM
+			 ,'협약체결' AS PJ_GUBUN
+			 ,DATE_FORMAT(A.AGRE_CNTR_YMD, '%m') AS PM_MONTH
+			 ,MIN(DATE_FORMAT(A.TOT_DVLP_END_YMD, '%m.%d')) AS PJ_YMD_ST
+			 ,MAX(DATE_FORMAT(A.TOT_DVLP_SRT_YMD, '%m.%d')) AS PJ_YMD_ED 
+			FROM VI_EDW_DM_SBJT_ADMN_INFO A
+				    LEFT JOIN (
+						SELECT DISTINCT
+						  ANCM_ID
+						 ,GR_M_CODE
+						 ,BBRDN_BUSI_NM
+						 FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST
+						WHERE GR_M_CODE = (SELECT GR_M_CODE FROM em_mb_member WHERE MB_CODE = #mbCode#)
+					  ) B
+				 ON A.ANCM_ID = B.ANCM_ID
+			WHERE B.GR_M_CODE IS NOT NULL
+	       AND A.BBRDN_BUSI_NM = #bbrdnBusiNm#
+			 AND DATE_FORMAT(A.AGRE_CNTR_YMD, '%m')  = #pmMonth#
+		    AND A.AGRE_CNTR_YMD LIKE CONCAT(#busiYy#,'%')
+		    ) T 
+		    WHERE T.GR_M_CODE IS NOT NULL 
+			]]>
+	</select>
+	
+	<select id="EMAU00B01.selectPjPsListCnt" parameterClass="empjPsVO" resultClass="java.lang.Integer">
+			<![CDATA[
+					SELECT  
+					    COUNT(a.PJ_PK)
+					FROM em_pj_ps_mapping a
+					WHERE a.PJ_CODE = #pjCode#
+					  AND a.PC_USE = '1' 
+					  AND a.PC_DAY_START != '0000-00-00'
+					  AND a.PC_DAY_END != '0000-00-00'
+					ORDER BY a.PC_ORDER_BY asc 
+			]]>
+	</select>
+ 
+	<resultMap id="monthlist" class="egovframework.or.kr.EMAU00A.service.DashboardVO"> 	
+		<result property="noPk" column="no_pk" columnIndex="1"/>
+		<result property="noInDay" column="no_in_day" columnIndex="2"/>
+		<result property="noDay" column="no_day" columnIndex="3"/> 
+		<result property="noTitle" column="no_title" columnIndex="4"/> 
+		<result property="noText" column="no_text" columnIndex="5"/>
+		<result property="noEtc" column="no_etc" columnIndex="6"/> 
+		<result property="noTable" column="no_table" columnIndex="7"/> 
+	</resultMap>
+	
+	<select id="EMAU00B01.selectMonthList" resultMap="monthlist">
+			<![CDATA[
+				SELECT 
+				   a.no_pk 
+				   ,DATE_FORMAT(a.no_in_day, '%Y/%m/%d %H:%i') AS no_in_day
+				   ,DATE_FORMAT(a.no_in_day, '%d') AS no_day
+				   ,a.no_title
+				   ,a.no_text
+				   ,a.no_etc
+				   ,'em_notice' AS no_table
+				FROM em_notice a
+				WHERE a.no_in_day LIKE CONCAT('%',#searchMonth#,'%')
+				AND a.no_receive_mb_code = #mbCode#
+				ORDER BY no_in_day ASC 
+				
+			]]>
+	</select>
+	
+	<insert id="EMAU00B01.scheduleInsert" parameterClass="Map">
+		<![CDATA[
+			INSERT INTO em_notice
+			(
+				no_in_day
+				, no_title
+				, no_text
+				, no_etc
+				, no_write_date
+				, no_receive_mb_code
+				, no_request_mb_code
+			) 
+			VALUES
+			( 
+				#noInDay#
+				, #noTitle# 
+				, #noText#
+				, #noEtc#
+				, now()
+				, #mbCode#
+				, #mbCode#
+			)
+		]]>
+		<selectKey keyProperty="no_pk" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<select id="EMAU00B01.newScheduleDetail" parameterClass="Map" resultClass="java.util.HashMap">
+			<![CDATA[
+				SELECT 
+				   a.no_pk AS noPk
+				   ,DATE_FORMAT(a.no_in_day, '%Y/%m/%d %H:%i') AS noInday
+				   ,DATE_FORMAT(a.no_in_day, '%d') AS no_day
+				   ,a.no_title AS noTitle
+				   ,a.no_text AS noText
+				   ,a.no_etc AS noEtc
+				   ,'em_notice' AS no_table
+				FROM em_notice a
+				WHERE a.no_pk = #noPk#
+				ORDER BY no_in_day ASC 
+			]]>
+	</select>
+	
+	<delete id="EMAU00B01.scheduleDelete" parameterClass="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			em_notice
+		WHERE
+			no_pk = #noPk#
+		]]>
+	</delete>
+	
+	<update id="EMAU00B01.scheduleUpdate" parameterClass="Map">
+		UPDATE 
+			em_notice
+		SET 
+			no_in_day = #noInDay#
+			, no_title = #noTitle#
+			, no_text = #noText#
+			, no_etc = #noEtc#
+		WHERE 
+			no_pk = #noPk#
+	</update>
+	
+	<select id="EMAU00B01.scheduleWeekList" resultMap="monthlist">
+			<![CDATA[
+				SELECT 
+				   a.no_pk 
+				   ,DATE_FORMAT(a.no_in_day, '%Y/%m/%d %H:%i') AS no_in_day
+				   ,DATE_FORMAT(a.no_in_day, '%d') AS no_day
+				   ,a.no_title
+				   ,a.no_text
+				   ,a.no_etc
+				   ,'em_notice' AS no_table
+				FROM em_notice a
+				WHERE a.no_in_day BETWEEN #searchDate1# AND #searchDate2#
+				AND a.no_receive_mb_code = #mbCode#
+				ORDER BY no_in_day ASC 
+			]]>
+	</select>
+	
+
+	
+	<resultMap id="empj0" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="ancmNm" column="ancmNm" columnIndex="6"/> 
+		<result property="dtlAncmNm" column="dtlAncmNm" columnIndex="7"/> 
+		<result property="pjGubun" column="pjGubun" columnIndex="8"/> 
+		<result property="pjYmd" column="pjYmd" columnIndex="9"/>  
+		<result property="rsltNm" column="rsltNm" columnIndex="10"/> 
+		<result property="mbrNm2" column="mbrNm2" columnIndex="11"/> 
+		<result property="evalGd" column="evalGd" columnIndex="12"/>
+		<result property="plcNm" column="plcNm" columnIndex="13"/>		
+	</resultMap>
+	
+	<select id="EMAU00B01.selectProjectList" parameterClass="empjVO" resultMap="empj0" >
+		<![CDATA[
+			SELECT 
+		      T.BUSI_YY AS busiYy
+		      ,S.SBJT_ID AS sbjtId  
+		      ,S.BUSI_NM AS busiNm
+		      ,S.BRDN_BUSI_NM AS brdnBusiNm
+		      ,S.BBRDN_BUSI_NM AS bbrdnBusiNm
+		      ,S.ANCM_NM AS ancmNm 
+			  ,S.DTL_ANCM_NM AS dtlAncmNm
+			  ,T.PJ_GUBUN AS pjGubun
+			  ,T.PJ_YMD AS pjYmd 
+			  ,T.RSLT_NM AS rsltNm
+			  ,T.MBR_NM2 AS mbrNm2 
+			  ,T.EVAL_GD AS evalGd 
+			  ,T.PLC_NM AS plcNm
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.PJ_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY PJ_YMD 
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	
+	<resultMap id="empj2" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="sbjtNm" column="sbjtNm" columnIndex="6"/> 
+		<result property="agreCntrYn" column="agreCntrYn" columnIndex="7"/> 
+		<result property="agreCntrYmd" column="agreCntrYmd" columnIndex="8"/> 
+		<result property="svorgnNm" column="svorgnNm" columnIndex="9"/>  
+		<result property="totDvlpSrtYmd" column="totDvlpSrtYmd" columnIndex="10"/>
+		<result property="totDvlpEndYmd" column="totDvlpEndYmd" columnIndex="11"/> 
+	</resultMap>
+	
+	<select id="EMAU00B01.selectProjectList2" parameterClass="empjVO" resultMap="empj2" >
+		<![CDATA[
+				SELECT  
+				   BUSI_YY as busiYy
+				  ,A.SBJT_ID as sbjtId
+				  ,A.BUSI_NM as busiNm
+				  ,A.BRDN_BUSI_NM as brdnBusiNm
+				  ,A.BBRDN_BUSI_NM as bbrdnBusiNm
+				  ,A.SBJT_NM AS sbjtNm
+				  ,A.AGRE_CNTR_YN AS agreCntrYn
+				  ,A.AGRE_CNTR_YMD as agreCntrYmd
+				  ,A.SVORGN_NM as svorgnNm
+				  ,A.TOT_DVLP_SRT_YMD as totDvlpSrtYmd 
+				  ,A.TOT_DVLP_END_YMD as totDvlpEndYmd
+				FROM VI_EDW_DM_SBJT_ADMN_INFO A
+				WHERE 1=1
+				 AND A.AGRE_CNTR_YMD LIKE CONCAT(#searchYear#,'%') 
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND A.BBRDN_BUSI_NM = #searchName#
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY A.AGRE_CNTR_YMD
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="EMAU00B01.selectProjectListCnt2" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[      
+				SELECT  
+				   COUNT(*)
+				FROM VI_EDW_DM_SBJT_ADMN_INFO A
+				WHERE 1=1
+				 AND A.AGRE_CNTR_YMD LIKE CONCAT(#searchYear#,'%') 
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND A.BBRDN_BUSI_NM = #searchName#
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY A.AGRE_CNTR_YMD
+		]]>	
+	</select>
+	
+	
+	<!-- <select id="EMAU00B01.selectProjectList" parameterClass="empjVO" resultMap="empj1" >
+		<![CDATA[      
+		SELECT     
+          SBJT_SN AS sbjtSn	
+  		, BUSI_YY AS busiYy
+  		, SBJT_ID AS sbjtId
+  		, BUSI_NM AS busiNm
+  		, BRDN_BUSI_NM AS brdnBusiNm
+		, BBRDN_BUSI_NM AS bbrdnBusiNm
+		, ANCM_YMD AS ancmYmd 
+		, ANCM_NM AS ancmNm
+		, DTL_ANCM_NM AS dtlAncmNm
+		, DVLP_SRT_YMD AS dvlpSrtYmd
+		, DVLP_END_YMD AS dvlpEndYmd
+		, RCPT_CLOS_YMD AS rcptClosYmd
+		, SUBM_CMPT_YMD AS submCmptYmd
+		, LAST_SBJT_PRG_SE_NM AS lastSbjtPrgSeNm
+		FROM
+		VI_EDW_DM_SBJT_EVAL_INTG_BASIC_STATE
+	 	WHERE BUSI_YY = #searchYear#
+	 	]]>
+	 	<isNotEmpty property="searchName">		
+		AND ANCM_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[ 
+	 	ORDER BY SBJT_SN ASC
+	 	LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>				
+	</select> -->
+	
+	<select id="EMAU00B01.selectProjectListCnt" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[      
+		SELECT
+			COUNT(*)
+		FROM
+			VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST
+		WHERE
+			PJ_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY PJ_YMD 
+		]]>	
+	</select>
+	
+	<resultMap id="empj1" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="ancmNm" column="ancmNm" columnIndex="6"/> 
+		<result property="dtlAncmNm" column="dtlAncmNm" columnIndex="7"/> 
+		<result property="pjGubun" column="pjGubun" columnIndex="8"/> 
+		<result property="pjYmd" column="pjYmd" columnIndex="9"/> 
+	</resultMap>
+	
+	<select id="EMAU00B01.excelDownloadList" parameterClass="Map" resultMap="empj1">
+ 
+		<![CDATA[      
+		SELECT
+			BUSI_YY AS busiYy
+			, ANCM_ID AS ancmId
+			, BUSI_NM AS busiNm
+		  	, BRDN_BUSI_NM AS brdnBusiNm
+			, BBRDN_BUSI_NM AS bbrdnBusiNm
+			, ANCM_NM AS ancmNm
+			, DTL_ANCM_NM AS dtlAncmNm
+			, PJ_GUBUN AS pjGubun
+			, PJ_YMD AS pjYmd
+		FROM
+			VI_EDW_DM_SBJT_EVAL_INTG_PJ_LIST
+	 	WHERE 1=1
+	 	]]>
+	 	<isNotEmpty prepend="AND" property="ancmId">
+			<![CDATA[
+					ANCM_ID = #ancmId#
+			]]>
+		</isNotEmpty>		
+	</select>
+			
+	<resultMap id="finalPj" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="sbjtNm" column="sbjtNm" columnIndex="6"/> 
+		<result property="svorgnNm" column="svorgnNm" columnIndex="7"/> 
+		<result property="lastEvalYmd" column="lastEvalYmd" columnIndex="8"/> 
+		<result property="ecmitNm" column="ecmitNm" columnIndex="9"/>  
+		<result property="plcNm" column="plcNm" columnIndex="10"/> 
+		<result property="evalGd" column="evalGd" columnIndex="11"/> 
+		<result property="rsltNm" column="rsltNm" columnIndex="12"/>
+		<result property="mbrNm2" column="mbrNm2" columnIndex="13"/>
+		<result property="pjYmd" column="pjYmd" columnIndex="14"/>
+		<result property="lastEvalObjapEvalYmd" column="lastEvalObjapEvalYmd" columnIndex="15"/>
+		<result property="lastEvalObjapEvalRsltNm" column="lastEvalObjapEvalRsltNm" columnIndex="16"/>
+	</resultMap>
+	
+	<select id="EMAU00B01.finalProjectList" parameterClass="empjVO" resultMap="finalPj" >
+		<![CDATA[
+			SELECT 
+		       T.BUSI_YY AS busiYy
+		      ,S.SBJT_ID AS sbjtId  
+		      ,S.BUSI_NM AS busiNm
+		      ,S.BRDN_BUSI_NM AS brdnBusiNm
+		      ,S.BBRDN_BUSI_NM AS bbrdnBusiNm
+		      ,S.SBJT_NM AS sbjtNm
+		      ,S.SVORGN_NM AS svorgnNm
+		      ,S.LAST_EVAL_YMD AS lastEvalYmd
+		      ,T.ECMIT_NM AS ecmitNm
+		      ,T.PLC_NM AS plcNm
+		      ,T.EVAL_GD AS evalGd
+			  ,T.RSLT_NM AS rsltNm
+			  ,T.MBR_NM2 AS mbrNm2 
+			  ,T.PJ_YMD AS pjYmd
+			  ,ifnull(S.LAST_EVAL_OBJAP_EVAL_YMD, '') AS lastEvalObjapEvalYmd
+			  ,ifnull(S.LAST_EVAL_OBJAP_EVAL_RSLT_NM, '') AS lastEvalObjapEvalRsltNm
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.PJ_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY PJ_YMD 
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="EMAU00B01.finalProjectListCnt" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[
+			SELECT 
+		      count(*)
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.PJ_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY PJ_YMD 
+		]]>
+	</select>
+	
+	<resultMap id="sePj" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="sbjtNm" column="sbjtNm" columnIndex="6"/> 
+		<result property="svorgnNm" column="svorgnNm" columnIndex="7"/> 
+		<result property="pjGubun" column="pjGubun" columnIndex="8"/> 
+		<result property="pjYmd" column="pjYmd" columnIndex="9"/>  
+		<result property="ecmitNm" column="ecmitNm" columnIndex="10"/> 
+		<result property="mbrNm2" column="mbrNm2" columnIndex="11"/> 
+		<result property="plcNm" column="plcNm" columnIndex="12"/>
+		<result property="evalGd" column="evalGd" columnIndex="13"/>
+		<result property="rsltNm" column="rsltNm" columnIndex="14"/>
+		<result property="ymd2" column="ymd2" columnIndex="15"/>
+		<result property="rsltNm2" column="rsltNm2" columnIndex="16"/>
+	</resultMap>
+	
+	<select id="EMAU00B01.seProjectList" parameterClass="empjVO" resultMap="sePj" >
+		<![CDATA[
+			SELECT 
+		       T.BUSI_YY AS busiYy
+		      ,S.SBJT_ID AS sbjtId  
+		      ,S.BUSI_NM AS busiNm
+		      ,S.BRDN_BUSI_NM AS brdnBusiNm
+		      ,S.BBRDN_BUSI_NM AS bbrdnBusiNm
+		      ,S.SBJT_NM AS sbjtNm
+		      ,S.SVORGN_NM AS svorgnNm
+   		   	  ,T.PJ_GUBUN AS pjGubun
+		      ,T.PJ_YMD AS pjYmd
+		      ,T.ECMIT_NM AS ecmitNm
+		      ,T.MBR_NM2 AS mbrNm2 
+		      ,T.PLC_NM AS plcNm
+		      ,T.EVAL_GD AS evalGd
+			  ,T.RSLT_NM AS rsltNm
+			  ,ifnull(T.YMD2, '') AS ymd2
+			  ,ifnull(T.RSLT_NM2, '') AS rsltNm2
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.PJ_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY PJ_YMD 
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="EMAU00B01.seProjectListCnt" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[
+			SELECT 
+		      count(*)
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.PJ_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY PJ_YMD 
+		]]>
+	</select>
+	
+	<resultMap id="applicationPj" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="sbjtNm" column="sbjtNm" columnIndex="6"/> 
+		<result property="svorgnNm" column="svorgnNm" columnIndex="7"/> 
+		<result property="ancmYmd" column="ancmYmd" columnIndex="8"/> 
+		<result property="ancmNm" column="ancmNm" columnIndex="9"/>  
+		<result property="dtlAncmNm" column="dtlAncmNm" columnIndex="10"/> 
+		<result property="rcptClosYmd" column="rcptClosYmd" columnIndex="11"/> 
+		<result property="submCmptYmd" column="submCmptYmd" columnIndex="12"/>
+	</resultMap>
+	
+	<select id="EMAU00B01.applicationProjectList" parameterClass="empjVO" resultMap="applicationPj" >
+		<![CDATA[
+			SELECT
+				T.BUSI_YY AS busiYy
+				,S.SBJT_ID AS sbjtId  
+				,S.BUSI_NM AS busiNm
+				,S.BRDN_BUSI_NM AS brdnBusiNm
+				,S.BBRDN_BUSI_NM AS bbrdnBusiNm
+				,S.SBJT_NM AS sbjtNm
+				,S.SVORGN_NM AS svorgnNm
+				,T.ANCM_YMD AS ancmYmd
+				,T.ANCM_NM AS ancmNm
+				,T.DTL_ANCM_NM AS dtlAncmNm
+				,T.RCPT_CLOS_YMD AS rcptClosYmd
+				,T.SUBM_CMPT_YMD AS submCmptYmd
+			FROM 
+				VI_EDW_DM_SBJT_EVAL_INTG_BASIC T
+			LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+				ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.RCPT_CLOS_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND S.BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY RCPT_CLOS_YMD 
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="EMAU00B01.applicationProjectListCnt" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[
+			SELECT 
+		      count(*)
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_BASIC T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND T.RCPT_CLOS_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND S.BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY RCPT_CLOS_YMD 
+		]]>
+	</select>
+	
+	<resultMap id="specPj" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="sbjtNm" column="sbjtNm" columnIndex="6"/> 
+		<result property="svorgnNm" column="svorgnNm" columnIndex="7"/> 
+		<result property="prblSbjtRcptYmd" column="prblSbjtRcptYmd" columnIndex="8"/> 
+		<result property="prblSbjtRsn" column="prblSbjtRsn" columnIndex="9"/>  
+		<result property="spevlYmd" column="spevlYmd" columnIndex="10"/> 
+		<result property="ecmitNm" column="ecmitNm" columnIndex="11"/> 
+		<result property="evalGd" column="evalGd" columnIndex="12"/>
+		<result property="plcNm" column="plcNm" columnIndex="13"/>
+		<result property="spevlRsltNm" column="spevlRsltNm" columnIndex="14"/>
+	</resultMap>
+	
+	<select id="EMAU00B01.specProjectList" parameterClass="empjVO" resultMap="specPj" >
+		<![CDATA[
+			SELECT 
+		       T.BUSI_YY AS busiYy
+		      ,S.SBJT_ID AS sbjtId  
+		      ,S.BUSI_NM AS busiNm
+		      ,S.BRDN_BUSI_NM AS brdnBusiNm
+		      ,S.BBRDN_BUSI_NM AS bbrdnBusiNm
+		      ,S.SBJT_NM AS sbjtNm
+		      ,S.SVORGN_NM AS svorgnNm
+   		   	  ,S.PRBL_SBJT_RCPT_YMD AS prblSbjtRcptYmd
+			  ,S.PRBL_SBJT_RSN AS prblSbjtRsn
+			  ,S.SPEVL_YMD AS spevlYmd
+			  ,T.ECMIT_NM AS ecmitNm
+			  ,T.EVAL_GD AS evalGd
+			  ,T.PLC_NM AS plcNm
+			  ,S.SPEVL_RSLT_NM AS spevlRsltNm
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND S.SPEVL_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY S.SPEVL_YMD 
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="EMAU00B01.specProjectListCnt" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[
+			SELECT 
+		      COUNT(*)
+			FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+			   LEFT JOIN VI_EDW_DM_SBJT_ADMN_INFO S
+			   ON T.SBJT_ID = S.SBJT_ID 
+			WHERE ANCM_ID IS NOT NULL
+	           AND S.SPEVL_YMD LIKE CONCAT(#searchYear#,'%')
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND BBRDN_BUSI_NM LIKE CONCAT('%',#searchName#,'%') 
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY S.SPEVL_YMD 
+		]]>
+	</select>
+	
+	<resultMap id="reportPj" class="egovframework.or.kr.EMAU00B.service.EmpjVO"> 
+		<result property="busiYy" column="busiYy" columnIndex="1"/>
+		<result property="sbjtId" column="sbjtId" columnIndex="2"/>
+		<result property="busiNm" column="busiNm" columnIndex="3"/>
+		<result property="brdnBusiNm" column="brdnBusiNm" columnIndex="4"/>
+		<result property="bbrdnBusiNm" column="bbrdnBusiNm" columnIndex="5"/>
+		<result property="sbjtNm" column="sbjtNm" columnIndex="6"/> 
+		<result property="svorgnNm" column="svorgnNm" columnIndex="7"/> 
+		<result property="lastRptpSubmYn" column="lastRptpSubmYn" columnIndex="8"/> 
+		<result property="lastRptpSubmYmd" column="lastRptpSubmYmd" columnIndex="9"/>  
+	</resultMap>
+	
+	<select id="EMAU00B01.reportProjectList" parameterClass="empjVO" resultMap="reportPj" >
+		<![CDATA[
+				SELECT  
+				  	A.BUSI_YY as busiYy
+				  ,A.SBJT_ID as sbjtId
+				  ,A.BUSI_NM as busiNm
+				  ,A.BRDN_BUSI_NM as brdnBusiNm
+				  ,A.BBRDN_BUSI_NM as bbrdnBusiNm
+  				  ,A.SBJT_NM AS sbjtNm
+				  ,A.SVORGN_NM as svorgnNm
+				  ,A.LAST_RPTP_SUBM_YN AS lastRptpSubmYn
+				  ,A.LAST_RPTP_SUBM_YMD AS lastRptpSubmYmd
+				FROM VI_EDW_DM_SBJT_ADMN_INFO A
+				WHERE 1=1
+				 AND A.AGRE_CNTR_YMD LIKE CONCAT(#searchYear#,'%') 
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND A.BBRDN_BUSI_NM = #searchName#
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY A.AGRE_CNTR_YMD
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="EMAU00B01.reportProjectListCnt" parameterClass="empjVO" resultClass="int" >
+		<![CDATA[
+				SELECT  
+				  COUNT(*)
+				FROM VI_EDW_DM_SBJT_ADMN_INFO A
+				WHERE 1=1
+				 AND A.AGRE_CNTR_YMD LIKE CONCAT(#searchYear#,'%') 
+		]]>	
+		<isNotEmpty property="searchName">		
+		AND A.BBRDN_BUSI_NM = #searchName#
+		</isNotEmpty>
+		<![CDATA[
+		ORDER BY A.AGRE_CNTR_YMD
+		]]>
+	</select>
+	
+	<resultMap id="pjMonthlist" class="egovframework.or.kr.EMAU00A.service.DashboardVO"> 	
+		<result property="start_date" column="PJ_ST" columnIndex="1"/>
+		<result property="end_date" column="PJ_ED" columnIndex="2"/>
+		<result property="text" column="PJ_TEXT" columnIndex="3"/> 
+		<result property="subject" column="SUBJECT" columnIndex="4"/>  
+	</resultMap>
+	
+	<select id="EMAU00B01.selectPjMonthList" resultMap="pjMonthlist">
+			<![CDATA[
+				SELECT DISTINCT
+				    DATE_FORMAT(T.YMD2,'%Y-%m-%d 09:00') AS PJ_ST
+				   ,DATE_FORMAT(T.YMD2,'%Y-%m-%d 09:00') AS PJ_ED  
+				   ,CONCAT(T.MBR_NM2," (",PJ_GUBUN,")") AS PJ_TEXT   
+				   ,'english' AS SUBJECT
+				FROM VI_EDW_DM_SBJT_EVAL_INTG_PJ T
+				WHERE 1=1
+				 AND YMD2 LIKE CONCAT(#searchData#,'%')
+				UNION ALL 
+					SELECT 
+					    DATE_FORMAT('20211001','%Y-%m-%d 09:00') AS PJ_ST
+					   ,DATE_FORMAT('20211005','%Y-%m-%d 09:00') AS PJ_ED  
+					   ,'[온라인대면평가]기정원 5F' AS PJ_TEXT   
+					   ,'english' AS SUBJECT
+					FROM DUAL
+				UNION ALL 
+					SELECT 
+					    DATE_FORMAT('20211002','%Y-%m-%d 09:00') AS PJ_ST
+					   ,DATE_FORMAT('20211010','%Y-%m-%d 09:00') AS PJ_ED  
+					   ,'[서면평가]기정원 4F' AS PJ_TEXT   
+					   ,'math' AS SUBJECT
+					FROM DUAL
+				UNION ALL 
+					SELECT 
+					    DATE_FORMAT('20211015','%Y-%m-%d 09:00') AS PJ_ST
+					   ,DATE_FORMAT('20211022','%Y-%m-%d 09:00') AS PJ_ED  
+					   ,'[서면평가]기정원 2F' AS PJ_TEXT   
+					   ,'science' AS SUBJECT
+					FROM DUAL
+				UNION ALL 
+					SELECT 
+					    DATE_FORMAT('20211020','%Y-%m-%d 09:00') AS PJ_ST
+					   ,DATE_FORMAT('20211022','%Y-%m-%d 09:00') AS PJ_ED  
+					   ,'[최종평가]기정원 2F (김병현간사)' AS PJ_TEXT   
+					   ,'english' AS SUBJECT
+					FROM DUAL
+				
+			]]>
+	</select>
+	
+</sqlMap>

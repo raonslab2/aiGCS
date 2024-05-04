@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMA00H01">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="eMA00H01VO" type="egovframework.or.kr.EMA00H01.service.EMA00H01VO"/>  
+  
+	
+	<select id="EMA00H01.EMA00H01Insert" parameterClass="EMA00H01VO" resultClass="int" >
+		<![CDATA[      
+		SELECT     
+        	COUNT(*)
+	    FROM
+			br_drone_waypoints a
+		]]>
+		<isNotEmpty property="dlUserId">		
+		where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
+		</isNotEmpty> 		
+	
+	
+	</select>
+	
+	
+	 
+	 
+	
+</sqlMap>

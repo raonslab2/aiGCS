@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA01MAIN">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="GA01MAINVO" type="egovframework.or.kr.GA01MAIN.service.GA01MAINVO"/> 
+	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/>
+	
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1"/> 
+	</resultMap>
+	
+	<resultMap id="drone" class="egovframework.or.kr.GA01MAIN.service.GA01MAINVO">
+		<result property="dlId" column="dl_id" columnIndex="1"/> 
+		<result property="dlName" column="dl_name" columnIndex="2"/> 
+		<result property="stBatVoltage" column="st_satelite_num" columnIndex="3"/> 
+		<result property="stBatVoltage" column="st_bat_voltage" columnIndex="4"/> 
+		<result property="stBatLevel" column="st_bat_level" columnIndex="5"/> 
+		<result property="stSpeed" column="st_speed" columnIndex="6"/> 
+		<result property="stXa" column="st_x" columnIndex="7"/> 
+		<result property="stYa" column="st_y" columnIndex="8"/> 
+		<result property="stZa" column="st_z" columnIndex="9"/> 
+		<result property="stAtitude" column="st_atitude" columnIndex="10"/> 
+	</resultMap> 
+	
+ 	<!-- test -->
+	<select id="GA01MAIN.selectTest" resultMap="login">
+			<![CDATA[
+            SELECT '1' AS id
+              from dual
+			]]>
+	</select>
+	
+	<select id="GA01MAIN.selectDrone" resultMap="drone">
+			<![CDATA[
+					SELECT a.dl_id 
+					 		,a.dl_name 
+					 		,b.st_satelite_num 
+					 		,b.st_bat_voltage 
+					 		,b.st_bat_level 
+					 		,b.st_speed 
+					 		,b.st_x 
+					 		,b.st_y 
+					 		,b.st_z 
+					 		,b.st_atitude 
+					 		FROM br_drone_list a 
+					 		 LEFT JOIN br_drone_state b 
+					 		    ON b.st_pk = ( select MAX(st_pk) from br_drone_state WHERE dl_id =  a.dl_id  ) 
+					 		WHERE a.dl_state = 1 
+			]]>
+	</select>
+
+	
+	<resultMap id="droneShowList" class="egovframework.or.kr.GA01MAIN.service.GA01MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1"/>
+		<result property="dlId" column="dl_id" columnIndex="2"/>
+		<result property="dlName" column="dl_name" columnIndex="3"/>
+		<result property="dlKind" column="dl_kind" columnIndex="4"/>
+		<result property="dlIp" column="dl_ip" columnIndex="5"/> 
+		<result property="dlPath" column="dl_path" columnIndex="6"/> 
+	</resultMap>
+	
+	<select id="GA01MAIN.selectDroneList" parameterClass="GA01MAINVO" resultMap="droneShowList" >
+			<![CDATA[
+				SELECT 
+				  a.ai_pk AS dl_pk
+				  ,a.ai_devicename AS dl_id
+				  ,a.ai_devicename AS dl_name
+				  ,a.ai_devicetype AS dl_kind
+				  ,'' AS dl_ip 
+				  ,(SELECT path_dl_pk FROM br_drone_path WHERE path_dl_name =  a.ai_devicename
+				                      ORDER BY create_time DESC LIMIT 1) AS dl_path
+				 FROM br_tb_aircraft a
+				 WHERE a.ai_use= 'Y'
+				 ORDER BY a.ai_devicename
+			 ]]> 
+	</select>
+	
+	<resultMap id="droneShowPathList" class="egovframework.or.kr.GA01MAIN.service.GA01MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1"/>
+		<result property="dlName" column="dl_name" columnIndex="2"/> 
+	</resultMap>
+	
+	<select id="GA01MAIN.selectDronePathList" parameterClass="GA01MAINVO" resultMap="droneShowPathList" >
+			<![CDATA[
+				SELECT 
+				    a.dl_pk
+				    ,a.dl_name
+				 FROM br_drone_waypoints a
+				 ORDER BY dl_name asc
+			 ]]> 
+	</select>
+	
+	<delete id="GA01MAIN.deleteLogin" parameterClass="loginVO" >
+		<![CDATA[
+			DELETE FROM br_did_login
+			WHERE
+				id = #id# 	
+		]]>	
+	</delete>
+	
+</sqlMap>

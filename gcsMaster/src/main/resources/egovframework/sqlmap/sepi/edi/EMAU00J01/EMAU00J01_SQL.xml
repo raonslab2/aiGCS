@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="EMAU00J01">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="loginVO" type="egovframework.com.cmm.LoginVO"/> 
+	<typeAlias  alias="TechVO" type="egovframework.or.kr.EMAU00J.service.TechVO"/>
+	<typeAlias  alias="BusinessVO" type="egovframework.or.kr.EMAU00J.service.BusinessVO"/>
+	<typeAlias  alias="PolicyConformVO" type="egovframework.or.kr.EMAU00J.service.PolicyConformVO"/>
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="login" class="egovframework.com.cmm.LoginVO">
+		<result property="id" column="id" columnIndex="1"/> 
+	</resultMap>
+ 
+	<!-- test -->
+	<select id="EMAU00J01.selectList" resultMap="login">
+			<![CDATA[
+            SELECT '1' AS id
+              from dual
+			]]>
+	</select>
+	
+	 <insert id="EMAU00J01.insertEMAU00J0102" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_skill_challenge
+			(
+				  CO_PK
+				, checkList1
+				, checkList2
+				, checkList3
+				, checkList4
+				, checkList5
+				, checkList6
+				, checkList7
+				, evalScore
+			) 
+			VALUES
+			( 	
+				  #coPk# 
+				, #checkList1#
+				, #checkList2#
+				, #checkList3#
+				, #checkList4#
+				, #checkList5#
+				, #checkList6#
+				, #checkList7#
+				, #evalScore#
+			)
+		]]>
+	</insert> 
+	
+	<!-- <update id="EMAU00J01.updateEMAU00J0102" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST1 = #checkList1#
+				, CHECKLIST2 = #checkList2#
+				, CHECKLIST3 = #checkList3#
+				, CHECKLIST4 = #checkList4#
+				, CHECKLIST5 = #checkList5#
+				, CHECKLIST6 = #checkList6#
+				, CHECKLIST7 = #checkList7#
+				, EVALSCORE = #evalScore#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0103" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_skill_effect
+			(
+				CO_PK
+				, checkList8
+				, checkList9
+				, checkList10
+				, checkList11
+				, checkList12
+				, checkList13
+				, checkList14
+				, checkList15
+				, evalScore2
+			) 
+			VALUES
+			( 
+				 #coPk# 
+				, #checkList8#
+				, #checkList9#
+				, #checkList10#
+				, #checkList11#
+				, #checkList12#
+				, #checkList13#
+				, #checkList14#
+				, #checkList15#
+				, #evalScore2#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0103" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST8 = #checkList8#
+				, CHECKLIST9 = #checkList9#
+				, CHECKLIST10 = #checkList10#
+				, CHECKLIST11 = #checkList11#
+				, CHECKLIST12 = #checkList12#
+				, CHECKLIST13 = #checkList13#
+				, CHECKLIST14 = #checkList14#
+				, CHECKLIST15 = #checkList15#
+				, EVALSCORE = #evalScore#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0104" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_skill_possible
+			(
+				CO_PK
+				, checkList16
+				, checkList17
+				, checkList18
+				, checkList19
+				, checkList20
+				, checkList21
+				, checkList22
+				, checkList23
+				, checkList24
+				, checkList25
+				, checkList26
+				, checkList27
+				, checkList28
+				, evalScore3
+			) 
+			VALUES
+			( 
+				#coPk# 
+				, #checkList16#
+				, #checkList17#
+				, #checkList18#
+				, #checkList19#
+				, #checkList20#
+				, #checkList21#
+				, #checkList22#
+				, #checkList23#
+				, #checkList24#
+				, #checkList25#
+				, #checkList26#
+				, #checkList27#
+				, #checkList28#
+				, #evalScore3#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0104" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST16 = #checkList16#
+				, CHECKLIST17 = #checkList17#
+				, CHECKLIST18 = #checkList18#
+				, CHECKLIST19 = #checkList19#
+				, CHECKLIST20 = #checkList20#
+				, CHECKLIST21 = #checkList21#
+				, CHECKLIST22 = #checkList22#
+				, CHECKLIST23 = #checkList23#
+				, CHECKLIST24 = #checkList24#
+				, CHECKLIST25 = #checkList25#
+				, CHECKLIST26 = #checkList26#
+				, CHECKLIST27 = #checkList27#
+				, CHECKLIST28 = #checkList28#
+				, CHECKLIST29 = #checkList29#
+				, CHECKLIST30 = #checkList30#
+				, EVALSCORE3 = #evalScore3#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0105" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_skill_todo
+			(
+				CO_PK
+				, checkList29
+				, checkList30
+				, checkList31
+				, checkList32
+				, checkList33
+				, checkList34
+				, checkList35
+				, checkList36
+				, checkList37
+				, checkList38
+				, checkList39
+				, evalScore4
+			) 
+			VALUES
+			( 
+				#coPk# 
+				, #checkList29#
+				, #checkList30#
+				, #checkList31#
+				, #checkList32#
+				, #checkList33#
+				, #checkList34#
+				, #checkList35#
+				, #checkList36#
+				, #checkList37#
+				, #checkList38#
+				, #checkList39#
+				, #evalScore4#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0105" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST31 = #checkList31#
+				, CHECKLIST32 = #checkList32#
+				, CHECKLIST33 = #checkList33#
+				, CHECKLIST34 = #checkList34#
+				, CHECKLIST35 = #checkList35#
+				, CHECKLIST36 = #checkList36#
+				, CHECKLIST37 = #checkList37#
+				, CHECKLIST38 = #checkList38#
+				, CHECKLIST39 = #checkList39#
+				, CHECKLIST40 = #checkList40#
+				, CHECKLIST41 = #checkList41#
+				, EVALSCORE4 = #evalScore4#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0106" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_skill_detail
+			(
+				CO_PK
+				, checkList40
+				, checkList41
+				, checkList42
+				, checkList43
+				, checkList44
+				, checkList45
+				, checkList46
+				, evalScore5
+			) 
+			VALUES
+			( 
+				#coPk# 
+				, #checkList40#
+				, #checkList41#
+				, #checkList42#
+				, #checkList43#
+				, #checkList44#
+				, #checkList45#
+				, #checkList46#
+				, #evalScore5#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0106" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST42 = #checkList42#
+				, CHECKLIST43 = #checkList43#
+				, CHECKLIST44 = #checkList44#
+				, CHECKLIST45 = #checkList45#
+				, CHECKLIST46 = #checkList46#
+				, CHECKLIST47 = #checkList47#
+				, CHECKLIST48 = #checkList48#
+				, CHECKLIST49 = #checkList49#
+				, EVALSCORE = #evalScore#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0107" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_skill_protect
+			(
+				CO_PK
+				, checkList47
+				, checkList48
+				, checkList49
+				, checkList50
+				, checkList51
+				, checkList52
+				, checkList53
+				, checkList54
+				, evalScore6
+			) 
+			VALUES
+			(
+				#coPk# 
+				, #checkList47#
+				, #checkList48#
+				, #checkList49#
+				, #checkList50#
+				, #checkList51#
+				, #checkList52#
+				, #checkList53#
+				, #checkList54#
+				, #evalScore6#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0107" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST50= #checkList50#
+				, CHECKLIST51 = #checkList51#
+				, CHECKLIST52 = #checkList52#
+				, CHECKLIST53 = #checkList53#
+				, CHECKLIST54 = #checkList54#
+				, CHECKLIST55 = #checkList55#
+				, CHECKLIST56 = #checkList56#
+				, CHECKLIST57 = #checkList57#
+				, EVALSCORE = #evalScore#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0108" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_business_innovative
+			(
+				CO_PK
+				, checkList1
+				, checkList2
+				, checkList3
+				, checkList4
+				, checkList5
+				, checkList6
+				, EVALSCORE
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList1#
+				, #checkList2#
+				, #checkList3#
+				, #checkList4#
+				, #checkList5#
+				, #checkList6#
+				, #evalScore#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0108" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST1 = #checkList1#
+				, CHECKLIST2 = #checkList2#
+				, CHECKLIST3 = #checkList3#
+				, CHECKLIST4 = #checkList4#
+				, CHECKLIST5 = #checkList5#
+				, CHECKLIST6 = #checkList6#
+				, EVALSCORE = #evalScore#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0109" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_business_scale
+			(
+				CO_PK
+				, checkList7
+				, checkList8
+				, checkList9
+				, checkList10
+				, checkList11
+				, checkList12
+				, checkList13
+				, checkList14
+				, checkList15
+				, checkList16
+				, checkList17
+				, checkList18
+				, checkList19
+				, evalScore2
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList7#
+				, #checkList8#
+				, #checkList9#
+				, #checkList10#
+				, #checkList11#
+				, #checkList12#
+				, #checkList13#
+				, #checkList14#
+				, #checkList15#
+				, #checkList16#
+				, #checkList17#
+				, #checkList18#
+				, #checkList19#
+				, #evalScore2#
+			)
+		]]>
+	</insert>
+	
+   <!-- <update id="EMAU00J01DAO.updateEMAU00J0109" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST7 = #checkList7#
+				, CHECKLIST8 = #checkList8#
+				, CHECKLIST9 = #checkList9#
+				, CHECKLIST10 = #checkList10#
+				, CHECKLIST11 = #checkList11#
+				, CHECKLIST12 = #checkList12#
+				, CHECKLIST13 = #checkList13#
+				, CHECKLIST14 = #checkList14#
+				, CHECKLIST15 = #checkList15#
+				, CHECKLIST16 = #checkList16#
+				, CHECKLIST17 = #checkList17#
+				, CHECKLIST18 = #checkList18#
+				, CHECKLIST19 = #checkList19#
+				, EVALSCORE2 = #evalScore2#
+			WHERE
+		]]>
+	</update> -->	
+	
+	<insert id="EMAU00J01.insertEMAU00J0110" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_business_capability
+			(
+				CO_PK
+				, checkList20
+				, checkList21
+				, checkList22
+				, checkList23
+				, checkList24
+				, checkList25
+				, checkList26
+				, evalScore3
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList20#
+				, #checkList21#
+				, #checkList22#
+				, #checkList23#
+				, #checkList24#
+				, #checkList25#
+				, #checkList26#
+				, #evalScore3#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0110" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST20 = #checkList20#
+				, CHECKLIST21 = #checkList21#
+				, CHECKLIST22 = #checkList22#
+				, CHECKLIST23 = #checkList23#
+				, CHECKLIST24 = #checkList24#
+				, CHECKLIST25 = #checkList25#
+				, CHECKLIST26 = #checkList26#
+				, EVALSCORE3 = #evalScore3#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0111" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_business_market_entry
+			(
+				CO_PK
+				, checkList27 
+				, checkList28
+				, checkList29
+				, checkList30
+				, checkList31
+				, checkList32
+				, checkList33
+				, checkList34
+				, checkList35
+				, evalScore4
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList27#
+				, #checkList28#
+				, #checkList29#
+				, #checkList30#
+				, #checkList31#
+				, #checkList32#
+				, #checkList33#
+				, #checkList34#
+				, #checkList35#
+				, #evalScore4#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0111" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST27 = #checkList27#
+				, CHECKLIST28 = #checkList28#
+				, CHECKLIST29 = #checkList29#
+				, CHECKLIST30 = #checkList30#
+				, CHECKLIST31 = #checkList31#
+				, CHECKLIST32 = #checkList32#
+				, CHECKLIST33 = #checkList33#
+				, CHECKLIST34 = #checkList34#
+				, CHECKLIST35 = #checkList35#
+				, EVALSCORE4 = #evalScore4#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0112" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_business_investment_plan
+			(
+				CO_PK
+				, checkList36
+				, checkList37
+				, checkList38
+				, checkList39
+				, checkList40
+				, checkList41
+				, evalScore5
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList36#
+				, #checkList37#
+				, #checkList38#
+				, #checkList39#
+				, #checkList40#
+				, #checkList41#
+				, #evalScore5#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0112" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				CHECKLIST36 = #checkList36#
+				, CHECKLIST37 = #checkList37#
+				, CHECKLIST38 = #checkList38#
+				, CHECKLIST39 = #checkList39#
+				, CHECKLIST40 = #checkList40#
+				, CHECKLIST41 = #checkList41#
+				, EVALSCORE5 = #evalScore5#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0113" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_policy_affinity
+			(
+				CO_PK
+				, checkList1
+				, checkList2
+				, checkList3
+				, checkList4
+				, checkList5
+				, checkList6
+				, checkList7
+				, checkList8
+				, checkList9
+				, evalScore
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList1#
+				, #checkList2#
+				, #checkList3#
+				, #checkList4#
+				, #checkList5#
+				, #checkList6#
+				, #checkList7#
+				, #checkList8#
+				, #checkList9#
+				, #evalScore#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0113" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				 CHECKLIST1 = #checkList1#
+				, CHECKLIST2 = #checkList2#
+				, CHECKLIST3 = #checkList3#
+				, CHECKLIST4 = #checkList4#
+				, CHECKLIST5 = #checkList5#
+				, CHECKLIST6 = #checkList6#
+				, CHECKLIST7 = #checkList7#
+				, CHECKLIST8 = #checkList8#
+				, CHECKLIST9 = #checkList9#
+				, EVALSCORE = #evalScore#
+			WHERE
+		]]>
+	</update> -->
+	
+	<insert id="EMAU00J01.insertEMAU00J0114" parameterClass="Map" >
+		<![CDATA[
+			INSERT INTO br_policy_indicator
+			(
+				CO_PK
+				, checkList10
+				, checkList11
+				, checkList12
+				, evalScore2
+			) 
+			VALUES
+			( 
+				#coPk#
+				, #checkList10#
+				, #checkList11#
+				, #checkList12#
+				, #evalScore2#
+			)
+		]]>
+	</insert>
+	
+	<!-- <update id="EMAU00J01DAO.updateEMAU00J0114" parameterClass="Map">
+		<![CDATA[
+			UPDATE 
+				em_mb_auth 
+			SET 
+				  CHECKLIST10 = #checkList10#
+				, CHECKLIST11 = #checkList11#
+				, CHECKLIST12 = #checkList12#
+				, EVALSCORE2 = #evalScore2#
+			WHERE
+		]]>
+	</update> -->
+	
+</sqlMap>

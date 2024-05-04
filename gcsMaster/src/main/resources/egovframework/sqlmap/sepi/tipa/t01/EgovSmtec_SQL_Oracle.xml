@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TipaSmtec">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="SmtecVO" type="egovframework.or.kr.TIPA.service.SmtecVO"/>
+	<typeAlias  alias="SmtecVO2" type="egovframework.or.kr.TIPA.service.SmtecVO2"/>
+ 
+	<resultMap id="SmtecAdmn" class="egovframework.or.kr.TIPA.service.SmtecVO">
+		<result property="ancmId"    		column="ANCM_ID"   				columnIndex="1"/>
+		<result property="sbjtId"  			column="SBJT_ID" 				columnIndex="2"/>
+		<result property="busiYy"   		column="BUSI_YY"  				columnIndex="3"/>
+		<result property="chngMax"   		column="CHNG_MAX"  				columnIndex="4"/>
+		<result property="nrmBuclCd"   		column="NRM_BUCL_CD"  			columnIndex="5"/>
+		<result property="busiNm"   		column="BUSI_NM"  				columnIndex="6"/>
+		<result property="brdnBusiNm"   	column="BRDN_BUSI_NM"  			columnIndex="7"/>
+		<result property="bbrdnBusiNm"   	column="BBRDN_BUSI_NM"  		columnIndex="8"/>
+		<result property="ancmNm"   		column="ANCM_NM"  				columnIndex="9"/>
+		<result property="dtlAncmNm"   		column="DTL_ANCM_NM"  			columnIndex="10"/>
+		<result property="lastSbJtPrgSeNm"  column="LAST_SBJT_PRG_SE_NM"  	columnIndex="11"/>
+		<result property="svorgnNm"   		column="SVORGN_NM"  			columnIndex="12"/>
+		<result property="trstOrgnNm"   	column="TRST_ORGN_NM"  			columnIndex="13"/>
+		<result property="ptcpEnprNm"   	column="PTCP_ENPR_NM"  			columnIndex="14"/>
+		<result property="assnDvlpOrgnNm"   column="ASSN_DVLP_ORGN_NM"  	columnIndex="15"/>
+		<result property="sbjtNm"   		column="SBJT_NM"  				columnIndex="16"/>
+		<result property="lclIdstTeclNm"   	column="LCL_IDST_TECL_NM"  		columnIndex="17"/>
+		<result property="mclIdstTeclNm"   	column="MCL_IDST_TECL_NM"  		columnIndex="18"/>
+		<result property="sclIdstTeclNm"   	column="SCL_IDST_TECL_NM"  		columnIndex="19"/>
+		<result property="aorgnNm"   		column="AORGN_NM"  				columnIndex="20"/>
+		<result property="agreCntrYn"   	column="AGRE_CNTR_YN"  			columnIndex="21"/>
+		<result property="agreCntrYmd"   	column="AGRE_CNTR_YMD"  		columnIndex="22"/>
+		<result property="totDvlpSrtYmd"   	column="TOT_DVLP_SRT_YMD"  		columnIndex="23"/>
+		<result property="totDvlpEndYmd"   	column="TOT_DVLP_END_YMD"  		columnIndex="24"/>
+		<result property="prgrtRptpSubmYn"  column="PRGRT_RPTP_SUBM_YN"		columnIndex="25"/>
+		<result property="prgrtRptpSubmYmd"	column="PRGRT_RPTP_SUBM_YMD"  	columnIndex="26"/>
+		<result property="prgrtchkymd"   	column="PRGRT_CHK_YMD"  		columnIndex="27"/>
+		<result property="prgrtchkRsltNm"   column="PRGRT_CHK_RSLT_NM"  	columnIndex="28"/>
+		<result property="lastRptpSubmYn"   column="LAST_RPTP_SUBM_YN"  	columnIndex="29"/>
+		<result property="lastRptpSubmYmd"  column="LAST_RPTP_SUBM_YMD"  	columnIndex="30"/>
+		<result property="lastChkEfcnYn"   	column="LAST_CHK_EFCN_YN"  		columnIndex="31"/>
+		<result property="lastChkYmd"   	column="LAST_CHK_YMD"  			columnIndex="32"/>
+		<result property="lastChkRsltNm"   	column="LAST_CHK_RSLT_NM"  		columnIndex="33"/>
+		<result property="actngAditRptpSubmYn"   		column="ACTNG_ADIT_RPTP_SUBM_YN"	columnIndex="34"/>
+		<result property="actngAditRptpSubmYmd"   		column="ACTNG_ADIT_RPTP_SUBM_YMD"	columnIndex="35"/>
+		<result property="ts1SetlYmd"   	column="TS1_SETL_YMD"  	columnIndex="36"/>
+		<result property="ts1SetlObjapYn"   column="TS1_SETL_OBJAP_YN"  	columnIndex="37"/>
+		<result property="ts2SetlYmd"   	column="TS2_SETL_YMD"  	columnIndex="38"/>
+		<result property="lastEvalFirstYmd" column="LAST_EVAL_FIRST_YMD"  	columnIndex="39"/>
+		<result property="lastEvalYmd"   	column="LAST_EVAL_YMD"  	columnIndex="40"/>
+		<result property="lastEvalRsltNm"  	column="LAST_EVAL_RSLT_NM"  	columnIndex="41"/>
+		<result property="lastEvalRevalYmd" column="LAST_EVAL_REVAL_YMD"  	columnIndex="42"/>
+		<result property="lastEvalRevalRsltNm"   		column="LAST_EVAL_REVAL_RSLT_NM"  	columnIndex="43"/>
+		<result property="lastEvalObjapYn"  column="LAST_EVAL_OBJAP_YN"  	columnIndex="44"/>
+		<result property="lastEvalOafoRcptYmd"   		column="LAST_EVAL_OAFO_RCPT_YMD"  	columnIndex="45"/>
+		<result property="lastEvalObjapEvalYmd"   		column="LAST_EVAL_OBJAP_EVAL_YMD"  	columnIndex="46"/>
+		<result property="lastEvalObjapEvalRsltNm"   	column="LAST_EVAL_OBJAP_EVAL_RSLT_NM"  	columnIndex="47"/>
+		<result property="fathExeRptpsubmGuidYmd"   	column="FATH_EXE_RPTP_SUBM_GUID_YMD"  	columnIndex="48"/>
+		<result property="fathExeRptpRmdYmd"   			column="FATH_EXE_RPTP_RMD_YMD"  	columnIndex="49"/>
+		<result property="fathExeRptpSubmYmd"   		column="FATH_EXE_RPTP_SUBM_YMD"  	columnIndex="50"/>
+		<result property="fathExeEvalYmd"   			column="FATH_EXE_EVAL_YMD"  		columnIndex="51"/>
+		<result property="fathExeEvalRsltNm"   			column="FATH_EXE_EVAL_RSLT_NM"  	columnIndex="52"/>
+		<result property="prblSbjtYn"   	column="PRBL_SBJT_YN"  	columnIndex="53"/>
+		<result property="prblSbjtRsn"   	column="PRBL_SBJT_RSN"  	columnIndex="54"/>
+		<result property="prblSbjtRcptYmd"  column="PRBL_SBJT_RCPT_YMD"  	columnIndex="55"/>
+		<result property="specChkYmd"   	column="SPEC_CHK_YMD"  	columnIndex="56"/>
+		<result property="specChkrsltNm"   	column="SPEC_CHK_RSLT_NM"  	columnIndex="57"/>
+		<result property="spevlYmd"   		column="SPEVL_YMD"  	columnIndex="58"/>
+		<result property="spevlRsltNm"   	column="SPEVL_RSLT_NM"  	columnIndex="59"/>
+		<result property="spevlObjapYn"   	column="SPEVL_OBJAP_YN"  	columnIndex="60"/>
+		<result property="spevlObjapRcptYmd"  		 	column="SPEVL_OBJAP_RCPT_YMD"  		columnIndex="61"/>
+		<result property="spevlObjapEvalYmd"   			column="SPEVL_OBJAP_EVAL_YMD"  		columnIndex="62"/>
+		<result property="spevlObjapEvalRsltNm"   		column="SPEVL_OBJAP_EVAL_RSLT_NM"  	columnIndex="63"/>
+		<result property="specSetlReqYmd"   			column="SPEC_SETL_REQ_YMD"  		columnIndex="64"/>
+		<result property="ts1SpecSetlYmd"   column="TS1_SPEC_SETL_YMD"  columnIndex="65"/>
+		<result property="ts1SpecSetlObjapYn" 		  	column="TS1_SPEC_SETL_OBJAP_YN"  	columnIndex="66"/>
+		<result property="ts2SpecSetlYmd"   column="TS2_SPEC_SETL_YMD"  columnIndex="67"/>
+		<result property="sacoObjtYn"   	column="SACO_OBJT_YN"  		columnIndex="68"/>
+		<result property="sacoDlbrRsn"   	column="SACO_DLBR_RSN"  	columnIndex="69"/>
+		<result property="sacoDlbrYmdCn"   	column="SACO_DLBR_YMD_CN"  	columnIndex="70"/>
+		<result property="sacoDlbrRsltCn"   column="SACO_DLBR_RSLT_CN"  columnIndex="71"/>
+		<result property="sacoObjapDlbrRsn" column="SACO_OBJAP_DLBR_RSN" columnIndex="72"/>
+		<result property="sacoObjapDlbrYmd" column="SACO_OBJAP_DLBR_YMD" columnIndex="73"/>
+		<result property="sacoObjapDlbrRsltNm"	column="SACO_OBJAP_DLBR_RSLT_NM"	columnIndex="74"/>
+		<result property="ntisTrsYn"   		column="NTIS_TRS_YN"  	columnIndex="75"/>
+		<result property="ntisTrsYmd"   	column="NTIS_TRS_YMD"  	columnIndex="76"/>
+		<result property="firstLoadDt"   	column="FIRST_LOAD_DT"  columnIndex="77"/>
+		<result property="lastLoadDt"   	column="LAST_LOAD_DT"  	columnIndex="78"/>
+	</resultMap>
+
+	<select id="SMTECDAO.selectSmtec" parameterClass="SmtecVO" resultMap="SmtecAdmn"> 
+		<![CDATA[ 
+			SELECT 
+			  ANCM_ID
+			, SBJT_ID
+			, BUSI_YY
+			, CHNG_MAX
+			, NRM_BUCL_CD
+			, BUSI_NM
+			, BRDN_BUSI_NM
+			, BBRDN_BUSI_NM
+			, ANCM_NM
+			, DTL_ANCM_NM
+			, LAST_SBJT_PRG_SE_NM
+			, SVORGN_NM
+			, TRST_ORGN_NM
+			, PTCP_ENPR_NM
+			, ASSN_DVLP_ORGN_NM
+			, SBJT_NM
+			, LCL_IDST_TECL_NM
+			, MCL_IDST_TECL_NM
+			, SCL_IDST_TECL_NM
+			, AORGN_NM
+			, AGRE_CNTR_YN
+			, AGRE_CNTR_YMD
+			, TOT_DVLP_SRT_YMD
+			, TOT_DVLP_END_YMD
+			, PRGRT_RPTP_SUBM_YN
+			, PRGRT_RPTP_SUBM_YMD
+			, PRGRT_CHK_YMD
+			, PRGRT_CHK_RSLT_NM
+			, LAST_RPTP_SUBM_YN
+			, LAST_RPTP_SUBM_YMD
+			, LAST_CHK_EFCN_YN
+			, LAST_CHK_YMD
+			, LAST_CHK_RSLT_NM
+			, ACTNG_ADIT_RPTP_SUBM_YN
+			, ACTNG_ADIT_RPTP_SUBM_YMD
+			, TS1_SETL_YMD
+			, TS1_SETL_OBJAP_YN
+			, TS2_SETL_YMD
+			, LAST_EVAL_FIRST_YMD
+			, LAST_EVAL_YMD
+			, LAST_EVAL_RSLT_NM
+			, LAST_EVAL_REVAL_YMD
+			, LAST_EVAL_REVAL_RSLT_NM
+			, LAST_EVAL_OBJAP_YN
+			, LAST_EVAL_OAFO_RCPT_YMD
+			, LAST_EVAL_OBJAP_EVAL_YMD
+			, LAST_EVAL_OBJAP_EVAL_RSLT_NM
+			, FATH_EXE_RPTP_SUBM_GUID_YMD
+			, FATH_EXE_RPTP_RMD_YMD
+			, FATH_EXE_RPTP_SUBM_YMD
+			, FATH_EXE_EVAL_YMD
+			, FATH_EXE_EVAL_RSLT_NM
+			, PRBL_SBJT_YN
+			, PRBL_SBJT_RSN
+			, PRBL_SBJT_RCPT_YMD
+			, SPEC_CHK_YMD
+			, SPEC_CHK_RSLT_NM
+			, SPEVL_YMD
+			, SPEVL_RSLT_NM
+			, SPEVL_OBJAP_YN
+			, SPEVL_OBJAP_RCPT_YMD
+			, SPEVL_OBJAP_EVAL_YMD
+			, SPEVL_OBJAP_EVAL_RSLT_NM
+			, SPEC_SETL_REQ_YMD
+			, TS1_SPEC_SETL_YMD
+			, TS1_SPEC_SETL_OBJAP_YN
+			, TS2_SPEC_SETL_YMD
+			, SACO_OBJT_YN
+			, SACO_DLBR_RSN
+			, SACO_DLBR_YMD_CN
+			, SACO_DLBR_RSLT_CN
+			, SACO_OBJAP_DLBR_RSN
+			, SACO_OBJAP_DLBR_YMD
+			, SACO_OBJAP_DLBR_RSLT_NM
+			, NTIS_TRS_YN
+			, NTIS_TRS_YMD
+			, FIRST_LOAD_DT
+			, LAST_LOAD_DT
+			
+			FROM 
+			VI_EDW_DM_SBJT_ADMN_INFO
+			WHERE BUSI_YY = #busiYy#
+		]]>
+	</select>
+ 
+	<resultMap id="SmtecAdmn2" class="egovframework.or.kr.TIPA.service.SmtecVO2">
+		<result property="sbjtID"    		column="SBJT_ID"   				columnIndex="1"/>
+		<result property="sbjtSn"  			column="SBJT_SN" 				columnIndex="2"/>
+		<result property="presSbjtYly"   	column="PRES_SBJT_YLY"  		columnIndex="3"/>
+		<result property="busiYy"   		column="BUSI_YY"  				columnIndex="4"/>
+		<result property="nrmBuclCd"   		column="NRM_BUCL_CD"  			columnIndex="5"/>
+		<result property="busiNm"   		column="BUSI_NM"  				columnIndex="6"/>
+		<result property="brdnBusiNm"   	column="BRDN_BUSI_NM"  			columnIndex="7"/>
+		<result property="bbrdnBusiNm"   	column="BBRDN_BUSI_NM"  		columnIndex="8"/>
+		<result property="ancmYmd"   		column="ANCM_YMD"  				columnIndex="9"/>
+		<result property="ancnNm"   		column="ANCM_NM"  				columnIndex="10"/>
+		<result property="dtlAncmNm"		column="DTL_ANCM_NM"  			columnIndex="11"/>
+		<result property="sbpTpNm"   		column="SBP_TP_NM"  			columnIndex="12"/>
+		<result property="sorgnNm"   		column="SORGN_NM"  				columnIndex="13"/>
+		<result property="sbjtNm"   		column="SBJT_NM"  				columnIndex="14"/>
+		<result property="dvlpSrtYmd" 		column="DVLP_SRT_YMD"  			columnIndex="15"/>
+		<result property="dvlpEndYmd"   	column="DVLP_END_YMD"  			columnIndex="16"/>
+		<result property="dvlpPridMcnt"   	column="DVLP_PRID_MCNT"  		columnIndex="17"/>
+		<result property="rcptClosYmd"   	column="RCPT_CLOS_YMD"  		columnIndex="18"/>
+		<result property="submCmptYmd"   	column="SUBM_CMPT_YMD"  		columnIndex="19"/>
+		<result property="aorgnNm"   		column="AORGN_NM"  				columnIndex="20"/>
+		<result property="aorgnAreaNm"   	column="AORGN_AREA_NM"  		columnIndex="21"/>
+		<result property="lastSbjtPrgSeNm"  column="LAST_SBJT_PRG_SE_NM"  	columnIndex="22"/>
+		<result property="lclIdstTeclNm"   	column="LCL_IDST_TECL_NM"  		columnIndex="23"/>
+		<result property="mclIdstTeclNm"   	column="MCL_IDST_TECL_NM"  		columnIndex="24"/>
+		<result property="sclIdstTeclNm"  	column="SCL_IDST_TECL_NM"		columnIndex="25"/>
+		<result property="hanKwdNm"			column="HAN_KWD_NM"  			columnIndex="26"/>
+		<result property="engKwdNm" 	  	column="ENG_KWD_NM"  			columnIndex="27"/>
+		<result property="svorgnNm"   		column="SVORGN_NM"  			columnIndex="28"/>
+		<result property="svorgnClNm"   	column="SVORGN_CL_NM"  			columnIndex="29"/>
+		<result property="svorgnBtpCd"  	column="SVORGN_BTP_CD"  		columnIndex="30"/>
+		<result property="svorgnBtpNm"   	column="SVORGN_BTP_NM"  		columnIndex="31"/>
+		<result property="svorgnBcondCd"   	column="SVORGN_BCOND_CD"  		columnIndex="32"/>
+		<result property="svoRgnBcondNm"   	column="SVORGN_BCOND_NM"  		columnIndex="33"/>
+		<result property="svorgnAd"   		column="SVORGN_AD"	columnIndex="34"/>
+		<result property="svorgnBusirRegNo" column="SVORGN_BUSIR_REG_NO"	columnIndex="35"/>
+		<result property="svorgnCorpRegNo"  column="SVORGN_CORP_REG_NO"  	columnIndex="36"/>
+		<result property="svorgnRpstrNm"   	column="SVORGN_RPSTR_NM"  		columnIndex="37"/>
+		<result property="svorgnRpstrTelNo" column="SVORGN_RPSTR_TEL_NO"  	columnIndex="38"/>
+		<result property="svorgnRpstrCelTelNo" 		column="SVORGN_RPSTR_CEL_TEL_NO"  	columnIndex="39"/>
+		<result property="svorgnRpstrEmailAD"  		column="SVORGN_RPSTR_EMAIL_AD"  	columnIndex="40"/>
+		<result property="svorgnResprNm"  	column="SVORGN_RESPR_NM"  		columnIndex="41"/>
+		<result property="svorgnResprTelNo" column="SVORGN_RESPR_TEL_NO"  	columnIndex="42"/>
+		<result property="svorgnResprCelTelNo"		column="SVORGN_RESPR_CEL_TEL_NO"  	columnIndex="43"/>
+		<result property="svorgnResprEmailAd"  		column="SVORGN_RESPR_EMAIL_AD"  	columnIndex="44"/>
+		<result property="no1PaenNm"   		column="NO1_PAEN_NM"  			columnIndex="45"/>
+		<result property="no2PaenNm"   		column="NO2_PAEN_NM"  			columnIndex="46"/>
+		<result property="no1TrstOrgnNm"   	column="NO1_TRST_ORGN_NM"  		columnIndex="47"/>
+		<result property="no2TrstOrgnNm"   	column="NO2_TRST_ORGN_NM"  		columnIndex="48"/>
+		<result property="agreCntrYmd"		column="AGRE_CNTR_YMD"  		columnIndex="49"/>
+		<result property="agreCntrYn"		column="AGRE_CNTR_YN"  			columnIndex="50"/>
+		<result property="totBexp"			column="TOT_BEXP"  				columnIndex="51"/>
+		<result property="gvctm"   			column="GVCTM"  				columnIndex="52"/>
+		<result property="logoShm"   		column="LOGO_SHM"  				columnIndex="53"/>
+		<result property="cashPrshm"   		column="CASH_PRSHM"  			columnIndex="54"/>
+		<result property="spotPrshm" 		column="SPOT_PRSHM"  			columnIndex="55"/>
+		<result property="cashDmndShm"   	column="CASH_DMND_SHM"  		columnIndex="56"/>
+		<result property="spotDmndShm"   	column="SPOT_DMND_SHM"  		columnIndex="57"/>
+		<result property="ts1YyGvctm"		column="TS1_YY_GVCTM"  			columnIndex="58"/>
+		<result property="ts1YyLogoShm"   	column="TS1_YY_LOGO_SHM"  		columnIndex="59"/>
+		<result property="ts1YyCashPrshm"	column="TS1_YY_CASH_PRSHM"  	columnIndex="60"/>
+		<result property="ts1YySpotPrshm"	column="TS1_YY_SPOT_PRSHM"  	columnIndex="61"/>
+		<result property="ts1YyCashDmndShm"	column="TS1_YY_CASH_DMND_SHM"  	columnIndex="62"/>
+		<result property="ts1YySpotDmndShm"	column="TS1_YY_SPOT_DMND_SHM"  	columnIndex="63"/>
+		<result property="ts2YyGvctm"		column="TS2_YY_GVCTM"  			columnIndex="64"/>
+		<result property="ts2YyLogoShm"   	column="TS2_YY_LOGO_SHM" 		columnIndex="65"/>
+		<result property="ts2YyCashPrshm"	column="TS2_YY_CASH_PRSHM"  	columnIndex="66"/>
+		<result property="ts2YySpotPrshm"   column="TS2_YY_SPOT_PRSHM"  	columnIndex="67"/>
+		<result property="ts2YyCashDmndShm"	column="TS2_YY_CASH_DMND_SHM"  	columnIndex="68"/>
+		<result property="ts2YySpotDmndShm"	column="TS2_YY_SPOT_DMND_SHM"  	columnIndex="69"/>
+		<result property="bexpPayYmd"   	column="BEXP_PAY_YMD"  			columnIndex="70"/>
+		<result property="ts1YyPayYmd"   	column="TS1_YY_PAY_YMD"  		columnIndex="71"/>
+		<result property="ts2YyPayYmd" 		column="TS2_YY_PAY_YMD" 		columnIndex="72"/>
+		<result property="payBexp" 			column="PAY_BEXP" 				columnIndex="73"/>
+		<result property="ts1YyPayBexp"		column="TS1_YY_PAY_BEXP"		columnIndex="74"/>
+		<result property="ts2YyPayBexp"   	column="TS2_YY_PAY_BEXP"  		columnIndex="75"/>
+		<result property="siteEvalYmd"   	column="SITE_EVAL_YMD"  		columnIndex="76"/>
+		<result property="siteEvalGd"   	column="SITE_EVAL_GD" 			columnIndex="77"/>
+		<result property="siteEvalRsltNm"   column="SITE_EVAL_RSLT_NM"  	columnIndex="78"/>
+		<result property="siteExamYmd"   	column="SITE_EXAM_YMD"			columnIndex="79"/>
+		<result property="siteExamGd"   	column="SITE_EXAM_GD"  			columnIndex="80"/>
+		<result property="siteExamRsltNm"   column="SITE_EXAM_RSLT_NM"  	columnIndex="81"/>
+		<result property="onlnDocyEvalYmd"  column="ONLN_DOCY_EVAL_YMD"  	columnIndex="82"/>
+		<result property="onlnDocyEcmitId"  column="ONLN_DOCY_ECMIT_ID"  	columnIndex="83"/>
+		<result property="onlnDocyEcmitNm"  column="ONLN_DOCY_ECMIT_NM"  	columnIndex="84"/>
+		<result property="onlnDocyEvalGd"   column="ONLN_DOCY_EVAL_GD"  	columnIndex="85"/>
+		<result property="onlnDocyEvalRsltNm"		column="ONLN_DOCY_EVAL_RSLT_NM"  	columnIndex="86"/>
+		<result property="onlnDocyOmngrMbrId"   	column="ONLN_DOCY_OMNGR_MBR_ID"  	columnIndex="87"/>
+		<result property="onlnDocyOmngrMbrNm"   	column="ONLN_DOCY_OMNGR_MBR_NM"  	columnIndex="88"/>
+		<result property="onlnDocyEvalMngrMbrId"   	column="ONLN_DOCY_EVAL_MNGR_MBR_ID" columnIndex="89"/>
+		<result property="onlnDocyEvalMngrMbrNm"   	column="ONLN_DOCY_EVAL_MNGR_MBR_NM" columnIndex="90"/>
+		<result property="onlnDocyEvalObjapYmd"   	column="ONLN_DOCY_EVAL_OBJAP_YMD"  	columnIndex="91"/>
+		<result property="onlnDocyEvalObjapRsltNm"  column="ONLN_DOCY_EVAL_OBJAP_RSLT_NM"  	columnIndex="92"/>
+		<result property="onlnDocyEvalPlcNm"   		column="ONLN_DOCY_EVAL_PLC_NM"  		columnIndex="93"/>
+		<result property="docyEvalId"   	column="DOCY_EVAL_YMD"  		columnIndex="94"/>
+		<result property="docyEcmitId"   	column="DOCY_ECMIT_ID"  		columnIndex="95"/>
+		<result property="docyEcmitNm"   	column="DOCY_ECMIT_NM"  		columnIndex="96"/>
+		<result property="docyEvalGd"   	column="DOCY_EVAL_GD"  			columnIndex="97"/>
+		<result property="docyEvalRsltNm"   		column="DOCY_EVAL_RSLT_NM"  	columnIndex="98"/>
+		<result property="docyOmngrMbrId"   		column="DOCY_OMNGR_MBR_ID"  	columnIndex="99"/>
+		<result property="docyOmngrMbrNm"   		column="DOCY_OMNGR_MBR_NM"  	columnIndex="100"/>
+		<result property="docyEvalMngrMbrId"   		column="DOCY_EVAL_MNGR_MBR_ID"  columnIndex="101"/>
+		<result property="docyEvalMngrMbrNm"   		column="DOCY_EVAL_MNGR_MBR_NM"  columnIndex="102"/>
+		<result property="docyEvalObjapYmd"   		column="DOCY_EVAL_OBJAP_YMD"  	columnIndex="103"/>
+		<result property="docyEvalObjapRsltNm" 	 column="DOCY_EVAL_OBJAP_RSLT_NM"  	columnIndex="104"/>
+		<result property="docyEvalPlcNm"   	column="DOCY_EVAL_PLC_NM"  	columnIndex="105"/>
+		<result property="ftfacEvalYmd"   	column="FTFAC_EVAL_YMD"  	columnIndex="106"/>
+		<result property="ftfacEcmitId"   	column="FTFAC_ECMIT_ID"  	columnIndex="107"/>
+		<result property="ftFacEcmitNm"   	column="FTFAC_ECMIT_NM"  	columnIndex="108"/>
+		<result property="ftfacEvalGd"   	column="FTFAC_EVAL_GD"  	columnIndex="109"/>
+		<result property="ftfacEvalAdtGd"   column="FTFAC_EVAL_ADT_GD"  	columnIndex="110"/>
+		<result property="ftfacEvalSubtGd"  column="FTFAC_EVAL_SUBT_GD"  	columnIndex="111"/>
+		<result property="ftfacEvalRsltNm"	column="FTFAC_EVAL_RSLT_NM"  	columnIndex="112"/>
+		<result property="ftfacOmngrMbrId"	column="FTFAC_OMNGR_MBR_ID"  	columnIndex="113"/>
+		<result property="ftfacOmngrMbrNm"	column="FTFAC_OMNGR_MBR_NM"  	columnIndex="114"/>
+		<result property="ftfacEvalMngrMbrId"		column="FTFAC_EVAL_MNGR_MBR_ID"  	columnIndex="115"/>
+		<result property="ftfacEvalMngrMbrNm"   	column="FTFAC_EVAL_MNGR_MBR_NM"  	columnIndex="116"/>
+		<result property="ftfacEvalObjapYmd"   		column="FTFAC_EVAL_OBJAP_YMD"  		columnIndex="117"/>
+		<result property="ftfacEvalObjapRsltNm"   	column="FTFAC_EVAL_OBJAP_RSLT_NM"  	columnIndex="118"/>
+		<result property="ftfacEvalPlcNm"   column="FTFAC_EVAL_PLC_NM"  	columnIndex="119"/>
+		<result property="clnEvalYmd"   	column="CLN_EVAL_YMD"  		columnIndex="120"/>
+		<result property="clnEcmitId"   	column="CLN_ECMIT_ID"  		columnIndex="121"/>
+		<result property="clEcmitNm"	   	column="CLN_ECMIT_NM"  		columnIndex="122"/>
+		<result property="clnEvalGd"   		column="CLN_EVAL_GD"  		columnIndex="123"/>
+		<result property="clnEvalRsltNm"	column="CLN_EVAL_RSLT_NM"  	columnIndex="124"/>
+		<result property="clnEvalPlcNm"   	column="CLN_EVAL_PLC_NM"  	columnIndex="125"/>
+		<result property="cnctEvalYmd"   	column="CNCT_EVAL_YMD"  	columnIndex="126"/>
+		<result property="cnctEcmitId"   	column="CNCT_ECMIT_ID"  	columnIndex="127"/>
+		<result property="cnctEcmitNm"   	column="CNCT_ECMIT_NM"  	columnIndex="128"/>
+		<result property="cnctEvalGd"   	column="CNCT_EVAL_GD"  		columnIndex="129"/>
+		<result property="cnctEvalRsltNm"   column="CNCT_EVAL_RSLT_NM"  columnIndex="130"/>
+		<result property="cnctEvalPlcNm"   	column="CNCT_EVAL_PLC_NM"  	columnIndex="131"/>
+		<result property="lastDlbrEvalYmd"  column="LAST_DLBR_EVAL_YMD" columnIndex="132"/>
+		<result property="lastDlbrEcmitId"   		column="LAST_DLBR_ECMIT_ID"  	columnIndex="133"/>
+		<result property="lastDlbrEcmitNm"   		column="LAST_DLBR_ECMIT_NM"  	columnIndex="134"/>
+		<result property="lastDlbrEvalGd"   		column="LAST_DLBR_EVAL_GD"  	columnIndex="135"/>
+		<result property="lastDlbrEvalRsltNm"   	column="LAST_DLBR_EVAL_RSLT_NM"  	columnIndex="136"/>
+		<result property="lastDlbrOmngrMbrId"   	column="LAST_DLBR_OMNGR_MBR_ID"  	columnIndex="137"/>
+		<result property="lastDlbrOmngrMbrNm"   	column="LAST_DLBR_OMNGR_MBR_NM"  	columnIndex="138"/>
+		<result property="lastDlbrEvalMngrMbrId"   	column="LAST_DLBR_EVAL_MNGR_MBR_ID" columnIndex="139"/>
+		<result property="lastDlbrEvalMngrMbrNm"   	column="LAST_DLBR_EVAL_MNGR_MBR_NM" columnIndex="140"/>
+		<result property="lastDlbrEvalPlcNm"	   	column="LAST_DLBR_EVAL_PLC_NM"  	columnIndex="141"/>
+		<result property="indpEvalYmd"   	column="INDP_EVAL_YMD"  	columnIndex="142"/>
+		<result property="indpEcmitId"   	column="INDP_ECMIT_ID"  	columnIndex="143"/>
+		<result property="indpEcmitNm"   	column="INDP_ECMIT_NM"  	columnIndex="144"/>
+		<result property="indpEvalGd"   	column="INDP_EVAL_GD"  		columnIndex="145"/>
+		<result property="indpEvalRsltNm"   column="INDP_EVAL_RSLT_NM"  	columnIndex="146"/>
+		<result property="indpOmngrMbrId"   column="INDP_OMNGR_MBR_ID"  	columnIndex="147"/>
+		<result property="indpOmngrMbrNm"   column="INDP_OMNGR_MBR_NM"  	columnIndex="148"/>
+		<result property="indpEvalMngrMbrId"		column="INDP_EVAL_MNGR_MBR_ID"  	columnIndex="149"/>
+		<result property="indpEvalMngrMbrNm"  	 	column="INDP_EVAL_MNGR_MBR_NM"  	columnIndex="150"/>
+		<result property="indpEvalPlcNm"   	column="INDP_EVAL_PLC_NM"  	columnIndex="151"/>
+		<result property="ts1PrgrtChkYmd" 	column="TS1_PRGRT_CHK_YMD"  columnIndex="152"/>
+		<result property="ts1PrgrtChkRsltNm"		column="TS1_PRGRT_CHK_RSLT_NM"  	columnIndex="153"/>
+		<result property="ts2PrgrtChkYmd"		   	column="TS2_PRGRT_CHK_YMD"  		columnIndex="154"/>
+		<result property="ts2PrgrtChkRsltNm"   		column="TS2_PRGRT_CHK_RSLT_NM"  	columnIndex="155"/>
+		<result property="specChkYmd"   	column="SPEC_CHK_YMD"  		columnIndex="156"/>
+		<result property="specChkRsltNm"   	column="SPEC_CHK_RSLT_NM"  	columnIndex="157"/>
+		<result property="lastChkYmd"   	column="LAST_CHK_YMD"  		columnIndex="158"/>
+		<result property="lastChkRsltNm"   	column="LAST_CHK_RSLT_NM"  	columnIndex="159"/>
+		<result property="lastRptpRcptClosYmd"   	column="LAST_RPTP_RCPT_CLOS_YMD"  	columnIndex="160"/>
+		<result property="lastRptpSubmYmd"  	 	column="LAST_RPTP_SUBM_YMD"  		columnIndex="161"/>
+		<result property="lastEvalYmd"   	column="LAST_EVAL_YMD"  	columnIndex="162"/>
+		<result property="lastEcmitId"   	column="LAST_ECMIT_ID"  	columnIndex="163"/>
+		<result property="lastEcmitNm"   	column="LAST_ECMIT_NM"  	columnIndex="164"/>
+		<result property="lastEvalGd"   	column="LAST_EVAL_GD"  		columnIndex="165"/>
+		<result property="lastEvalRsltNm"  	column="LAST_EVAL_RSLT_NM"  	columnIndex="166"/>
+		<result property="lastOmngrMbrId" 	column="LAST_OMNGR_MBR_ID"  	columnIndex="167"/>
+		<result property="lastOmngrMbrNm"   		column="LAST_OMNGR_MBR_NM"  		columnIndex="168"/>
+		<result property="lastEvalMngrMbrId" 	 	column="LAST_EVAL_MNGR_MBR_ID"  	columnIndex="169"/>
+		<result property="lastEvalMngrMbrNm" 	  	column="LAST_EVAL_MNGR_MBR_NM"  	columnIndex="170"/>
+		<result property="lastEvalObjapYmd"		   	column="LAST_EVAL_OBJAP_YMD"  		columnIndex="171"/>
+		<result property="lastEvalObjapRsltNm"   	column="LAST_EVAL_OBJAP_RSLT_NM"  	columnIndex="172"/>
+		<result property="lastEvalPlcNm"   			column="LAST_EVAL_PLC_NM"  		columnIndex="173"/>
+		<result property="lastEvalRsltNotiYmd"   	column="LAST_EVAL_RSLT_NOTI_YMD"  	columnIndex="174"/>
+		<result property="fathExeEvalYmd"   	column="FATH_EXE_EVAL_YMD"  	columnIndex="175"/>
+		<result property="fathExeEcmitId"   	column="FATH_EXE_ECMIT_ID"  	columnIndex="176"/>
+		<result property="fathExeEcmitNm"   	column="FATH_EXE_ECMIT_NM"  	columnIndex="177"/>
+		<result property="fathExeEvalGd"	   	column="FATH_EXE_EVAL_GD"  		columnIndex="178"/>
+		<result property="fathExeEvalRsltNm"   	column="FATH_EXE_EVAL_RSLT_NM"  columnIndex="179"/>
+		<result property="fathExeEvalPlcNm"   	column="FATH_EXE_EVAL_PLC_NM"  	columnIndex="180"/>
+		<result property="prblSbjtDesnYmd"   	column="PRBL_SBJT_DESN_YMD"  	columnIndex="181"/>
+		<result property="prblSbjtRsnDtll"   	column="PRBL_SBJT_RSN_DTLL"  	columnIndex="182"/>
+		<result property="spevlYmd"			   	column="SPEVL_YMD"  			columnIndex="183"/>
+		<result property="specEcmitId"		   	column="SPEC_ECMIT_ID"  		columnIndex="184"/>
+		<result property="specEcmitNm"		   	column="SPEC_ECMIT_NM"  		columnIndex="185"/>
+		<result property="spevlGd"			   	column="SPEVL_GD"  				columnIndex="186"/>
+		<result property="spevlRsltNm"		   	column="SPEVL_RSLT_NM"  		columnIndex="187"/>
+		<result property="spevlPlcNm"		   	column="SPEVL_PLC_NM"  			columnIndex="188"/>
+		<result property="dlbrTurn"			   	column="DLBR_TURN"  			columnIndex="189"/>
+		<result property="dlbrYmd"		   		column="DLBR_YMD"  				columnIndex="190"/>
+		<result property="dlbrRsn"		   		column="DLBR_RSN"  				columnIndex="191"/>
+		<result property="dlbrRsltNm"   		column="DLBR_RSLT_NM" 		 	columnIndex="192"/>
+		<result property="dlbrPlcNm"   			column="DLBR_PLC_NM"  			columnIndex="193"/>
+		<result property="onlnDocyOmngrLginId"  column="ONLN_DOCY_OMNGR_LGIN_ID"  	columnIndex="194"/>
+		<result property="onlnDocyEvalMngrLginId"   	column="ONLN_DOCY_EVAL_MNGR_LGIN_ID"  	columnIndex="195"/>
+		<result property="docyOmngrLginId"   	column="DOCY_OMNGR_LGIN_ID"  	columnIndex="196"/>
+		<result property="docyEvalMngrLginId"  	column="DOCY_EVAL_MNGR_LGIN_ID" columnIndex="197"/>
+		<result property="ftfacOmngrLginId"   	column="FTFAC_OMNGR_LGIN_ID"  	columnIndex="198"/>
+		<result property="ftfacEvalMngrLginId" 	column="FTFAC_EVAL_MNGR_LGIN_ID"  	columnIndex="199"/>
+		<result property="lastDlbrOmngrLginId"  column="LAST_DLBR_OMNGR_LGIN_ID"  	columnIndex="200"/>
+		<result property="lastDlbrEvalMngrLginID"   	column="LAST_DLBR_EVAL_MNGR_LGIN_ID"  	columnIndex="201"/>
+		<result property="indpOmngrLginId"   	column="INDP_OMNGR_LGIN_ID"  	columnIndex="202"/>
+		<result property="indpEvalMngrLginId"   column="INDP_EVAL_MNGR_LGIN_ID" columnIndex="203"/>
+		<result property="lastOmngrLginId"   	column="LAST_OMNGR_LGIN_ID"  	columnIndex="204"/>
+		<result property="lastEvalMngrLginId"   column="LAST_EVAL_MNGR_LGIN_ID" columnIndex="205"/>
+		<result property="firstLoadDt"   		column="FIRST_LOAD_DT"			columnIndex="206"/>
+		<result property="lastLoadDt"   		column="LAST_LOAD_DT"  			columnIndex="207"/>
+	</resultMap>
+
+	<select id="SMTECDAO.selectSmtec2" parameterClass="SmtecVO2" resultMap="SmtecAdmn2"> 
+		<![CDATA[ 
+			SELECT 
+			  SBJT_ID
+			, SBJT_SN
+			, PRES_SBJT_YLY
+			, BUSI_YY
+			, NRM_BUCL_CD
+			, BUSI_NM
+			, BRDN_BUSI_NM
+			, BBRDN_BUSI_NM
+			, ANCM_YMD
+			, ANCM_NM
+			, DTL_ANCM_NM
+			, SBP_TP_NM
+			, SORGN_NM
+			, SBJT_NM
+			, DVLP_SRT_YMD
+			, DVLP_END_YMD
+			, DVLP_PRID_MCNT
+			, RCPT_CLOS_YMD
+			, SUBM_CMPT_YMD
+			, AORGN_NM
+			, AORGN_AREA_NM
+			, LAST_SBJT_PRG_SE_NM
+			, LCL_IDST_TECL_NM
+			, MCL_IDST_TECL_NM
+			, SCL_IDST_TECL_NM
+			, HAN_KWD_NM
+			, ENG_KWD_NM
+			, SVORGN_NM
+			, SVORGN_CL_NM
+			, SVORGN_BTP_CD
+			, SVORGN_BTP_NM
+			, SVORGN_BCOND_CD
+			, SVORGN_BCOND_NM
+			, SVORGN_AD
+			, SVORGN_BUSIR_REG_NO
+			, SVORGN_CORP_REG_NO
+			, SVORGN_RPSTR_NM
+			, SVORGN_RPSTR_TEL_NO
+			, SVORGN_RPSTR_CEL_TEL_NO
+			, SVORGN_RPSTR_EMAIL_AD
+			, SVORGN_RESPR_NM
+			, SVORGN_RESPR_TEL_NO
+			, SVORGN_RESPR_CEL_TEL_NO
+			, SVORGN_RESPR_EMAIL_AD
+			, NO1_PAEN_NM
+			, NO2_PAEN_NM
+			, NO1_TRST_ORGN_NM
+			, NO2_TRST_ORGN_NM
+			, AGRE_CNTR_YMD
+			, AGRE_CNTR_YN
+			, TOT_BEXP
+			, GVCTM
+			, LOGO_SHM
+			, CASH_PRSHM
+			, SPOT_PRSHM
+			, CASH_DMND_SHM
+			, SPOT_DMND_SHM
+			, TS1_YY_GVCTM
+			, TS1_YY_LOGO_SHM
+			, TS1_YY_CASH_PRSHM
+			, TS1_YY_SPOT_PRSHM
+			, TS1_YY_CASH_DMND_SHM
+			, TS1_YY_SPOT_DMND_SHM
+			, TS2_YY_GVCTM
+			, TS2_YY_LOGO_SHM
+			, TS2_YY_CASH_PRSHM
+			, TS2_YY_SPOT_PRSHM
+			, TS2_YY_CASH_DMND_SHM
+			, TS2_YY_SPOT_DMND_SHM
+			, BEXP_PAY_YMD
+			, TS1_YY_PAY_YMD
+			, TS2_YY_PAY_YMD
+			, PAY_BEXP
+			, TS1_YY_PAY_BEXP
+			, TS2_YY_PAY_BEXP
+			, SITE_EVAL_YMD
+			, SITE_EVAL_GD
+			, SITE_EVAL_RSLT_NM
+			, SITE_EXAM_YMD
+			, SITE_EXAM_GD
+			, SITE_EXAM_RSLT_NM
+			, ONLN_DOCY_EVAL_YMD
+			, ONLN_DOCY_ECMIT_ID
+			, ONLN_DOCY_ECMIT_NM
+			, ONLN_DOCY_EVAL_GD
+			, ONLN_DOCY_EVAL_RSLT_NM
+			, ONLN_DOCY_OMNGR_MBR_ID
+			, ONLN_DOCY_OMNGR_MBR_NM
+			, ONLN_DOCY_EVAL_MNGR_MBR_ID
+			, ONLN_DOCY_EVAL_MNGR_MBR_NM
+			, ONLN_DOCY_EVAL_OBJAP_YMD
+			, ONLN_DOCY_EVAL_OBJAP_RSLT_NM
+			, ONLN_DOCY_EVAL_PLC_NM
+			, DOCY_EVAL_YMD
+			, DOCY_ECMIT_ID
+			, DOCY_ECMIT_NM
+			, DOCY_EVAL_GD
+			, DOCY_EVAL_RSLT_NM
+			, DOCY_OMNGR_MBR_ID
+			, DOCY_OMNGR_MBR_NM
+			, DOCY_EVAL_MNGR_MBR_ID
+			, DOCY_EVAL_MNGR_MBR_NM
+			, DOCY_EVAL_OBJAP_YMD
+			, DOCY_EVAL_OBJAP_RSLT_NM
+			, DOCY_EVAL_PLC_NM
+			, FTFAC_EVAL_YMD
+			, FTFAC_ECMIT_ID
+			, FTFAC_ECMIT_NM
+			, FTFAC_EVAL_GD
+			, FTFAC_EVAL_ADT_GD
+			, FTFAC_EVAL_SUBT_GD
+			, FTFAC_EVAL_RSLT_NM
+			, FTFAC_OMNGR_MBR_ID
+			, FTFAC_OMNGR_MBR_NM
+			, FTFAC_EVAL_MNGR_MBR_ID
+			, FTFAC_EVAL_MNGR_MBR_NM
+			, FTFAC_EVAL_OBJAP_YMD
+			, FTFAC_EVAL_OBJAP_RSLT_NM
+			, FTFAC_EVAL_PLC_NM
+			, CLN_EVAL_YMD
+			, CLN_ECMIT_ID
+			, CLN_ECMIT_NM
+			, CLN_EVAL_GD
+			, CLN_EVAL_RSLT_NM
+			, CLN_EVAL_PLC_NM
+			, CNCT_EVAL_YMD
+			, CNCT_ECMIT_ID
+			, CNCT_ECMIT_NM
+			, CNCT_EVAL_GD
+			, CNCT_EVAL_RSLT_NM
+			, CNCT_EVAL_PLC_NM
+			, LAST_DLBR_EVAL_YMD
+			, LAST_DLBR_ECMIT_ID
+			, LAST_DLBR_ECMIT_NM
+			, LAST_DLBR_EVAL_GD
+			, LAST_DLBR_EVAL_RSLT_NM
+			, LAST_DLBR_OMNGR_MBR_ID
+			, LAST_DLBR_OMNGR_MBR_NM
+			, LAST_DLBR_EVAL_MNGR_MBR_ID
+			, LAST_DLBR_EVAL_MNGR_MBR_NM
+			, LAST_DLBR_EVAL_PLC_NM
+			, INDP_EVAL_YMD
+			, INDP_ECMIT_ID
+			, INDP_ECMIT_NM
+			, INDP_EVAL_GD
+			, INDP_EVAL_RSLT_NM
+			, INDP_OMNGR_MBR_ID
+			, INDP_OMNGR_MBR_NM
+			, INDP_EVAL_MNGR_MBR_ID
+			, INDP_EVAL_MNGR_MBR_NM
+			, INDP_EVAL_PLC_NM
+			, TS1_PRGRT_CHK_YMD
+			, TS1_PRGRT_CHK_RSLT_NM
+			, TS2_PRGRT_CHK_YMD
+			, TS2_PRGRT_CHK_RSLT_NM
+			, SPEC_CHK_YMD
+			, SPEC_CHK_RSLT_NM
+			, LAST_CHK_YMD
+			, LAST_CHK_RSLT_NM
+			, LAST_RPTP_RCPT_CLOS_YMD
+			, LAST_RPTP_SUBM_YMD
+			, LAST_EVAL_YMD
+			, LAST_ECMIT_ID
+			, LAST_ECMIT_NM
+			, LAST_EVAL_GD
+			, LAST_EVAL_RSLT_NM
+			, LAST_OMNGR_MBR_ID
+			, LAST_OMNGR_MBR_NM
+			, LAST_EVAL_MNGR_MBR_ID
+			, LAST_EVAL_MNGR_MBR_NM
+			, LAST_EVAL_OBJAP_YMD
+			, LAST_EVAL_OBJAP_RSLT_NM
+			, LAST_EVAL_PLC_NM
+			, LAST_EVAL_RSLT_NOTI_YMD
+			, FATH_EXE_EVAL_YMD
+			, FATH_EXE_ECMIT_ID
+			, FATH_EXE_ECMIT_NM
+			, FATH_EXE_EVAL_GD
+			, FATH_EXE_EVAL_RSLT_NM
+			, FATH_EXE_EVAL_PLC_NM
+			, PRBL_SBJT_DESN_YMD
+			, PRBL_SBJT_RSN_DTLL
+			, SPEVL_YMD
+			, SPEC_ECMIT_ID
+			, SPEC_ECMIT_NM
+			, SPEVL_GD
+			, SPEVL_RSLT_NM
+			, SPEVL_PLC_NM
+			, DLBR_TURN
+			, DLBR_YMD
+			, DLBR_RSN
+			, DLBR_RSLT_NM
+			, DLBR_PLC_NM
+			, ONLN_DOCY_OMNGR_LGIN_ID
+			, ONLN_DOCY_EVAL_MNGR_LGIN_ID
+			, DOCY_OMNGR_LGIN_ID
+			, DOCY_EVAL_MNGR_LGIN_ID
+			, FTFAC_OMNGR_LGIN_ID
+			, FTFAC_EVAL_MNGR_LGIN_ID
+			, LAST_DLBR_OMNGR_LGIN_ID
+			, LAST_DLBR_EVAL_MNGR_LGIN_ID
+			, INDP_OMNGR_LGIN_ID
+			, INDP_EVAL_MNGR_LGIN_ID
+			, LAST_OMNGR_LGIN_ID
+			, LAST_EVAL_MNGR_LGIN_ID
+			, FIRST_LOAD_DT
+			, LAST_LOAD_DT
+			
+			FROM 
+			VI_EDW_DM_SBJT_EVAL_INTG
+			WHERE BUSI_YY = #busiYy#
+		]]>
+	</select>
+</sqlMap>            

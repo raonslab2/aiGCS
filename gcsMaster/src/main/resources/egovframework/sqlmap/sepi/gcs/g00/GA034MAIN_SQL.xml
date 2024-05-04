@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GA00MAIN">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="gA00MAINVO" type="egovframework.or.kr.GA00MAIN.service.GA00MAINVO"/> 
+ 
+ 	<resultMap id="GmainAirList" class="egovframework.or.kr.GA00MAIN.service.GA00MAINVO">
+		<result property="codePk" column="code_pk" columnIndex="1"/>
+		<result property="codeName" column="code_name" columnIndex="2"/> 
+	</resultMap> 
+ 	<select id="GA00MAIN.selectDeviceType" parameterClass="gA00MAINVO" resultMap="GmainAirList" >
+			<![CDATA[
+					 SELECT  
+					  code_pk,
+					  code_name
+					FROM br_code_type 
+					ORDER BY code_pk
+			 ]]>
+		 
+	</select>
+    
+</sqlMap>

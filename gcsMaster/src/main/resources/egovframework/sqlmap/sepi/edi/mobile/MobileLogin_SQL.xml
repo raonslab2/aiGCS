@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MobileLogin">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="MobileLoginVO" type="egovframework.or.mobile.login.service.MobileLoginVO"/> 
+	 
+
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="mobileLogin" class="egovframework.or.mobile.login.service.MobileLoginVO">
+		<result property="id" column="id" columnIndex="1"/> 
+	</resultMap>
+ 
+	<!-- test -->
+	<select id="MobileLogin.selectList" resultMap="mobileLogin">
+			<![CDATA[
+            SELECT '1' AS id
+              from dual
+			]]>
+	</select>
+	
+
+</sqlMap>

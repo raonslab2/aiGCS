@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="USER">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
+	<typeAlias  alias="UserVO" type="egovframework.or.kr.TD0001.service.UserVO"/> 
+ 
+	<resultMap id="UserVOInfo" class="egovframework.or.kr.TD0001.service.UserVO">
+		<result property="grPCode" column="GR_P_CODE" columnIndex="1"/>
+		<result property="grMCode" column="GR_M_CODE" columnIndex="2"/>
+		<result property="grMName" column="GR_M_NAME" columnIndex="3"/> 
+		<result property="mbCode" column="MB_CODE" columnIndex="4"/>  
+		<result property="userId" column="USER_ID" columnIndex="5"/>  
+		<result property="mbPw" column="MB_PW" columnIndex="6"/>  
+		<result property="mbName" column="MB_NAME" columnIndex="7"/>  
+		<result property="mbRankCode" column="MB_RANK_CODE" columnIndex="8"/>  
+		<result property="mbRankName" column="MB_RANK_NAME" columnIndex="9"/>  
+		<result property="mbTel" column="MB_TEL" columnIndex="10"/>  
+		<result property="mbHp" column="MB_HP" columnIndex="11"/>  
+		<result property="mbEmail" column="MB_EMAIL" columnIndex="12"/>  
+		<result property="mbState" column="MB_STATE" columnIndex="13"/>   
+	</resultMap> 
+	<select id="USER.selectUserList" parameterClass="UserVO" resultMap="UserVOInfo" >
+			<![CDATA[
+					SELECT 
+					       GR_P_CODE
+						 , GR_M_CODE
+						 , GR_M_NAME
+						 , MB_CODE
+						 , USER_ID
+						 , MB_PW
+						 , MB_NAME
+						 , MB_RANK_CODE
+						 , MB_RANK_NAME
+						 , MB_TEL
+						 , MB_HP
+						 , MB_EMAIL
+						 , MB_STATE
+						FROM em_mb_member
+						WHERE GR_M_CODE = (
+											SELECT GR_M_CODE 
+												FROM em_mb_member
+												 WHERE USER_ID = #searchUserId#
+						                  )
+ 
+					]]>  
+	</select>
+</sqlMap>
