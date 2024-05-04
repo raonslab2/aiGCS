@@ -1,0 +1,25 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'KBFG Text';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/kbfg/KBFGTextL.eot?#iefix') format('eot'),
+         url('../fonts/kbfg/KBFGTextL.woff') format('woff'),
+         url('../fonts/kbfg/KBFGTextL.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'KBFG Text';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/kbfg/KBFGTextM.eot?#iefix') format('eot'),
+         url('../fonts/kbfg/KBFGTextM.woff') format('woff'),
+         url('../fonts/kbfg/KBFGTextM.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'KBFG Text';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/kbfg/KBFGTextB.eot?#iefix') format('eot'),
+         url('../fonts/kbfg/KBFGTextB.woff') format('woff');
+}
+
