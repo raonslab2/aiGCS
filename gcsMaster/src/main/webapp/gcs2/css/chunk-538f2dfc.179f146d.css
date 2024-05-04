@@ -1,0 +1,67 @@
+.gmap[data-v-333c4570] {
+    position: absolute
+}
+
+.lockscreen[data-v-333c4570] {
+    background: #00f;
+    height: 100%;
+    widows: 100%
+}
+
+.gmap[data-v-333c4570] .capture-animation {
+    background: rgba(5, 81, 85, 0);
+    border-radius: 50%;
+    margin: 10px;
+    height: 40px;
+    width: 40px;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation: pulse-data-v-333c4570 .5s infinite;
+    animation: pulse-data-v-333c4570 .5s infinite
+}
+
+@-webkit-keyframes pulse-data-v-333c4570 {
+    0% {
+        -webkit-transform: scale(.95);
+        transform: scale(.95);
+        -webkit-box-shadow: 0 0 0 0 hsla(0, 0%, 100%, .7);
+        box-shadow: 0 0 0 0 hsla(0, 0%, 100%, .7)
+    }
+    70% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-box-shadow: 0 0 0 10px transparent;
+        box-shadow: 0 0 0 10px transparent
+    }
+    to {
+        -webkit-transform: scale(.95);
+        transform: scale(.95);
+        -webkit-box-shadow: 0 0 0 0 transparent;
+        box-shadow: 0 0 0 0 transparent
+    }
+}
+
+@keyframes pulse-data-v-333c4570 {
+    0% {
+        -webkit-transform: scale(.95);
+        transform: scale(.95);
+        -webkit-box-shadow: 0 0 0 0 hsla(0, 0%, 100%, .7);
+        box-shadow: 0 0 0 0 hsla(0, 0%, 100%, .7)
+    }
+    70% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-box-shadow: 0 0 0 10px transparent;
+        box-shadow: 0 0 0 10px transparent
+    }
+    to {
+        -webkit-transform: scale(.95);
+        transform: scale(.95);
+        -webkit-box-shadow: 0 0 0 0 transparent;
+        box-shadow: 0 0 0 0 transparent
+    }
+}
+
+#cesiumContainer[data-v-632d4a64] .cesium-selection-wrapper svg {
+    fill: none
+}
