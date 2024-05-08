@@ -1,7 +1,5 @@
-let socket;
-//var wsLink = "ws://13.209.238.3:5010/websocket"; 
-var wsLink = "ws://127.0.0.1:5010/websocket";
-//var wsLink = "ws://samsungdrone.net:5010/websocket";
+let socket; 
+var wsLink = "ws://192.168.0.24:5010/websocket"; 
  
    
 	function connect() { 
