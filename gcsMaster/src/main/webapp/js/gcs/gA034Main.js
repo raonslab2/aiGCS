@@ -1,6 +1,9 @@
 	;(function() {
 	 
 		$(function() {
+            $('.menu-item[data-tab="5"]').addClass('selected');
+            $('#menu-logout').css('float', 'right');
+			
 			//js first start
 			initList(); 
 		});

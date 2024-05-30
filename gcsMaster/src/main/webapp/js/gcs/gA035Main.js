@@ -1,120 +1,46 @@
-;(function() { 
+class TodayWorkManager {
+    constructor() {
+        // 페이지가 준비되면 실행될 콜백 함수 등록
+        $(document).ready(() => {
+            // 메뉴 초기화 및 데이터 목록 초기화
+            // 상단 메뉴 선택 기능
+            this.initializeMenu(); 
+            this.initDataList(); 
 
-	
-	$(function() { 
-		initList();
-	});
- 
-	
+        });
+    }
 
-	var initList = function() {
-		
-		var formSer = $('#searchForm').serialize();
-		
-		$.ajax({
-			url : '/gcs/dashboard/gA035MainList.do'
-			, type : 'post'
-			, data :formSer
-		}).done(function(res) { 
-			$('#resultList').children().remove();
-			$('.pagination').children().remove();
-			$('.subTr').remove();
-			if(res.totalCnt == '0'){
-				var data =  "<tr class='subTr'><td colspan='9' style='height:100px;'>자료가 존재하지 않습니다.</td></tr>" ;
-				$('#resultList').append(data);
-				$('.pagination').append(paginationView(res.paginationInfo));
-				
-				$('.' + res.paginationInfo.currentPageNo ).addClass("active");
-				$('.pagination > li').css('cursor', 'pointer');
-			}else{
-				res.list.forEach(function(row, index) {
-					console.log(row)
-					$('#resultList').append(projectListView(row));
-					//mbCode = row.mbCode;	
-				});
-				$('.pagination').children().remove();
-				$('.pagination').append(paginationView(res.paginationInfo));
-				$('.' + res.paginationInfo.currentPageNo ).addClass("active");
-				$('.pagination > li').css('cursor', 'pointer');
-			}
-		}).fail(function() {
-			alert("실패");
-		});
-		
-	};
-	
-	$(document).on('click', '.pageClass', function() {
-		var page = $(this).data('page');
-		var totalPageCnt = $(this).data('total_page_count');
-		console.log(totalPageCnt);
-		if (page > totalPageCnt) {
-			return false;
-		}
-		if (page == 0) {
-			return false;
-		}
-		$("#page").val(page);
-		console.log($("#page").val());
-		var formSer = $('#searchForm').serialize();
-		//목록
-		$.post('/gcs/dashboard/gA035MainList.do', formSer).done(function(res) {
-			console.log(res.list);
-			$("#resultList").children().remove();
-			$('.pagination').children().remove();
-			res.list.forEach(function(row, index) {
-				if (row.smtechId == "NULL") {
-					row.smtechId = "";
-				}
-				$('#resultList').append(projectListView(row));
-			});
-			
-			$('.pagination').append(paginationView(res.paginationInfo));
-			
-			$('.' + res.paginationInfo.currentPageNo ).addClass("active");
-			$('.pagination > li').css('cursor', 'pointer');
-			
-			// 회원정보 목록 커서
-			//$(".userList > table > tbody> tr > td").css("cursor","pointer");
+    
+    initializeMenu() {
+        $('.menu-item[data-tab="5"]').addClass('selected');
+        $('#menu-logout').css('float', 'right');
+    }
 
-			//$('.rowTD')[0].click(); 
-		}).fail(function() {
-			alert("실패");
-		});
-		
-	});
-	
-	var projectListView = function(row) {
-		var data = "<tr>\r\n"
-			+ "	<th scope=\"row\">"+ row.grPcode +"</th>\r\n"
-			+ "	<td>"+ row.mbCode +"</td>\r\n"
-			+ "	<td>"+ row.mbName +"</td>\r\n"
-			+ "	<td>"+ row.grMname +"</td>\r\n"
-			+ "	<td>"+ row.mbHp +"</td>\r\n"
-			+ "	<td>"+ row.timeWrite +"</td>\r\n"
-			+ "</tr>";
-		
+    initDataList() { 
+            $('#initDataList').DataTable({ 
+                data: [
+                    ["Tiger Nixon", "System Architect", "Edinburgh", 61, "2011/04/25", "$320,800"],
+                    ["Garrett Winters", "Accountant", "Tokyo", 63, "2011/07/25", "$170,750"],
+                    ["Ashton Cox", "Junior Technical Author", "San Francisco", 66, "2009/01/12", "$86,000"],
+                    ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", 22, "2012/03/29", "$433,060"],
+                    ["Airi Satou", "Accountant", "Tokyo", 33, "2008/11/28", "$162,700"]
+                ],
+                columns: [
+                    { title: "Name" },
+                    { title: "Position" },
+                    { title: "Office" },
+                    { title: "Age" },
+                    { title: "Start date" },
+                    { title: "Salary" }
+                ]
+            });
+        //this.setTodayDate("searchTwRequestDateSt", 0);
+        //this.setTodayDate("searchTwRequestDateEd", 1);
+        //this.userList("searchTwWorker");
+        //this.setupSearchTwWorkerChange();
+        //this.searchList();
+    }
  
-			
-			return $(data);
-	} 
-	
-	var paginationView = function(page) {
-		 var data = "" ;
-	 
-		 	data = 
-			'	<li class="first"><a class="pageClass" data-page="' + page.firstPageNo + '" title="첫 페이지 바로가기"><img src="/images/bbs_prev02.gif" alt="첫 페이지" style="margin: 10px;"></a></li>' +
-			'	<li class="prev"><a class="pageClass" data-page="' + (page.currentPageNo-1) + '" title="이전 페이지(1page) 바로가기"><img src="/images/bbs_prev01.gif" alt="이전 페이지" style="margin: 10px;"></a></li>' ;
-			
-			for (var i=page.firstPageNoOnPageList; i <= page.lastPageNoOnPageList; i++) {
-				data = data +
-					'<li class=' + i + '><a class="pageClass" data-page="' + i + '" title="' + i + '페이지 바로가기">' + i + '</a></li>' ;
-			}
-			
-			data = data +
-				'<li class="next"><a class="pageClass" data-total_page_count="' + page.totalPageCount + '" data-page="' + (page.currentPageNo+1) + '" title="다음 페이지(11page) 바로가기"><img src="/images/bbs_next01.gif" alt="다음 페이지" style="margin: 10px;"></a></li>' +
-				'<li class="last"><a class="pageClass" data-page="' + page.lastPageNo + '" title="끝 페이지(67page) 바로가기"><img src="/images/bbs_next02.gif" alt="마지막 페이지" style="margin: 10px;"></a></li>' ;
-		 
-		return $(data);
-	 } 
- 
-})();
+}
+
+const todayWorkManager = new TodayWorkManager();

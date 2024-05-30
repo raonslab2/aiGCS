@@ -26,8 +26,8 @@
     // const DEFAULT_LAT = 74.62042829019228;    
     // const DEFAULT_LNG = 42.88478323563591;
     //부론 , 
-    const DEFAULT_LAT = 42.88630329;    
-    const DEFAULT_LNG = 74.58857208;
+    const DEFAULT_LAT = 127.75115186132;    
+    const DEFAULT_LNG = 37.20821628335832;
  
    
     const COOR_PRECIS = 6;
@@ -39,49 +39,48 @@
     	}
      });
 
-   // Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZTExN2E0Zi0xMGRjLTQxYmEtODkxNy02NzU0NTQyNDEzMmMiLCJpZCI6NzQwOTEsImlhdCI6MTYzNzkyMjU0Nn0.3oaPj0-O1bYx5kelh18EN_8DUJhcQkiwTIJ5xKzP-P4";
     Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTk5YjE3ZC1iNDk3LTRiNTItOTVhNy04ZTJhNDk4M2MzYzMiLCJpZCI6NzIzMjksImlhdCI6MTYzNTk0Mjg1Mn0.YdISux9sGatQpsMXnVUlxziv-q9XCXpfZ7h9Gxqdaes";
-    //Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTk5YjE3ZC1iNDk3LTRiNTItOTVhNy04ZTJhNDk4M2MzYzMiLCJpZCI6NzIzMjksImlhdCI6MTYzNTk0Mjg1Mn0.YdISux9sGatQpsMXnVUlxziv-q9XCXpfZ7h9Gxqdaes";
-
-   /*
-    const viewer = new Cesium.Viewer('cesiumContainer', {
-        //selectionIndicator: false,
-    	//terrainProvider : Cesium.createWorldTerrain(),  
-        sceneModePicker: false, 
-        baseLayerPicker: false,
-        selectionIndicator: false,
-        shouldAnimate: true,
-        geocoder: false,
-        homeButton: false,
-        navigationHelpButton: false,
-		terrainProvider: new Cesium.CesiumTerrainProvider({
-		  url: Cesium.IonResource.fromAssetId(1),
-		}),
-    });
-   */
+ 
  
 	const viewer = new Cesium.Viewer("cesiumContainer", {
-	  infoBox: false,
-	  selectionIndicator: false,
-	  shadows: true,
-	  shouldAnimate: true,
+	  terrainProvider: Cesium.createWorldTerrain()
 	});
     
     
     viewer.scene.globe.depthTestAgainstTerrain = true;
+    viewer.animation.container.style.visibility = 'hidden';
    
     var scene = viewer.scene;
     var numberOfWaypoints = 0;
 
-
-
-    
-    viewer.animation.container.style.visibility = 'hidden';
-
-
-  
-  
  
+	// 3D Tiles 데이터셋을 로드합니다.
+	const tileset = new Cesium.Cesium3DTileset({
+	    url: '/home/mrdev/offlinemap/tileset.json' // JSON 파일 경로
+	});
+	 
+	// 뷰어에 3D Tiles 데이터셋을 추가합니다.
+	viewer.scene.primitives.add(tileset);
+	
+	// 3D Tiles의 루트 위치로 카메라를 이동시킵니다.
+	viewer.zoomTo(tileset);
+		
+	tileset.readyPromise.then(function(tileset) {
+	    // 타일셋의 루트 변환 행렬을 조정합니다.
+	    var heightOffset = 145.0; // 높이 조정값 (미터 단위)
+	    var boundingSphere = tileset.boundingSphere;
+	    var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+	    var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+	    var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
+	    var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+	    var newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
+	
+	    // 기존의 변환 매트릭스와 새로운 매트릭스를 결합합니다.
+	    Cesium.Matrix4.multiply(tileset.modelMatrix, newModelMatrix, tileset.modelMatrix);
+	});
+
+  
+ /*
 	const tileset = viewer.scene.primitives.add(
 	  new Cesium.Cesium3DTileset({
 	    url: Cesium.IonResource.fromAssetId(1579212),
@@ -108,7 +107,7 @@
 	    console.log(error);
 	  }
 	})();
-
+*/
 	
  
  

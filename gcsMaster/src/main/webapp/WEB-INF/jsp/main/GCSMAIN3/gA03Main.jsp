@@ -25,23 +25,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drone Aricraft</title>
+  <title>User List</title>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'> 
   <!-- Common Css -->
   <link href="/css/gcs/TodayWorkCommon.css" rel="stylesheet"> 
-  <link href="/css/gcs/gA034Main.css" rel="stylesheet">
+  <link href="/css/gcs/gA035Main.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
   <!-- Common Js -->
-  <script src="/assets/vendor/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="/js/gcs/TodayCommon.js"></script>
-  <script type="text/javascript" src="/js/gcs/gA034Main.js"></script>
-  
-    <link href="/assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
-    <link href="/assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
-    <link href="/assets/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
-    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/master.css" rel="stylesheet">
-    <link href="/assets/vendor/flagiconcss/css/flag-icon.min.css" rel="stylesheet">
-  
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script> 
 		 
 			function fn_waypoint(dlPk) { 
@@ -99,7 +93,7 @@
  
   <main> 
    <!-- top menu -->
-    <c:import url="/EmpPageLink.do?link=main/include/menutop" /> 
+    <c:import url="/EmpPageLink.do?link=main/include/menutopGcs" /> 
      <!-- content st -->
             <div class="content">
                 <div class="container"> 
@@ -113,7 +107,10 @@
 								        <label for="tmLng">Longitude:</label>
 								        <input type="text" id="tmLng" name="tmLng" value="" class="position-input">
 								        <a id="createRouterPath" href="#" class="add-plan-link">
-								            <button type="button" class="btn_style02 btn_green">Add New Plan <span>▷</span></button>
+								            <button type="button" class="btn_style02 btn_green">3D New Plan <span>▷</span></button>
+								        </a>
+								        <a id="createRouterPolygonPath" href="#" class="add-plan-link">
+								            <button type="button" class="btn_style02 btn_green">2D New Plan <span>▷</span></button>
 								        </a>
 								    </div>
 								</div>
@@ -216,6 +213,13 @@
         var tmLat = $("#tmLat").val(); 
         var tmLng = $("#tmLng").val(); 
 	  var popup = window.open("/gcs/dashboard/gA03Main2.do?tmLat="+tmLat+"&tmLng="+tmLng, "waypoint", "fullscreen=yes, toolbar=no, location=no, directories=no, status=no, menubar=no,scrollbars=no,resizable=no");
+
+	});
+	
+	$('#createRouterPolygonPath').click(function(e) {  
+        var tmLat = $("#tmLat").val(); 
+        var tmLng = $("#tmLng").val(); 
+	  var popup = window.open("/gcs/dashboard/gA03Main9.do?tmLat="+tmLat+"&tmLng="+tmLng, "waypoint", "fullscreen=yes, toolbar=no, location=no, directories=no, status=no, menubar=no,scrollbars=no,resizable=no");
 
 	});
 	

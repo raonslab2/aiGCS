@@ -25,21 +25,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drone Aricraft</title>
+  <title>User List</title>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'> 
   <!-- Common Css -->
   <link href="/css/gcs/TodayWorkCommon.css" rel="stylesheet"> 
   <link href="/css/gcs/gA034Main.css" rel="stylesheet">
-  <!-- Common Js -->
-  <script src="/assets/vendor/jquery/jquery.min.js"></script>
-  <script type="text/javascript" src="/js/gcs/TodayCommon.js"></script>
   
-    <link href="/assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
-    <link href="/assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
-    <link href="/assets/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
-    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/master.css" rel="stylesheet">
-    <link href="/assets/vendor/flagiconcss/css/flag-icon.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <!-- Common Js -->
+  <script type="text/javascript" src="/js/gcs/TodayCommon.js"></script>
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script> 
 		 
 		function fn_waypoint(dlPk) { 
@@ -78,7 +74,7 @@
  
   <main> 
    <!-- top menu -->
-    <c:import url="/EmpPageLink.do?link=main/include/menutop" /> 
+    <c:import url="/EmpPageLink.do?link=main/include/menutopGcs" /> 
      <!-- content st -->
             <div class="content">
                 <div class="container">

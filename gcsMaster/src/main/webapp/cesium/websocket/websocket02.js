@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 let socket; 
 var wsLink = "ws://192.168.0.24:5010/websocket"; 
  
+=======
+let socket;  
+var wsLink = "ws://192.168.0.23:5010/websocket"; 
+>>>>>>> refs/remotes/origin/dev_240508
    
 	function connect() { 
 		  socket = new WebSocket(wsLink); 
