@@ -31,6 +31,7 @@
 		<value>main/include/menu3</value>
 		<value>main/include/menutop</value>
 		<value>main/include/menutopTodayWork</value>
+		<value>main/include/menutopGcs</value>
 		<value>main/include/menutopAiWork</value>
 		<value>main/include/gcsCommon</value> 
 		<value>main/include/gcsFooter</value> 

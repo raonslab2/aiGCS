@@ -8,21 +8,22 @@ const tmLon = 127.75095132;
 const tmZom = 16;
 var map = L.map('map').setView([tmLat, tmLon], tmZom);
 
-//offline tile load
-var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//var tiles = L.tileLayer('/home/ubuntu/map/images/test/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	minZoom: 5,
-	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+ 
+// 온라인 타일 레이어
+var onlineTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map); // 온라인 레이어를 기본 레이어로 추가
+ 
+ 
+var offlineTiles = L.tileLayer.fallback('/home/mrdev/offlinemap/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    minZoom: 5,
+    errorTileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 }).addTo(map);
 
-//비행 경계구역 설정
-var circle = L.circle([tmLat, tmLon], {
-    color: '#A9D0F5',
-    fillColor: '#f03',
-    fillOpacity: 0.1,
-    radius: 5000
-}).addTo(map);
+// 오프라인 타일이 우선적으로 보이도록 설정
+map.addLayer(offlineTiles);
 
 //폴리건
 var polygon = L.polygon([

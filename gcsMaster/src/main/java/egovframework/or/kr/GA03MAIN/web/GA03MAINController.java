@@ -272,6 +272,66 @@ public class GA03MAINController {
 	} 
 	
 	/**
+	 * GCS > MAIN > PLAN : 2D 폴리곤
+	 * @return 메인페이지 정보 Map [key : 항목명]
+	 *
+	 * @param request
+	 * @param model
+	 * @exception Exception Exception
+	 */ 
+	@RequestMapping("/gcs/dashboard/gA03Main9.do")
+	public String gA03Main9(@RequestParam Map<String, Object> param,@ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO,HttpServletRequest request, ModelMap model)
+	  throws Exception{  
+		
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+		
+		ModelAndView mav = new ModelAndView("jsonView");	 		
+		EgovMap map = CommUtil.makeEgovMap(param); 
+
+		String tmLat = String.valueOf(map.get("tmLat"));
+		String tmLng = String.valueOf(map.get("tmLng"));
+		 
+		
+		String dlPk = gA03MAINVO.getDlPk();
+		LOGGER.debug("gA03Main2 : {}", dlPk);
+		
+		GA03MAINVO waypoints     = null;
+		String strWayPoint       = "";
+		String strWayPointDetail = ""; 
+		//오늘 날짜
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyyMMddHHmm");
+		Date time = new Date();
+		String time1 = format1.format(time);
+		
+		String strDlName         = "Route_"+time1;
+		if(dlPk !=null && !dlPk.equals("")) {
+			//파라미터 수신데이터
+			GA03MAINVO vo = new GA03MAINVO();
+			vo.setDlPk(dlPk);
+			waypoints         = gA03MAINService.selectWaypoint(vo);
+			strDlName         = waypoints.getDlName();
+			strWayPoint       = waypoints.getDlWaypoint();  
+			strWayPointDetail = waypoints.getDlWaypointDetail(); 
+			
+		}
+ 
+		
+		model.addAttribute("dlName", strDlName);
+		model.addAttribute("waypoints", strWayPoint);
+		model.addAttribute("waypointsDetail", strWayPointDetail);
+		model.addAttribute("dlPk", dlPk);
+		model.addAttribute("tmLat", tmLat);
+		model.addAttribute("tmLng", tmLng);
+		
+		return "main/GCSMAIN3/gA03Main9";
+	} 
+	
+	/**
 	 * GCS > MAIN > PLAN
 	 * @return 메인페이지 정보 Map [key : 항목명]
 	 *
