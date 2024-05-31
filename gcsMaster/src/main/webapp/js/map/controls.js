@@ -17,7 +17,12 @@
                 link.innerHTML = this.options.html;
                 L.DomEvent.on(link, 'click', L.DomEvent.stop)
                           .on(link, 'click', function() {
-                            window.LAYER = this.options.callback.call(map.editTools);
+                            var layer = this.options.callback.call(map.editTools);
+                            if (layer && layer.enableEdit) {
+                                layer.enableEdit();
+                                layer.dragging.enable();
+                                layer.transform.enable({ rotation: true, scaling: false });
+                            }
                           }, this);
 
                 return container;
@@ -36,7 +41,15 @@
         L.NewPolygonControl = L.EditControl.extend({
             options: {
                 position: 'topleft',
-                callback: map => map.editTools.startPolygon(),
+                callback: function() {
+                    var polygon = this.startPolygon();
+                    polygon.on('editable:drawing:end', function() {
+                        polygon.enableEdit();
+                        polygon.dragging.enable();
+                        polygon.transform.enable({ rotation: true, scaling: false });
+                    });
+                    return polygon;
+                },
                 kind: 'polygon',
                 html: '▰'
             }
@@ -60,7 +73,15 @@
         L.NewRectangleControl = L.EditControl.extend({
             options: {
                 position: 'topleft',
-                callback: map => map.editTools.startRectangle(),
+                callback: function() {
+                    var rectangle = this.startRectangle();
+                    rectangle.on('editable:drawing:end', function() {
+                        rectangle.enableEdit();
+                        rectangle.dragging.enable();
+                        rectangle.transform.enable({ rotation: true, scaling: false });
+                    });
+                    return rectangle;
+                },
                 kind: 'rectangle',
                 html: '⬛'
             }

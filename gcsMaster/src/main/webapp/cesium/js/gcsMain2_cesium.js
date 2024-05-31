@@ -43,7 +43,11 @@
  
  
 	const viewer = new Cesium.Viewer("cesiumContainer", {
-	  terrainProvider: Cesium.createWorldTerrain()
+	  infoBox: false,
+	  selectionIndicator: false,
+	  shadows: true,
+	  shouldAnimate: true,
+	  //terrainProvider: Cesium.createWorldTerrain()
 	});
     
     
@@ -67,7 +71,8 @@
 		
 	tileset.readyPromise.then(function(tileset) {
 	    // 타일셋의 루트 변환 행렬을 조정합니다.
-	    var heightOffset = 145.0; // 높이 조정값 (미터 단위)
+	    //var heightOffset = 145.0; // 높이 조정값 (미터 단위)
+	    var heightOffset = 71; // 높이 조정값 (미터 단위)
 	    var boundingSphere = tileset.boundingSphere;
 	    var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
 	    var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);

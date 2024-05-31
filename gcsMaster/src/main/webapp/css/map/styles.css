@@ -159,22 +159,32 @@ body {
     margin-bottom: 15px;
 }
 
+.header .title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
 .header .title .title-input {
     border: 1px solid #ccc;
     padding: 5px;
     border-radius: 3px;
     width: 150px;
-    box-sizing: border-box; /* 박스의 크기가 패딩과 테두리를 포함 */
-    font-size: 16px; /* 폰트 크기 */
-    color: #333; /* 폰트 색상 */
-    background-color: #fff; /* 배경 색상 */
-    transition: border-color 0.3s, box-shadow 0.3s; /* 애니메이션 효과 */
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .header .title .title-input:focus {
-    border-color: #007bff; /* 포커스 시 테두리 색상 */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 박스 그림자 */
-    outline: none; /* 기본 포커스 테두리 제거 */
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+.header .actions {
+    display: flex;
+    align-items: center;
 }
 
 .header .actions button {
@@ -185,16 +195,16 @@ body {
     cursor: pointer;
     border-radius: 3px;
     margin-left: 10px;
-    transition: background-color 0.3s; /* 애니메이션 효과 */
+    transition: background-color 0.3s;
 }
 
 .header .actions button:hover {
-    background-color: #0056b3; /* 마우스 오버 시 배경 색상 */
+    background-color: #0056b3;
 }
 
 .header .actions button:focus {
-    outline: none; /* 기본 포커스 테두리 제거 */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 박스 그림자 */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .stats {
@@ -213,11 +223,10 @@ body {
 }
 
 .option {
-    display: flex; 
-    height:50px;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 25px 0;
     border-top: 1px solid #ddd;
 }
 
@@ -308,6 +317,39 @@ body {
     z-index: 10000;
 }
 
+.btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    margin-right: 5px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-reset {
+    background-color: #dc3545;
+    margin-left:10px;
+}
+
+.btn-reset:hover {
+    background-color: #c82333;
+}
+
+.btn-reset:focus {
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
 .topnav {
     overflow: hidden;
     background-color: #333;
@@ -346,3 +388,127 @@ body {
 .topnav-right {
     float: right;
 }
+
+/* 모던 모바일 스타일 시작 */
+
+/* Input 스타일 */
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #f9f9f9;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+/* Button 스타일 */
+/* 버튼 간격 조정 */
+.btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 5px; /* 좌우 간격 추가 */
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-reset {
+    background-color: #dc3545;
+}
+
+.btn-reset:hover {
+    background-color: #c82333;
+}
+
+.btn-reset:focus {
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
+}
+
+/* Select 스타일 */
+select.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    appearance: none; /* Removes default arrow in some browsers */
+    -webkit-appearance: none; /* Safari and Chrome */
+    -moz-appearance: none; /* Firefox */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+}
+
+select.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+/* 모던 모바일 스타일 끝 */
+ 
+/* 꼭지점 스타일 */
+.vertex {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+}
+
+/* 꼭지점에 마우스 오버 시 스타일 */
+.vertex-hover {
+    width: 15px;
+    height: 15px;
+    background-color: blue;
+    border: 2px solid white;
+}
+
+/* 중간 아이콘 스타일 */
+.midpoint {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+}
+
+/* 중간 아이콘에 마우스 오버 시 스타일 */
+.midpoint-hover {
+    width: 15px;
+    height: 15px;
+    background-color: orange;
+    border: 2px solid white;
+}
+

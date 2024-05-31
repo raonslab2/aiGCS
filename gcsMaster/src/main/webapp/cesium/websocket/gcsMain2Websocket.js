@@ -1,9 +1,5 @@
 let socket;  
-<<<<<<< HEAD
-var wsLink = "ws://192.168.0.24:5010/websocket"; 
-=======
 var wsLink = "ws://192.168.0.29:5010/websocket"; 
->>>>>>> refs/remotes/origin/dev_240508
 var audioElement = document.createElement('audio');
 
 function connect() {

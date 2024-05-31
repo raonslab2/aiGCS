@@ -12,11 +12,13 @@
     <title>Map Application</title>
     <link rel="stylesheet" href="/css/map/leaflet.css">
     <link rel="stylesheet" href="/css/map/styles.css">
+    <link rel="stylesheet" href="/css/map/leaflet-path-transform.css"> <!-- 추가 -->
     <script src="https://npmcdn.com/leaflet@1.3.4/dist/leaflet.js"></script>
     <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
     <script src="/js/map/Leaflet.Editable.js"></script>
     <script src="/js/map/controls.js"></script>
+    <script src="/js/map/leaflet-path-transform.js"></script> <!-- 추가 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -25,10 +27,10 @@
         <a href="#">홈</a>
         <a href="#"></a>
         <a href="/gcs/dashboard/gA03Main9.do?tmLat=37.2953232&tmLng=127.0374223">비행계획(2D)</a>
-        <a href="/gcs/dashboard/gA03Main.do" target="_blank" >비행계획(3D)</a>
+        <a href="/gcs/dashboard/gA03Main.do" target="_blank">비행계획(3D)</a>
         <a href="#">업로드</a>
-        <a href="/gcs/dashboard/gcsMain2.do" target="_blank" >관제시스템</a>
-        <a href="/gcs/dashboard/gA01Main2.do" target="_blank" >군집드론</a>
+        <a href="/gcs/dashboard/gcsMain2.do" target="_blank">관제시스템</a>
+        <a href="/gcs/dashboard/gA01Main2.do" target="_blank">군집드론</a>
         <a href="#">보고서</a>
         <div class="topnav-right">
             <a href="#">공유</a>
@@ -43,28 +45,28 @@
             <div class="section">
                 <div class="header">
                     <div class="title">
-                        <input type="text" value="드론 비행계획" class="title-input">
+                        <input type="text" value="드론 비행계획" class="title-input form-control">
                     </div>
                     <div class="actions">
-                        <button class="add-button">+</button>
+                        <button class="add-button btn">+</button>
                     </div>
                 </div>
                 <div class="stats">
-                    <div ><span id="statsTime">33:19</span>분</div>
+                    <div><span id="statsTime">33:19</span>분</div>
                     <div><span id="statsArea">12</span>에이커</div>
                     <div><span id="statsImgCnt">605</span>이미지</div>
                     <div><span id="statsBat">3</span>배터리</div>
-                </div> 
+                </div>
                 <div class="option">
-                    <label>총 거리(M)</label> 
+                    <label>총 거리(M)</label>
                     <div class="flight-altitude">
-                        <span id="distanceDisplay"></span> 
+                        <span id="distanceDisplay"></span>
                     </div>
                 </div>
                 <div class="option">
                     <label>좌표</label>
                     <div class="flight-altitude">
-                        <span><c:out value="${tmLat}"/> / <c:out value="${tmLng}"/></span> 
+                        <span><c:out value="${tmLat}"/> / <c:out value="${tmLng}"/></span>
                     </div>
                 </div>
                 <div class="option">
@@ -73,21 +75,18 @@
                         <div id="areaAarea">에이커: 0 </div>
                     </div>
                 </div>
-       
                 <div class="option">
                     <label>비행 경로</label>
                     <div class="flight-altitude">
-                       <button id="rectangleButton">폴리곤 추가</button>
-                       <button id="resetButton">RESET</button>
- 
+                        <button id="rectangleButton" class="btn">폴리곤</button>
+                        <button id="resetButton" class="btn btn-reset">초기화</button>
                     </div>
                 </div>
-				<div class="option">
-				    <label for="gridSizeSlider">그리드 크기</label> 
-				    <input type="range" id="gridSizeSlider" min="1" max="10" value="2" step="0.01">
-				    <span id="gridSizeValue">2.0</span>(m)
-				</div>
-
+                <div class="option">
+                    <label for="gridSizeSlider">그리드 크기</label>
+                    <input type="range" id="gridSizeSlider" class="form-control" min="1" max="10" step="1" value="2">
+                    <span id="gridSizeValue">2.0</span>(m)
+                </div>
                 <div class="option">
                     <label>고급 3D</label>
                     <label class="toggle-switch">
@@ -101,52 +100,20 @@
                         <input type="checkbox">
                         <span></span>
                     </label>
-                </div> 
+                </div>
                 <div class="option">
                     <label>RTK SetUp</label>
                     <span>●</span>
                 </div>
-                <%-- 
-                <div class="option">
-                    <label>Data On Demand</label>
-                    <button class="request-button">요청</button>
+                <div class="section">
+                    <label for="droneSelect">드론 선택</label>
+                    <select id="droneSelect" class="form-control">
+                        <option value="dji">DJI</option>
+                        <option value="ardupilot">ArduPilot</option>
+                    </select>
+                    <button id="exportButton" class="btn">업로드</button>
+                    <div id="rectangleList" class="rectangle-list"></div>
                 </div>
-                --%>
-            </div>
-                <%-- 
-            <div class="section">
-                <label for="mapSelect">맵</label>
-                <select id="mapSelect">
-                    <option>업로드된 맵 없음</option>
-                </select>
-            </div>
-
-            <div class="section">
-                <div class="section-header">
-                    <span>레이어</span>
-                    <button class="add-button">추가</button>
-                </div>
-                <ul class="layer-list">
-                    <li>오버레이 <span class="count">0</span></li>
-                    <li>위치 <span class="count">0</span></li>
-                </ul>
-            </div>
-            <div class="section">
-                <span>맵 분석</span>
-            </div> 
-          --%>
-          
-            <div class="section">
-                
-       
-                
-                <select id="droneSelect">
-                    <option value="dji">DJI</option>
-                    <option value="ardupilot">ArduPilot</option>
-                </select>
-                <button id="exportButton">업로드</button>
-                <div id="rectangleList" class="rectangle-list"></div>
-
             </div>
         </div>
     </div>
