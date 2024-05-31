@@ -9,7 +9,7 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
-    <title>Map Application</title>
+    <title>Drone Flight Plan</title>
     <link rel="stylesheet" href="/css/map/leaflet.css">
     <link rel="stylesheet" href="/css/map/styles.css">
     <link rel="stylesheet" href="/css/map/leaflet-path-transform.css"> <!-- 추가 -->
@@ -17,7 +17,8 @@
     <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
     <script src="/js/map/Leaflet.Editable.js"></script>
-    <script src="/js/map/controls.js"></script>
+    <script src="/js/map/controls.js"></script> 
+    <script src="/js/map/polygonService.js"></script> 
     <script src="/js/map/leaflet-path-transform.js"></script> <!-- 추가 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -63,10 +64,10 @@
                         <span id="distanceDisplay"></span>
                     </div>
                 </div>
-                <div class="option">
-                    <label>좌표</label>
+                <div class="option"> 
+                    <label>중심좌표</label>
                     <div class="flight-altitude">
-                        <span><c:out value="${tmLat}"/> / <c:out value="${tmLng}"/></span>
+                        <span id="tmLat"></span> / <span id="tmLng"></span>
                     </div>
                 </div>
                 <div class="option">
@@ -83,9 +84,18 @@
                     </div>
                 </div>
                 <div class="option">
-                    <label for="gridSizeSlider">그리드 크기</label>
-                    <input type="range" id="gridSizeSlider" class="form-control" min="1" max="10" step="1" value="2">
-                    <span id="gridSizeValue">2.0</span>(m)
+                    <label for="gridSizeSlider">간격</label>
+                    <div class="flight-altitude">
+                      <input type="range" id="gridSizeSlider" class="form-control" min="1" max="10" step="1" value="2">
+                      <span id="gridSizeValue">2.0</span>(m)
+                    </div>
+                </div>
+                <div class="option">
+                    <label for="gridSizeSlider">고도</label>
+                    <div class="flight-altitude">
+                      <input type="range" id="droneAlt" class="form-control" min="10" max="150" step="1" value="20">
+                      <span id="droneAltValue">20</span>(m)
+                    </div>
                 </div>
                 <div class="option">
                     <label>고급 3D</label>
@@ -93,14 +103,7 @@
                         <input type="checkbox" checked>
                         <span></span>
                     </label>
-                </div>
-                <div class="option">
-                    <label>라이브 맵 HD</label>
-                    <label class="toggle-switch">
-                        <input type="checkbox">
-                        <span></span>
-                    </label>
-                </div>
+                </div> 
                 <div class="option">
                     <label>RTK SetUp</label>
                     <span>●</span>
@@ -128,6 +131,20 @@
     <script>
         var tmLat = ${tmLat};
         var tmLng = ${tmLng};
+        
+        $(document).ready(function() {
+            // 좌표값이 정의되지 않은 경우를 대비한 기본값 설정
+            tmLat = (tmLat !== undefined && tmLat !== null) ? tmLat.toString() : "";
+            tmLng = (tmLng !== undefined && tmLng !== null) ? tmLng.toString() : "";
+
+            // 앞 6자리만 가져오기
+            var truncatedLat = tmLat.substring(0, 10);
+            var truncatedLng = tmLng.substring(0, 10);
+
+            // 좌표값을 span 요소에 설정
+            $('#tmLat').text(truncatedLat);
+            $('#tmLng').text(truncatedLng);
+        });
 
         function toggleNav() {
             var sidebar = document.getElementById("mySidebar");
@@ -140,6 +157,8 @@
                 toggleBtn.innerHTML = "❯";
             }
         }
+
+    
     </script>
 
     <!-- 외부 JavaScript 파일 포함 -->

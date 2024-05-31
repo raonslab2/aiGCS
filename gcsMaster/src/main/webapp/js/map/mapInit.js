@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     class RectangleCreator {
         constructor(map) {
@@ -311,4 +312,61 @@ $(document).ready(function() {
         var value = (this.value / 10).toFixed(1);
         $("#gridSizeValue").text(value);
     });
+    
+    // 슬라이더 값이 변경될 때 이벤트 핸들러 등록
+    $('#droneAlt').on('input', function() {
+        // 슬라이더의 현재 값을 가져오기
+        var currentValue = $(this).val();
+        // droneAltValue 요소의 텍스트 업데이트
+        $('#droneAltValue').text(currentValue);
+    });
+
+    // 업로드 버튼 클릭 이벤트 핸들러 추가
+    $('#exportButton').on('click', function() {
+        var data = exportMapData(map);
+        console.log(JSON.stringify(data, null, 2));
+    });
+
+    // 샘플 데이터를 불러오는 함수 호출 (테스트용)
+    // loadMapData(map, sampleData); // sampleData는 JSON 형식의 데이터 객체
 });
+
+function exportMapData(map) {
+    var data = {
+        polygons: [],
+        dronePaths: [], // 수정된 부분: paths를 dronePaths로 변경
+        gridSize: parseInt($('#gridSizeSlider').val()), // 간격 정보
+        droneAltitude: parseFloat($('#droneAlt').val()) // 고도 정보
+    };
+
+    map.eachLayer(function(layer) {
+        if (layer instanceof L.Polygon) {
+            var latlngs = layer.getLatLngs().map(polygon => polygon.map(latlng => ({ lat: latlng.lat, lng: latlng.lng })));
+            var style = layer.options;
+            data.polygons.push({ latlngs, style });
+        } else if (layer instanceof L.Polyline && layer.options.color === 'white') {
+            // 드론 이동 경로 저장 (하얀색 선)
+            var latlngs = layer.getLatLngs().map(latlng => ({ lat: latlng.lat, lng: latlng.lng }));
+            var style = layer.options;
+            data.dronePaths.push({ latlngs, style }); // 수정된 부분: paths를 dronePaths로 변경
+        }
+    });
+
+    return data;
+}
+
+
+function loadMapData(map, data) {
+    data.polygons.forEach(polygonData => {
+        var latlngs = polygonData.latlngs.map(polygon => polygon.map(latlng => L.latLng(latlng.lat, latlng.lng)));
+        L.polygon(latlngs, polygonData.style).addTo(map);
+    });
+    data.paths.forEach(pathData => {
+        var latlngs = pathData.latlngs.map(latlng => L.latLng(latlng.lat, latlng.lng));
+        L.polyline(latlngs, pathData.style).addTo(map);
+    });
+    $('#gridSizeSlider').val(data.gridSize);
+    $('#gridSizeValue').text(data.gridSize);
+    $('#droneAlt').val(data.droneAltitude);
+    $('#droneAltValue').text(data.droneAltitude);
+}
