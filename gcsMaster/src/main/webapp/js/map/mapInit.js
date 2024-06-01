@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     class RectangleCreator {
         constructor(map) {
@@ -10,6 +9,8 @@ $(document).ready(function() {
             this.distanceDisplay = $('#distanceDisplay');
             this.startMarker = null;
             this.endMarker = null;
+            this.gridIntersections = []; // 가로줄 꺾이는 점을 저장하는 배열
+            this.gridMarkers = []; // 교차점 마커를 저장하는 배열
         }
 
         createRectangle() {
@@ -57,22 +58,27 @@ $(document).ready(function() {
         drawGridAndPathInPolygon(latStep, lngStep) {
             this.gridLayers.forEach(layer => this.map.removeLayer(layer));
             this.gridLayers = [];
+            this.gridIntersections = []; // 초기화
 
             const bounds = this.poly.getBounds();
             let path = [];
             let gridLines = [];
             let isPathReversed = false;
 
+            // 가로 격자선 그리기
             for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
                 let linePoints = [];
                 for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
                     const point = new L.LatLng(lat, lng);
                     if (this.isPointInPolygon(point)) {
                         linePoints.push(point);
+                        if (linePoints.length === 1 || linePoints.length > 1 && lng === bounds.getEast()) {
+                            this.gridIntersections.push([point.lat, point.lng]);
+                        }
                     }
                 }
                 if (linePoints.length > 1) {
-                    const gridLine = L.polyline(linePoints, { color: 'rgba(0, 0, 0, 0.2)', weight: 1 });
+                    const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
                     gridLines.push(gridLine);
                     this.gridLayers.push(gridLine);
                     if (isPathReversed) {
@@ -83,23 +89,26 @@ $(document).ready(function() {
                 }
             }
 
-            for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
-                let linePoints = [];
-                for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
-                    const point = new L.LatLng(lat, lng);
-                    if (this.isPointInPolygon(point)) {
-                        linePoints.push(point);
+            // 세로 격자선 그리기
+            if ($('#checkMulti').is(':checked')) {
+                for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
+                    let linePoints = [];
+                    for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
+                        const point = new L.LatLng(lat, lng);
+                        if (this.isPointInPolygon(point)) {
+                            linePoints.push(point);
+                        }
                     }
-                }
-                if (linePoints.length > 1) {
-                    const gridLine = L.polyline(linePoints, { color: 'rgba(0, 0, 0, 0.5)', weight: 1 });
-                    gridLines.push(gridLine);
-                    this.gridLayers.push(gridLine);
+                    if (linePoints.length > 1) {
+                        const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
+                        gridLines.push(gridLine);
+                        this.gridLayers.push(gridLine);
+                    }
                 }
             }
 
             gridLines.forEach(line => line.addTo(this.map));
-            const pathLine = L.polyline(path, { color: 'white', weight: 2 });
+            const pathLine = L.polyline(path, { color: "#00FF00", weight: 1 });
             pathLine.addTo(this.map);
             this.gridLayers.push(pathLine);
 
@@ -110,6 +119,7 @@ $(document).ready(function() {
             }
 
             this.updateArea();
+            this.toggleGridMarkers(); // 교차점 마커 추가
         }
 
         updateArea() {
@@ -152,6 +162,12 @@ $(document).ready(function() {
             this.poly.on('edit', redrawGridAndPath);
             this.poly.on('editable:vertex:dragend', redrawGridAndPath);
             this.poly.on('editable:dragend', redrawGridAndPath);
+
+            $('#checkCamera').on('change', () => {
+                this.toggleGridMarkers();
+            });
+
+            $('#checkMulti').on('change', redrawGridAndPath); // checkMulti 변경 시 실시간 적용
         }
 
         removePolygon() {
@@ -162,6 +178,7 @@ $(document).ready(function() {
                 this.gridLayers = [];
                 this.updateDistance([]);
                 this.removeMarkers();
+                this.removeGridMarkers(); // 기존 마커 제거
                 $('#areaAarea').text('에이커: 0');
             }
         }
@@ -211,8 +228,8 @@ $(document).ready(function() {
             latlngs.forEach((latlng) => {
                 const vertex = L.circleMarker(latlng, {
                     radius: 5,
-                    color: 'red',
-                    fillColor: 'red',
+                    color: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
+                    fillColor: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
                     fillOpacity: 1,
                     className: 'vertex'
                 }).addTo(map);
@@ -231,8 +248,8 @@ $(document).ready(function() {
                 vertex.on('mouseout', function() {
                     this.setStyle({
                         radius: 5,
-                        color: 'red',
-                        fillColor: 'red',
+                        color: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
+                        fillColor: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
                         weight: 0,
                         fillOpacity: 1,
                         className: 'vertex'
@@ -278,9 +295,134 @@ $(document).ready(function() {
                 });
             }
         }
+
+        addGridMarkers() {
+            this.gridMarkers.forEach(marker => this.map.removeLayer(marker)); // 기존 마커 제거
+            this.gridMarkers = []; // 마커 배열 초기화
+            this.gridIntersections.forEach(([lat, lng], lineIndex) => {
+                const markerOptions = {
+                    radius: 3,
+                    color: 'blue',
+                    fillColor: 'blue',
+                    fillOpacity: 1,
+                };
+                if (lineIndex === 0) { // 첫 번째 가로선의 두 번째 교차점에 포인트 아이콘 추가
+                    markerOptions.radius = 5;
+                    markerOptions.color = 'red';
+                    markerOptions.fillColor = 'red';
+                }
+                const startMarker = L.circleMarker([lat, lng], markerOptions).addTo(this.map);
+                this.gridMarkers.push(startMarker);
+            });
+        }
+
+        removeGridMarkers() {
+            this.gridMarkers.forEach(marker => this.map.removeLayer(marker));
+            this.gridMarkers = [];
+        }
+
+        toggleGridMarkers() {
+            if ($('#checkCamera').is(':checked')) {
+                this.addGridMarkers();
+            } else {
+                this.removeGridMarkers();
+            }
+        }
+
+		exportGridIntersections() {
+		    const gridSize = 10; // 2 meters
+		    const bounds = this.poly.getBounds();
+		    const northWest = bounds.getNorthWest();
+		    const southEast = bounds.getSouthEast();
+		    const latStep = gridSize / 111320; // Approximation of meters per degree latitude
+		    const lngStep = gridSize / (111320 * Math.cos(northWest.lat * (Math.PI / 180))); // Approximation of meters per degree longitude
+		
+		    const intersections = [];
+		    const polyCoords = this.poly.getLatLngs()[0].map(coord => [coord.lng, coord.lat]);
+		    
+		    // 첫 번째 좌표를 마지막에 다시 추가하여 닫힌 루프 생성
+		    polyCoords.push(polyCoords[0]);
+		
+		    const polygon = turf.polygon([polyCoords]);
+		
+		    for (let lat = northWest.lat; lat >= southEast.lat; lat -= latStep) {
+		        for (let lng = northWest.lng; lng <= southEast.lng; lng += lngStep) {
+		            const point = turf.point([lng, lat]);
+		            if (turf.booleanPointInPolygon(point, polygon)) {
+		                intersections.push(L.latLng(lat, lng));
+		            }
+		        }
+		    }
+		
+		    // dl_waypoint에 교차점 좌표 추가
+		    const dl_waypoint = {
+		        actions: [],
+		        defaultFrame: "Home",
+		        creationTime: new Date().toISOString(),
+		        defaultAngle: 0,
+		        defaultAngleOfView: [150, 85],
+		        defaultCameraName: "",
+		        defaultCameraResolution: [1280, 720],
+		        defaultAltitude: 0,
+		        defaultDelay: 0,
+		        defaultDistance: 0,
+		        defaultHeading: 0,
+		        defaultOverlap: 0,
+		        defaultRadius: 0,
+		        defaultSpeed: 0,
+		        defaultWidth: 0,
+		        home: {
+		            coordinate: [
+		                this.poly.getBounds().getCenter().lat,
+		                this.poly.getBounds().getCenter().lng
+		            ],
+		            version: 1
+		        },
+		        name: "test",
+		        rallys: [],
+		        version: 1,
+		        missionDetail: []
+		    };
+		
+		    intersections.forEach((intersection, index) => {
+		        dl_waypoint.actions.push({
+		            command: "Waypoint",
+		            coordinate: [
+		                intersection.lat,
+		                intersection.lng,
+		                20 // Assume a constant altitude for all waypoints
+		            ],
+		            delay: 0,
+		            elevation: 20,
+		            frame: "Home",
+		            heading: 0,
+		            radius: 0,
+		            speed: 2,
+		            type: "MoveTo",
+		            version: 1
+		        });
+		
+		        dl_waypoint.missionDetail.push([{
+		            _num: index,
+		            _waypointParan1: "",
+		            _waypointParan2: "",
+		            _waypointParan3: "",
+		            _waypointParan4: "",
+		            _waypoinCommand: "16",
+		            _waypoinframe: "3"
+		        }]);
+		    });
+		
+		    console.log(JSON.stringify(dl_waypoint, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
+		}
+
+
+
+
+
     }
 
-    var map = L.map('map', {editable: true}).setView([tmLat, tmLng], 18);
+    var map = L.map('map', { editable: true }).setView([tmLat, tmLng], 18);
 
     map.on('editable:created', function(e) {
         var layer = e.layer;
@@ -296,7 +438,7 @@ $(document).ready(function() {
 
     var controls = new MapControls(map);
     controls.addDefaultControls();
-    
+
     const rectangleCreator = new RectangleCreator(map);
 
     $('#rectangleButton').on('click', function() {
@@ -307,54 +449,26 @@ $(document).ready(function() {
     $('#resetButton').on('click', function() {
         rectangleCreator.removePolygon();
     });
-    
+
+    $('#exportButton').on('click', function() {
+        rectangleCreator.exportGridIntersections();
+    });
+
     $("#gridSizeSlider").on("input", function() {
         var value = (this.value / 10).toFixed(1);
         $("#gridSizeValue").text(value);
     });
-    
-    // 슬라이더 값이 변경될 때 이벤트 핸들러 등록
+
     $('#droneAlt').on('input', function() {
-        // 슬라이더의 현재 값을 가져오기
         var currentValue = $(this).val();
-        // droneAltValue 요소의 텍스트 업데이트
         $('#droneAltValue').text(currentValue);
     });
 
-    // 업로드 버튼 클릭 이벤트 핸들러 추가
-    $('#exportButton').on('click', function() {
-        var data = exportMapData(map);
-        console.log(JSON.stringify(data, null, 2));
+    $('#droneSpeed').on('input', function() {
+        var currentValue = $(this).val();
+        $('#droneSpeedValue').text(currentValue);
     });
-
-    // 샘플 데이터를 불러오는 함수 호출 (테스트용)
-    // loadMapData(map, sampleData); // sampleData는 JSON 형식의 데이터 객체
 });
-
-function exportMapData(map) {
-    var data = {
-        polygons: [],
-        dronePaths: [], // 수정된 부분: paths를 dronePaths로 변경
-        gridSize: parseInt($('#gridSizeSlider').val()), // 간격 정보
-        droneAltitude: parseFloat($('#droneAlt').val()) // 고도 정보
-    };
-
-    map.eachLayer(function(layer) {
-        if (layer instanceof L.Polygon) {
-            var latlngs = layer.getLatLngs().map(polygon => polygon.map(latlng => ({ lat: latlng.lat, lng: latlng.lng })));
-            var style = layer.options;
-            data.polygons.push({ latlngs, style });
-        } else if (layer instanceof L.Polyline && layer.options.color === 'white') {
-            // 드론 이동 경로 저장 (하얀색 선)
-            var latlngs = layer.getLatLngs().map(latlng => ({ lat: latlng.lat, lng: latlng.lng }));
-            var style = layer.options;
-            data.dronePaths.push({ latlngs, style }); // 수정된 부분: paths를 dronePaths로 변경
-        }
-    });
-
-    return data;
-}
-
 
 function loadMapData(map, data) {
     data.polygons.forEach(polygonData => {
@@ -369,4 +483,6 @@ function loadMapData(map, data) {
     $('#gridSizeValue').text(data.gridSize);
     $('#droneAlt').val(data.droneAltitude);
     $('#droneAltValue').text(data.droneAltitude);
+    $('#droneSpeed').val(data.droneSpeed);
+    $('#droneSpeedValue').text(data.droneSpeed);
 }

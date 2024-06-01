@@ -37,6 +37,7 @@ body {
 }
 
 .sidebar {
+	display: block; /* 기본적으로 표시되도록 수정 */
     width: 300px;
     background-color: #f4f4f4;
     color: black;
@@ -226,7 +227,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 25px 0;
+    padding: 17px 0;
     border-top: 1px solid #ddd;
 }
 

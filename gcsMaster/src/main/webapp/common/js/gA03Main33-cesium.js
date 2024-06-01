@@ -583,72 +583,64 @@
         //var missionJSON22 = $('#waypoints-data22').text()
     
    
- 
-      
-        if (missionJSON && missionJSON != "\"\"" && missionJSON != "{}") {
-           // var mission = cesium_path_mission.js_parseMission(missionJSON)  
-            var mission = cesium_path_mission.js_parseMission2(missionJSON) 
-
-            var detail_waypoint =  mission.detail_waypoint
-            var home_position = mission.home_position
-            var home_address = mission.home_address
-            var actions = mission.actions
-
-       
- 
- 
-             //home setting
-            cesium_path_mission.map_addHomePoint(home_position.lon, home_position.lat, 0.0, home_address)
-            var tmIdex = 0;
-            actions.forEach(function (action,index) {
-                cesium_path_mission.map_increasePoint(
-                    action.lon, action.lat, action.alt, action.offset,
-                    action.speed, action.delay, action.heading, action.command, action.pov
-                    ,detail_waypoint[index][0]
-                )
-               if(actions.length == (index+1)){ 
-                  $("input[name='waypointParan1']").eq(index+1).val(detail_waypoint[actions.length][0]._waypointParan1);
-                  $("input[name='waypointParan2']").eq(index+1).val(detail_waypoint[actions.length][0]._waypointParan2);
-                  $("input[name='waypointParan3']").eq(index+1).val(detail_waypoint[actions.length][0]._waypointParan3);
-                  $("input[name='waypointParan4']").eq(index+1).val(detail_waypoint[actions.length][0]._waypointParan4);
-                  $("select[name='waypoinCommand']").eq(index+1).val(detail_waypoint[actions.length][0]._waypoinCommand).prop("selected",true);
-                  $("select[name='waypoinframe']").eq(index+1).val(detail_waypoint[actions.length][0]._waypoinframe).prop("selected",true);
-               }
-           
-            });
-      
-
-
-            // At this point home point must be exists
-            $formSubmit.prop("disabled", false)
-            submitDisabled = false
-        } else { 
-	        /*
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var lon = position.coords.longitude
-                    var lat = position.coords.latitude
-
-                    setTimeout(function () {
-                        viewer.camera.flyTo({
-                            destination: Cesium.Cartesian3.fromDegrees(lon, lat, 6000000),
-                            duration: 5.0,
-                        });
-                    }, 1200)
-                })
-            }
-          */ 
-            var home_position = DEFAULT_LAT
-            var home_address = "test"
-       
-            cesium_path_mission.map_addHomePoint(DEFAULT_LAT,DEFAULT_LNG,0.0, home_address)
- 
-
-            // At this point home point must be exists
-            $formSubmit.prop("disabled", false)
-            submitDisabled = false
- 
-        }
+			if (missionJSON && missionJSON != "\"\"" && missionJSON != "{}") {
+			    // var mission = cesium_path_mission.js_parseMission(missionJSON)  
+			    var mission = cesium_path_mission.js_parseMission2(missionJSON);
+			
+			    var detail_waypoint = mission.detail_waypoint;
+			    var home_position = mission.home_position;
+			    var home_address = mission.home_address;
+			    var actions = mission.actions;
+			
+			    // home setting
+			    cesium_path_mission.map_addHomePoint(home_position.lon, home_position.lat, 0.0, home_address);
+			    var tmIdex = 0;
+			
+			    actions.forEach(function (action, index) {
+			        cesium_path_mission.map_increasePoint(
+			            action.lon, action.lat, action.alt, action.offset,
+			            action.speed, action.delay, action.heading, action.command, action.pov,
+			            detail_waypoint && detail_waypoint[index] ? detail_waypoint[index][0] : null
+			        );
+			
+			        if (actions.length == (index + 1) && detail_waypoint && detail_waypoint[actions.length]) {
+			            $("input[name='waypointParan1']").eq(index + 1).val(detail_waypoint[actions.length][0]._waypointParan1);
+			            $("input[name='waypointParan2']").eq(index + 1).val(detail_waypoint[actions.length][0]._waypointParan2);
+			            $("input[name='waypointParan3']").eq(index + 1).val(detail_waypoint[actions.length][0]._waypointParan3);
+			            $("input[name='waypointParan4']").eq(index + 1).val(detail_waypoint[actions.length][0]._waypointParan4);
+			            $("select[name='waypoinCommand']").eq(index + 1).val(detail_waypoint[actions.length][0]._waypoinCommand).prop("selected", true);
+			            $("select[name='waypoinframe']").eq(index + 1).val(detail_waypoint[actions.length][0]._waypoinframe).prop("selected", true);
+			        }
+			    });
+			
+			    // At this point home point must exist
+			    $formSubmit.prop("disabled", false);
+			    submitDisabled = false;
+			} else {
+			    /*
+			    if (navigator.geolocation) {
+			        navigator.geolocation.getCurrentPosition(function (position) {
+			            var lon = position.coords.longitude;
+			            var lat = position.coords.latitude;
+			
+			            setTimeout(function () {
+			                viewer.camera.flyTo({
+			                    destination: Cesium.Cartesian3.fromDegrees(lon, lat, 6000000),
+			                    duration: 5.0,
+			                });
+			            }, 1200);
+			        });
+			    }
+			    */
+			    var home_position = DEFAULT_LAT;
+			    var home_address = "test";
+			
+			    cesium_path_mission.map_addHomePoint(DEFAULT_LAT, DEFAULT_LNG, 0.0, home_address);
+			
+			    // At this point home point must exist
+			    $formSubmit.prop("disabled", false);
+			    submitDisabled = false;
+			}
     })
 })()
 

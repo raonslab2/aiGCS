@@ -16,6 +16,8 @@
     <script src="https://npmcdn.com/leaflet@1.3.4/dist/leaflet.js"></script>
     <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    
     <script src="/js/map/Leaflet.Editable.js"></script>
     <script src="/js/map/controls.js"></script> 
     <script src="/js/map/polygonService.js"></script> 
@@ -46,7 +48,7 @@
             <div class="section">
                 <div class="header">
                     <div class="title">
-                        <input type="text" value="드론 비행계획" class="title-input form-control">
+                        <input type="text" id="projectName" value="Drone WayPoint" class="title-input form-control">
                     </div>
                     <div class="actions">
                         <button class="add-button btn">+</button>
@@ -98,9 +100,23 @@
                     </div>
                 </div>
                 <div class="option">
+                    <label for="gridSizeSlider">속도</label>
+                    <div class="flight-altitude">
+                      <input type="range" id="droneSpeed" class="form-control" min="2" max="8" step="1" value="2">
+                      <span id="droneSpeedValue">2</span>(m/s)
+                    </div>
+                </div>
+                <div class="option">
+                    <label>카메라</label>
+                    <label class="toggle-switch">
+                        <input id="checkCamera" type="checkbox">
+                        <span></span>
+                    </label>
+                </div> 
+                <div class="option">
                     <label>고급 3D</label>
                     <label class="toggle-switch">
-                        <input type="checkbox" checked>
+                        <input id="checkMulti" type="checkbox" >
                         <span></span>
                     </label>
                 </div> 
@@ -144,6 +160,9 @@
             // 좌표값을 span 요소에 설정
             $('#tmLat').text(truncatedLat);
             $('#tmLng').text(truncatedLng);
+
+            // 사이드바 기본 표시
+            document.getElementById("mySidebar").style.display = "block";
         });
 
         function toggleNav() {
@@ -157,8 +176,6 @@
                 toggleBtn.innerHTML = "❯";
             }
         }
-
-    
     </script>
 
     <!-- 외부 JavaScript 파일 포함 -->
