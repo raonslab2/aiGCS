@@ -41,32 +41,8 @@ $(document).ready(function() {
             this.updateArea();
             this.addVertexAndMidpointHoverEffect();
         }
-        
-        exportData() {
-            const polygonData = this.poly.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
-            const gridData = this.gridIntersections.map(point => ({ lat: point[0], lng: point[1] }));
-            const gridSize = this.gridSizeSlider.val();
-            const droneAltitude = $('#droneAlt').val();
-            const droneSpeed = $('#droneSpeed').val();
-
-            const data = {
-                polygons: [{
-                    latlngs: polygonData,
-                    style: {
-                        fillColor: this.poly.options.fillColor,
-                        color: this.poly.options.color,
-                        weight: this.poly.options.weight
-                    }
-                }],
-                gridSize: gridSize,
-                grid: gridData,
-                droneAltitude: droneAltitude,
-                droneSpeed: droneSpeed
-            };
-
-            console.log(JSON.stringify(data, null, 2));
-        }
-        
+ 
+ 
         
         importData(data) {
             this.removePolygon();
@@ -400,96 +376,103 @@ drawGridAndPathInPolygon(latStep, lngStep) {
 			}
 		}
 
-		exportGridIntersections() {
-			const elevation = parseFloat($('#droneAlt').val()); // 슬라이더에서 고도 값을 가져옴
+exportGridIntersections() {
+    const elevation = parseFloat($('#droneAlt').val());
 
-			// 격자 교차점 좌표를 지그재그 패턴으로 정렬
-			const sortedIntersections = [];
-			const latGroups = {};
+    const gridLines = [];
+    const bounds = this.poly.getBounds();
+    const latStep = 0.00009 * parseInt(this.gridSizeSlider.val());
+    const lngStep = 0.00009 * parseInt(this.gridSizeSlider.val());
 
-			// 교차점을 위도별로 그룹화
-			this.gridIntersections.forEach(([lat, lng]) => {
-				if (!latGroups[lat]) {
-					latGroups[lat] = [];
-				}
-				latGroups[lat].push([lat, lng]);
-			});
+    // 가로 격자선에서 좌측 끝과 우측 끝을 선택
+    for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
+        let linePoints = [];
+        for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
+            const point = new L.LatLng(lat, lng);
+            if (this.isPointInPolygon(point)) {
+                linePoints.push(point);
+            }
+        }
+        if (linePoints.length > 1) {
+            gridLines.push(linePoints);
+        }
+    }
 
-			// 위도별로 정렬된 교차점을 지그재그 패턴으로 정렬
-			const sortedLats = Object.keys(latGroups).sort((a, b) => parseFloat(a) - parseFloat(b));
-			let reverse = false;
+    // dl_waypoint에 필요한 점들만 추가
+    const dl_waypoint = {
+        actions: [],
+        defaultFrame: "Home",
+        creationTime: new Date().toISOString(),
+        defaultAngle: 0,
+        defaultAngleOfView: [150, 85],
+        defaultCameraName: "",
+        defaultCameraResolution: [1280, 720],
+        defaultAltitude: elevation,
+        defaultDelay: 0,
+        defaultDistance: 0,
+        defaultHeading: 0,
+        defaultOverlap: 0,
+        defaultRadius: 0,
+        defaultSpeed: 0,
+        defaultWidth: 0,
+        home: {
+            coordinate: [
+                this.poly.getBounds().getCenter().lat,
+                this.poly.getBounds().getCenter().lng
+            ],
+            version: 1
+        },
+        name: "test",
+        rallys: [],
+        version: 1,
+        missionDetail: []
+    };
 
-			sortedLats.forEach(lat => {
-				const lngs = latGroups[lat].sort((a, b) => parseFloat(a[1]) - parseFloat(b[1]));
-				if (reverse) {
-					lngs.reverse();
-				}
-				sortedIntersections.push(...lngs);
-				reverse = !reverse;
-			});
+    // 격자선의 좌측 끝과 우측 끝을 추가하고 연결
+    let path = [];
+    for (let i = 0; i < gridLines.length; i++) {
+        const linePoints = gridLines[i];
+        if (i % 2 === 0) {
+            // 짝수 줄: 좌측 끝에서 우측 끝으로
+            path.push(linePoints[0]);
+            path.push(linePoints[linePoints.length - 1]);
+        } else {
+            // 홀수 줄: 우측 끝에서 좌측 끝으로
+            path.push(linePoints[linePoints.length - 1]);
+            path.push(linePoints[0]);
+        }
+    }
 
-			// dl_waypoint에 교차점 좌표 추가
-			const dl_waypoint = {
-				actions: [],
-				defaultFrame: "Home",
-				creationTime: new Date().toISOString(),
-				defaultAngle: 0,
-				defaultAngleOfView: [150, 85],
-				defaultCameraName: "",
-				defaultCameraResolution: [1280, 720],
-				defaultAltitude: elevation,
-				defaultDelay: 0,
-				defaultDistance: 0,
-				defaultHeading: 0,
-				defaultOverlap: 0,
-				defaultRadius: 0,
-				defaultSpeed: 0,
-				defaultWidth: 0,
-				home: {
-					coordinate: [
-						this.poly.getBounds().getCenter().lat,
-						this.poly.getBounds().getCenter().lng
-					],
-					version: 1
-				},
-				name: "test",
-				rallys: [],
-				version: 1,
-				missionDetail: []
-			};
+    // 경로를 추가
+    path.forEach((point, index) => {
+        dl_waypoint.actions.push({
+            command: "Waypoint",
+            coordinate: [point.lat, point.lng, elevation],
+            delay: 0,
+            elevation: elevation,
+            frame: "Home",
+            heading: 0,
+            radius: 0,
+            speed: 3,
+            type: "MoveTo",
+            version: 1
+        });
 
-			sortedIntersections.forEach(([lat, lng], index) => {
-				dl_waypoint.actions.push({
-					command: "Waypoint",
-					coordinate: [
-						lat,
-						lng,
-						elevation // 입력된 고도 값을 사용
-					],
-					delay: 0,
-					elevation: elevation, // 입력된 고도 값을 사용
-					frame: "Home",
-					heading: 0,
-					radius: 0,
-					speed: 2,
-					type: "MoveTo",
-					version: 1
-				});
+        dl_waypoint.missionDetail.push([{
+            _num: index,
+            _waypointParan1: "",
+            _waypointParan2: "",
+            _waypointParan3: "",
+            _waypointParan4: "",
+            _waypoinCommand: "16",
+            _waypoinframe: "3"
+        }]);
+    });
 
-				dl_waypoint.missionDetail.push([{
-					_num: index,
-					_waypointParan1: "",
-					_waypointParan2: "",
-					_waypointParan3: "",
-					_waypointParan4: "",
-					_waypoinCommand: "16",
-					_waypoinframe: "3"
-				}]);
-			});
+    console.log(JSON.stringify(dl_waypoint, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
+}
 
-			console.log(JSON.stringify(dl_waypoint, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
-			//console.log(JSON.stringify(dl_waypoint.missionDetail, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
-		}
+
 
 	}
 
@@ -523,8 +506,7 @@ drawGridAndPathInPolygon(latStep, lngStep) {
 
 	$('#exportButton').on('click', function() {
 		rectangleCreator.exportGridIntersections();
-		//데이터 불러오기위해 저장할 데이터 정보
-		rectangleCreator.exportData();
+ 
 	});
 	
     // 임시로 JSON 데이터를 불러오는 버튼 핸들러 추가
