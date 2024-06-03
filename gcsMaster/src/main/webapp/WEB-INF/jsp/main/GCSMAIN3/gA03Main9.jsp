@@ -131,6 +131,7 @@
                         <option value="ardupilot">ArduPilot</option>
                     </select>
                     <button id="exportButton" class="btn">업로드</button>
+                    <button id="importButton" class="btn">(임시)불러오기</button>
                     <div id="rectangleList" class="rectangle-list"></div>
                 </div>
             </div>

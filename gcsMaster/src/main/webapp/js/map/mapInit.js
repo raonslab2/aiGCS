@@ -2,46 +2,121 @@ $(document).ready(function() {
 
 	class RectangleCreator {
 		constructor(map) {
-			this.map = map;
-			this.poly = null;
-			this.gridLayers = [];
-			this.gridSizeValue = $('#gridSizeValue');
-			this.gridSizeSlider = $('#gridSizeSlider');
-			this.distanceDisplay = $('#distanceDisplay');
-			this.startMarker = null;
-			this.endMarker = null;
-			this.gridIntersections = []; // 가로줄 꺾이는 점을 저장하는 배열
-			this.gridMarkers = []; // 교차점 마커를 저장하는 배열
+            this.map = map;
+            this.poly = null;
+            this.gridLayers = [];
+            this.gridSizeValue = $('#gridSizeValue');
+            this.gridSizeSlider = $('#gridSizeSlider');
+            this.distanceDisplay = $('#distanceDisplay');
+            this.startMarker = null;
+            this.endMarker = null;
+            this.gridIntersections = []; // 가로줄 꺾이는 점을 저장하는 배열
+            this.gridMarkers = []; // 교차점 마커를 저장하는 배열
 		}
 
-		createRectangle() {
-			const center = this.map.getCenter();
-			const centerLat = center.lat;
-			const centerLng = center.lng;
-			const latOffset = 130 / 111320;
-			const lngOffset = 170 / (111320 * Math.cos(centerLat * (Math.PI / 180)));
+       createRectangle() {
+            const center = this.map.getCenter();
+            const centerLat = center.lat;
+            const centerLng = center.lng;
+            const latOffset = 130 / 111320;
+            const lngOffset = 170 / (111320 * Math.cos(centerLat * (Math.PI / 180)));
 
-			const topLeft = [centerLat + latOffset, centerLng - lngOffset];
-			const topRight = [centerLat + latOffset, centerLng + lngOffset];
-			const bottomRight = [centerLat - latOffset, centerLng + lngOffset];
-			const bottomLeft = [centerLat - latOffset, centerLng - lngOffset];
+            const topLeft = [centerLat + latOffset, centerLng - lngOffset];
+            const topRight = [centerLat + latOffset, centerLng + lngOffset];
+            const bottomRight = [centerLat - latOffset, centerLng + lngOffset];
+            const bottomLeft = [centerLat - latOffset, centerLng - lngOffset];
 
-			this.poly = L.polygon([topLeft, topRight, bottomRight, bottomLeft], {
-				fillColor: 'rgba(0, 128, 0, 0.7)',
-				color: 'white',
-				weight: 2
-			}).addTo(this.map);
+            this.poly = L.polygon([topLeft, topRight, bottomRight, bottomLeft], {
+                fillColor: 'rgba(0, 128, 0, 0.7)',
+                color: 'white',
+                weight: 2
+            }).addTo(this.map);
 
-			this.poly.enableEdit();
-			this.poly.on('dblclick', L.DomEvent.stop).on('dblclick', this.poly.toggleEdit);
+            this.poly.enableEdit();
+            this.poly.on('dblclick', L.DomEvent.stop).on('dblclick', this.poly.toggleEdit);
 
-			this.initGridAndPath();
-			this.setupEventListeners();
+            this.initGridAndPath();
+            this.setupEventListeners();
 
-			this.updateArea();
-			this.addVertexAndMidpointHoverEffect();
-		}
+            this.updateArea();
+            this.addVertexAndMidpointHoverEffect();
+        }
+        
+        exportData() {
+            const polygonData = this.poly.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
+            const gridData = this.gridIntersections.map(point => ({ lat: point[0], lng: point[1] }));
+            const gridSize = this.gridSizeSlider.val();
+            const droneAltitude = $('#droneAlt').val();
+            const droneSpeed = $('#droneSpeed').val();
 
+            const data = {
+                polygons: [{
+                    latlngs: polygonData,
+                    style: {
+                        fillColor: this.poly.options.fillColor,
+                        color: this.poly.options.color,
+                        weight: this.poly.options.weight
+                    }
+                }],
+                gridSize: gridSize,
+                grid: gridData,
+                droneAltitude: droneAltitude,
+                droneSpeed: droneSpeed
+            };
+
+            console.log(JSON.stringify(data, null, 2));
+        }
+        
+        
+        importData(data) {
+            this.removePolygon();
+
+            const polygonData = data.polygons[0];
+            this.poly = L.polygon(polygonData.latlngs, polygonData.style).addTo(this.map);
+            this.poly.enableEdit();
+            this.poly.on('dblclick', L.DomEvent.stop).on('dblclick', this.poly.toggleEdit);
+
+            this.gridSizeSlider.val(data.gridSize);
+            this.gridSizeValue.text(data.gridSize);
+            $('#droneAlt').val(data.droneAltitude);
+            $('#droneAltValue').text(data.droneAltitude);
+            $('#droneSpeed').val(data.droneSpeed);
+            $('#droneSpeedValue').text(data.droneSpeed);
+
+            this.gridIntersections = data.grid.map(point => [point.lat, point.lng]);
+            this.drawGridAndPathInPolygon(0.00009 * data.gridSize, 0.00009 * data.gridSize);
+
+            this.setupEventListeners();
+        }
+        
+        setupEventListeners() {
+            this.gridSizeSlider.on('input', () => {
+                const gridSize = parseInt(this.gridSizeSlider.val());
+                this.gridSizeValue.text(gridSize);
+                const latStep = 0.00009 * gridSize;
+                const lngStep = 0.00009 * gridSize;
+                this.drawGridAndPathInPolygon(latStep, lngStep);
+            });
+
+            const redrawGridAndPath = () => {
+                const gridSize = parseInt(this.gridSizeSlider.val());
+                const latStep = 0.00009 * gridSize;
+                const lngStep = 0.00009 * gridSize;
+                this.drawGridAndPathInPolygon(latStep, lngStep);
+            };
+
+            this.poly.on('edit', redrawGridAndPath);
+            this.poly.on('editable:vertex:dragend', redrawGridAndPath);
+            this.poly.on('editable:dragend', redrawGridAndPath);
+
+            $('#checkCamera').on('change', () => {
+                this.toggleGridMarkers();
+            });
+
+            $('#checkMulti').on('change', redrawGridAndPath);
+        }
+
+        
 		isPointInPolygon(point) {
 			const polyPoints = this.poly.getLatLngs()[0];
 			const x = point.lat, y = point.lng;
@@ -56,71 +131,72 @@ $(document).ready(function() {
 			return inside;
 		}
 
-		drawGridAndPathInPolygon(latStep, lngStep) {
-			this.gridLayers.forEach(layer => this.map.removeLayer(layer));
-			this.gridLayers = [];
-			this.gridIntersections = []; // 초기화
+drawGridAndPathInPolygon(latStep, lngStep) {
+    this.gridLayers.forEach(layer => this.map.removeLayer(layer));
+    this.gridLayers = [];
+    this.gridIntersections = []; // 초기화
 
-			const bounds = this.poly.getBounds();
-			let path = [];
-			let gridLines = [];
-			let isPathReversed = false;
+    const bounds = this.poly.getBounds();
+    let path = [];
+    let gridLines = [];
+    let isPathReversed = false;
 
-			// 가로 격자선 그리기
-			for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
-				let linePoints = [];
-				for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
-					const point = new L.LatLng(lat, lng);
-					if (this.isPointInPolygon(point)) {
-						linePoints.push(point);
-						this.gridIntersections.push([point.lat, point.lng]);
-					}
-				}
-				if (linePoints.length > 1) {
-					const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
-					gridLines.push(gridLine);
-					this.gridLayers.push(gridLine);
-					if (isPathReversed) {
-						linePoints.reverse();
-					}
-					path = path.concat(linePoints);
-					isPathReversed = !isPathReversed;
-				}
-			}
+    // 가로 격자선 그리기
+    for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
+        let linePoints = [];
+        for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
+            const point = new L.LatLng(lat, lng);
+            if (this.isPointInPolygon(point)) {
+                linePoints.push(point);
+                this.gridIntersections.push([point.lat, point.lng]);
+            }
+        }
+        if (linePoints.length > 1) {
+            const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
+            gridLines.push(gridLine);
+            this.gridLayers.push(gridLine);
+            if (isPathReversed) {
+                linePoints.reverse();
+            }
+            path = path.concat(linePoints);
+            isPathReversed = !isPathReversed;
+        }
+    }
 
-			// 세로 격자선 그리기
-			if ($('#checkMulti').is(':checked')) {
-				for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
-					let linePoints = [];
-					for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
-						const point = new L.LatLng(lat, lng);
-						if (this.isPointInPolygon(point)) {
-							linePoints.push(point);
-							this.gridIntersections.push([point.lat, point.lng]);
-						}
-					}
-					if (linePoints.length > 1) {
-						const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
-						gridLines.push(gridLine);
-						this.gridLayers.push(gridLine);
-					}
-				}
-			}
+    // 세로 격자선 그리기
+    if ($('#checkMulti').is(':checked')) {
+        for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
+            let linePoints = [];
+            for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
+                const point = new L.LatLng(lat, lng);
+                if (this.isPointInPolygon(point)) {
+                    linePoints.push(point);
+                    this.gridIntersections.push([point.lat, point.lng]);
+                }
+            }
+            if (linePoints.length > 1) {
+                const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
+                gridLines.push(gridLine);
+                this.gridLayers.push(gridLine);
+            }
+        }
+    }
 
-			gridLines.forEach(line => line.addTo(this.map));
-			const pathLine = L.polyline(path, { color: "#00FF00", weight: 1 });
-			pathLine.addTo(this.map);
-			this.gridLayers.push(pathLine);
+    gridLines.forEach(line => line.addTo(this.map));
+    const pathLine = L.polyline(path, { color: "#00FF00", weight: 1 });
+    pathLine.addTo(this.map);
+    this.gridLayers.push(pathLine);
 
-			this.updateDistance(path);
+    this.updateDistance(path);
 
-			if (path.length > 0) {
-				this.addStartAndEndMarkers(path[0], path[path.length - 1]);
-			}
+    if (path.length > 0) {
+        this.addStartAndEndMarkers(path[0], path[path.length - 1]);
+    }
 
-			this.updateArea();
-			this.toggleGridMarkers(); // 교차점 마커 추가
-		}
+    this.updateArea();
+    this.toggleGridMarkers(); // 교차점 마커 추가
+}
+
 
 		updateArea() {
 			const bounds = this.poly.getBounds();
@@ -412,6 +488,7 @@ $(document).ready(function() {
 			});
 
 			console.log(JSON.stringify(dl_waypoint, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
+			//console.log(JSON.stringify(dl_waypoint.missionDetail, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
 		}
 
 	}
@@ -446,7 +523,67 @@ $(document).ready(function() {
 
 	$('#exportButton').on('click', function() {
 		rectangleCreator.exportGridIntersections();
+		//데이터 불러오기위해 저장할 데이터 정보
+		rectangleCreator.exportData();
 	});
+	
+    // 임시로 JSON 데이터를 불러오는 버튼 핸들러 추가
+    $('#importButton').on('click', function() {
+		/*
+        var data = {
+            "polygons": [{
+                "latlngs": [[37.5665, 126.9780], [37.5665, 126.9790], [37.5655, 126.9790], [37.5655, 126.9780]],
+                "style": {
+                    "fillColor": "rgba(0, 128, 0, 0.7)",
+                    "color": "white",
+                    "weight": 2
+                }
+            }],
+            "gridSize": 5,
+            "grid": [{"lat": 37.5665, "lng": 126.9781}, {"lat": 37.5664, "lng": 126.9782}],
+            "droneAltitude": 100,
+            "droneSpeed": 10
+        };
+        */
+        const data = `{
+          "polygons": [
+            {
+              "latlngs": [
+                [37.20647849602711, 127.75017142295836],
+                [37.20531817368949, 127.7498209988414],
+                [37.20563679845143, 127.74739801883692]
+              ],
+              "style": {
+                "fillColor": "rgba(0, 128, 0, 0.7)",
+                "color": "white",
+                "weight": 2
+              }
+            }
+          ],
+          "gridSize": "4",
+          "grid": [
+            {"lat": 37.20567817368949, "lng": 127.74775801883692},
+            {"lat": 37.20567817368949, "lng": 127.74811801883692},
+            {"lat": 37.20567817368949, "lng": 127.74847801883692},
+            {"lat": 37.20567817368949, "lng": 127.74883801883692},
+            {"lat": 37.20567817368949, "lng": 127.74919801883692},
+            {"lat": 37.20567817368949, "lng": 127.74955801883692},
+            {"lat": 37.20567817368949, "lng": 127.74991801883692},
+            {"lat": 37.20603817368949, "lng": 127.74883801883692},
+            {"lat": 37.20603817368949, "lng": 127.74919801883692},
+            {"lat": 37.20603817368949, "lng": 127.74955801883692},
+            {"lat": 37.20603817368949, "lng": 127.74991801883692},
+            {"lat": 37.20639817368949, "lng": 127.74991801883692}
+          ],
+          "droneAltitude": "49",
+          "droneSpeed": "2"
+        }`;
+
+
+        const jsonData = JSON.parse(data);
+
+        rectangleCreator.importData(jsonData);
+    });
 
 	$("#gridSizeSlider").on("input", function() {
 		var value = (this.value / 10).toFixed(1);
