@@ -55,6 +55,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <form id="searchForm">
+                            <input type="hidden" id="page" name="page" value="">
+                            <input type="hidden" id="pageUnit" name="pageUnit" value="15">
+                            </form>
 
                             <div class="card-body" style="margin-top: 20px;">
                                 <div class="table-responsive">

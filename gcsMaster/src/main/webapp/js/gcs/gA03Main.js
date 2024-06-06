@@ -108,7 +108,7 @@ class GcsDashboard {
         return `
             <tr id="subRow" class="subTr" style="cursor:pointer;">
                 <td class="dlPk">${row.dlPk}</td>
-                <td><img src="/images/sample_map.png" height="42" /></td>
+                <td><img src="/images/sample_map.png" height="32" /></td>
                 <td><button type="button" onclick="GcsDashboard.fn_waypoint33(${row.dlPk}); return false;" class="btn_style03 btn_green btnMoveReg">${row.dlName}</button></td>
                 <td>${row.dlHomeX} , ${row.dlHomeY}</td>
                 <td><button type="button" onclick="GcsDashboard.fn_waypoint(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">Edit</button></td>
@@ -123,8 +123,7 @@ class GcsDashboard {
             <div class="gallery-item">
                 <img src="/images/sample_map.png" alt="Map Image">
                 <div class="content">
-                    <h3>${row.dlName}</h3>
-                    <p>${row.dlHomeX} , ${row.dlHomeY}</p>
+                    <h3>${row.dlName}</h3> 
                     <div class="meta">
                         <span>${this.formatDate(row.dlCreateTime)}</span>
                         <span><button type="button" onclick="GcsDashboard.fn_waypoint(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">Edit</button></span>

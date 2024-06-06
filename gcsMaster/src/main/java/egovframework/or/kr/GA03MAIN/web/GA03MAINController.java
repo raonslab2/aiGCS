@@ -1143,6 +1143,7 @@ public class GA03MAINController {
 		EgovMap map = CommUtil.makeEgovMap(param); 
 		
 		String page = String.valueOf(map.get("page")); 
+		String pageUnit = String.valueOf(map.get("pageUnit")); 
 		
 		//파라미터 수신데이터
 		GA03MAINVO vo = new GA03MAINVO();
@@ -1150,7 +1151,13 @@ public class GA03MAINController {
 		if(page !=null && page !="null" && page !="") {
 			int page1 = Integer.parseInt(page);
 			vo.setPageIndex(page1);
+		} 
+		
+		if(pageUnit !=null && pageUnit !="null" && pageUnit !="") {
+			int pageUnitCnt = Integer.parseInt(pageUnit);
+			vo.setPageUnit(pageUnitCnt);
 		}
+		
 		PaginationInfo paginationInfo = new PaginationInfo();
 		
 		//paginationInfo.setCurrentPageNo(1);

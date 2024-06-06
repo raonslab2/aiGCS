@@ -36,7 +36,7 @@
 
 .topnav a.active {
     background-color: #4CAF50;
-    color: white;
+    color: white; /* 하얀색으로 변경 */
 }
 
 .topnav-right {
@@ -72,15 +72,15 @@
 <div class="topnav" id="myTopnav">
     <a href="javascript:void(0)" class="menu-icon" onclick="toggleNav()">&#9776;</a>
     <a href="#"></a>
-    <a href="/gcs/dashboard/gA03Main.do">프로젝트</a> 
-    <a href="/gcs/dashboard/gcsMain2.do" target="_blank">실시간 관제시스템</a>
-    <a href="/gcs/dashboard/gA030OfflineMain.do" target="_blank">오프라인 관제시스템</a>
-    <a href="/gcs/dashboard/gA01Main2.do">군집드론</a>
-    <a href="/gcs/dashboard/gA034Main.do">기체현황</a>
-    <a href="#">보고서</a>
+    <a href="/gcs/dashboard/gA03Main.do" id="menu-project">프로젝트</a> 
+    <a href="/gcs/dashboard/gcsMain2.do" target="_blank" id="menu-realtime">실시간 관제시스템</a>
+    <a href="/gcs/dashboard/gA030OfflineMain.do" target="_blank" id="menu-offline">오프라인 관제시스템</a>
+    <a href="/gcs/dashboard/gA01Main2.do" id="menu-drone">군집드론</a>
+    <a href="/gcs/dashboard/gA034Main.do" id="menu-status">기체현황</a>
+    <a href="#" id="menu-report">보고서</a>
     <div class="topnav-right">
-        <a href="/gcs/dashboard/gA035Main.do">사용자정보</a>
-        <a href="/gcs/TD0001/TodayWork900.do" target="_blank">오늘 할 일</a>
+        <a href="/gcs/dashboard/gA035Main.do" id="menu-user">사용자정보</a>
+        <a href="/gcs/TD0001/TodayWork900.do" target="_blank" id="menu-today">오늘 할 일</a>
         <a href="#" id="menu-logout">로그아웃</a>
     </div>
 </div>
@@ -91,6 +91,14 @@ $(document).ready(function() {
     // 클릭 시 실행할 동작을 정의합니다.
     // 예를 들어, 로그아웃 기능을 여기에 추가할 수 있습니다.
     $(location).attr('href', '/gcs/login/actionLogout.do');
+  });
+
+  // 현재 URL을 기반으로 active 클래스를 추가
+  var currentUrl = window.location.pathname;
+  $('.topnav a').each(function() {
+    if ($(this).attr('href') === currentUrl) {
+      $(this).addClass('active');
+    }
   });
 });
 
