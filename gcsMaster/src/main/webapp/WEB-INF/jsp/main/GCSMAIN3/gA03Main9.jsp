@@ -25,22 +25,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div class="topnav">
-        <a href="javascript:void(0)" class="menu-icon" onclick="toggleNav()">&#9776;</a>
-        <a href="#">홈</a>
-        <a href="#"></a>
-        <a href="/gcs/dashboard/gA03Main9.do?tmLat=37.2953232&tmLng=127.0374223">비행계획(2D)</a>
-        <a href="/gcs/dashboard/gA03Main.do" target="_blank">비행계획(3D)</a>
-        <a href="#">업로드</a>
-        <a href="/gcs/dashboard/gcsMain2.do" target="_blank">관제시스템</a>
-        <a href="/gcs/dashboard/gA01Main2.do" target="_blank">군집드론</a>
-        <a href="#">보고서</a>
-        <div class="topnav-right">
-            <a href="#">공유</a>
-            <a href="#"><i class="fa fa-user"></i></a>
-            <a href="#"><i class="fa fa-cog"></i></a>
-        </div>
-    </div>
+     <!-- head menu -->
+    <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
+         
+ 
 
     <div id="mySidebar" class="sidebar" ondragstart="return false;" ondrop="return false;">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()"> </a>
@@ -150,6 +138,23 @@
         var tmLng = ${tmLng};
         
         $(document).ready(function() {
+        	
+            // 현재 날짜와 시간을 가져옵니다.
+            var now = new Date();
+            
+            // 년, 월, 일, 시, 분을 각각 가져옵니다.
+            var year = now.getFullYear();
+            var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줍니다.
+            var day = String(now.getDate()).padStart(2, '0');
+            var hours = String(now.getHours()).padStart(2, '0');
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            // 원하는 형식으로 문자열을 만듭니다.
+            var formattedDate = 'Route_' + year + month + day + hours + minutes;
+            
+            // input 요소의 값을 설정합니다.
+            $('#projectName').val(formattedDate);
+        	
             // 좌표값이 정의되지 않은 경우를 대비한 기본값 설정
             tmLat = (tmLat !== undefined && tmLat !== null) ? tmLat.toString() : "";
             tmLng = (tmLng !== undefined && tmLng !== null) ? tmLng.toString() : "";

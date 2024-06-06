@@ -44,9 +44,8 @@
 
 <body>
 
-  
-  <!-- left menu List -->
-  <c:import url="/EmpPageLink.do?link=main/include/menu3" /> 
+     <!-- head menu -->
+    <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
 
  
   <main>

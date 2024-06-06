@@ -104,7 +104,9 @@ public class GA03MAINController {
     	}
   
 		return "main/GCSMAIN3/gA03Main";
-	} 
+	}  
+	
+	
 	
 	
 	/**
@@ -329,7 +331,79 @@ public class GA03MAINController {
 		model.addAttribute("tmLng", tmLng);
 		
 		return "main/GCSMAIN3/gA03Main9";
-	} 
+	}
+	
+	
+	/**
+	 * Home > 2D : 비행경로 등록
+	 * @return 메인페이지 정보 Map [key : 항목명]
+	 *
+	 * @param request
+	 * @param model
+	 * @exception Exception Exception
+	 */ 
+	@RequestMapping(value = "/gcs/dashboard/insertDlWaypoint.do", method = RequestMethod.POST)
+	public @ResponseBody ModelAndView insertDlWaypoint(@RequestParam Map<String, Object> param,
+			HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("jsonView");
+		EgovMap map = CommUtil.makeEgovMap(param);
+
+		String tmData = String.valueOf(map.get("data"));
+		String addr = String.valueOf(map.get("addr"));
+		String dlPk = String.valueOf(map.get("dlPk"));
+		String missionName = String.valueOf(map.get("missionName"));
+		String waypointsDetail = String.valueOf(map.get("jsonObj2"));
+
+		LOGGER.debug("waypointsDetail : {}", waypointsDetail);
+
+		LOGGER.debug("gA03Main2Waypoint : {}", tmData);
+
+		JSONObject jObject = new JSONObject(tmData);
+		LOGGER.debug("gA03Main2Waypoint : {}", jObject.get("creationTime"));
+
+		// home
+		JSONObject home = new JSONObject(jObject.getStr("home"));
+		JSONArray coordinateArry = new JSONArray(home.getStr("coordinate"));
+		String home_x = coordinateArry.get(0).toString();
+		String home_y = coordinateArry.get(1).toString();
+
+		LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+		String user_id = user.getMbCode();
+
+		String waypoints = tmData;
+		String create_time = jObject.getStr("creationTime");
+
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("DL_NAME", missionName);
+		paramMap.put("DL_USER_ID", user_id);
+		paramMap.put("DL_HOME_X", home_x);
+		paramMap.put("DL_HOME_Y", home_y);
+		paramMap.put("DL_WAYPOINT", waypoints);
+		paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail);
+		paramMap.put("DL_CREATE_TIME", create_time);
+		paramMap.put("DL_ADDR", addr);
+		if (dlPk != null && dlPk != "") {
+			paramMap.put("DL_PK", dlPk);
+		}
+
+		try {
+			if (dlPk != null && dlPk != "") {
+				gA03MAINService.updateWaypoint(paramMap);
+			} else {
+				gA03MAINService.insertWaypoint(paramMap);
+			}
+
+		} catch (IllegalAccessException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO: handle exception
+			e.getTargetException().printStackTrace();
+		}
+
+		return mav;
+	}
+		
 	
 	/**
 	 * GCS > MAIN > PLAN

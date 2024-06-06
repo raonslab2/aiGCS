@@ -375,6 +375,9 @@
     
 </head> 
 <body style="overflow-x: hidden;overflow-y: hidden">  
+     <!-- head menu -->
+    <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
+    
 <div id="waypoints-data" class="waypoints-data" style="display:none"><c:out value="${waypoints}"/></div>  
 <div id="waypoints-data22" class="waypoints-data22" style="display:none"><c:out value="${waypointsDetail}"/></div>  
  
@@ -438,7 +441,7 @@
 <%--
 <button id="btnCloseEast">[Close]</button>
  --%>
-		   <table id="tb2" class="ui inverted right aligned table">
+		   <table id="tb2" class="ui inverted right aligned table" style="margin-top:50px;">
 		     <tr>
 		      <th><span style="color:#A4A4A4">Route Name</span></th>
 		      <th>  

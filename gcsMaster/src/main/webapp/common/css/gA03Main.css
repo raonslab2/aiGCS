@@ -1,0 +1,215 @@
+/* 기존 CSS 유지 */
+@import url('https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+@import url('/css/gcs/TodayWorkCommon.css');
+@import url('/css/gcs/gA035Main.css');
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table thead th, .table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 모바일 반응형 CSS 추가 */
+@media (max-width: 768px) {
+    .table thead th:nth-child(2), /* Map 컬럼 */
+    .table tbody td:nth-child(2),
+    .table thead th:nth-child(4), /* Address 컬럼 */
+    .table tbody td:nth-child(4),
+    .table thead th:nth-child(7), /* Reg 컬럼 */
+    .table tbody td:nth-child(7) {
+        display: none;
+    }
+}
+
+.local-position {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.position-input {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-plan-link {
+    margin-left: auto;
+}
+
+.btn_style02 {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn_style02:hover {
+    background-color: #45a049;
+}
+
+.view-switch-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.view-switch-buttons button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.view-switch-buttons button.active {
+    background-color: #45a049;
+}
+
+.view-switch-buttons button:not(.active):hover {
+    background-color: #45a049;
+}
+
+/* Gallery */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.gallery-item {
+    box-sizing: border-box;
+    padding: 10px;
+    flex: 1 1 calc(20% - 20px); /* 기본적으로 가로 5개 */
+    max-width: calc(20% - 20px); /* 기본적으로 가로 5개 */
+    border: 1px solid #ccc; /* 회색 테두리 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 살짝 그림자 효과 */
+    transition: transform 0.2s; /* 호버 시 애니메이션 효과 */
+} 
+
+.gallery-item:hover {
+    transform: scale(1.05); /* 호버 시 약간 확대 */
+}
+
+.gallery-item img {
+    border-radius: 8px; /* 이미지도 모서리 둥글게 */
+}
+
+@media (max-width: 1200px) {
+    .gallery-item {
+        flex: 1 1 calc(25% - 20px); /* 가로 4개 */
+        max-width: calc(25% - 20px); /* 가로 4개 */
+    }
+}
+
+@media (max-width: 992px) {
+    .gallery-item {
+        flex: 1 1 calc(33.33% - 20px); /* 가로 3개 */
+        max-width: calc(33.33% - 20px); /* 가로 3개 */
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-item {
+        flex: 1 1 calc(50% - 20px); /* 가로 2개 */
+        max-width: calc(50% - 20px); /* 가로 2개 */
+    }
+}
+
+@media (max-width: 576px) {
+    .gallery-item {
+        flex: 1 1 calc(100% - 20px); /* 가로 1개 */
+        max-width: calc(100% - 20px); /* 가로 1개 */
+    }
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+}
+
+.gallery-item .content {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.gallery-item .content h3 {
+    margin: 10px 0;
+}
+
+.gallery-item .content p {
+    margin: 10px 0;
+}
+
+.gallery-item .content .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Center alignment */
+.content-container {
+    margin-top: 70px;
+    text-align: center;
+    width: 100%;
+}
+
+.content-container .container {
+    text-align: center;
+    width: 100%;
+}
+
+.content-container .row {
+    max-width: 1444px;
+    margin: 0 auto; /* Center the row */
+}
+
+.view-switch-buttons button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.view-switch-buttons button:hover {
+    background-color: #45a049;
+}
+

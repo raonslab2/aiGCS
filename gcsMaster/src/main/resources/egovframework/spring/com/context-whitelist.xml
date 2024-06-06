@@ -56,6 +56,9 @@
 		<value>main/include2/menu01</value>
 		<value>main/include2/menu02</value>
 		
+		
+		<value>main/include/droneHeadMenu</value>
+		
 		<value>main/*</value>
 	 
 	    <!-- 
