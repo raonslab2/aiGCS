@@ -92,7 +92,7 @@
                                 <div class="card-header">  <a style="color:blue" href="<c:url value='/gcs/dashboard/gA034MainWrite.do'/>"><button type="button" class="btn_style02 btn_green" id="btnExcelDownload">
                                 Add New Device<span>▷</span></button>
 					             </a></div>
-                                <div class="card-body"> 
+                                <div class="card-body" style="margin-top:20px;"> 
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
