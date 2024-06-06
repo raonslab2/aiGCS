@@ -39,32 +39,32 @@ class GcsDashboard {
         }
     }
 
-    bindEvents() {
-        $('#createRouterPath').click((e) => {  
-            var tmLat = $("#tmLat").val(); 
-            var tmLng = $("#tmLng").val(); 
-            window.location.href = "/gcs/dashboard/gA03Main2.do?tmLat=" + tmLat + "&tmLng=" + tmLng;
-        });
+	bindEvents() {
+	    $('#createRouterPath').click((e) => {  
+	        var tmLat = $("#tmLat").val(); 
+	        var tmLng = $("#tmLng").val(); 
+	        window.location.href = "/gcs/dashboard/gA03Main2.do?tmLat=" + tmLat + "&tmLng=" + tmLng;
+	    });
+	
+	    $('#createRouterPolygonPath').click((e) => {  
+	        var tmLat = $("#tmLat").val(); 
+	        var tmLng = $("#tmLng").val(); 
+	        window.location.href = "/gcs/dashboard/gA03Main9.do?tmLat=" + tmLat + "&tmLng=" + tmLng;
+	    });
+	
+	    $(document).on('click', '.pageClass', (e) => {
+	        var page = $(e.target).data('page');
+	        var totalPageCnt = $(e.target).data('total_page_count');
+	        if (page > totalPageCnt) return false;
+	        if (page == 0) return false;
+	        $("#page").val(page);
+	        var formSer = $('#searchForm').serialize();
+	        this.loadList(formSer);
+	    });
+	
+	    $('#viewSwitchToggle').click(() => this.toggleView());
+	}
 
-        $('#createRouterPolygonPath').click((e) => {  
-            var tmLat = $("#tmLat").val(); 
-            var tmLng = $("#tmLng").val(); 
-            window.location.href = "/gcs/dashboard/gA03Main9.do?tmLat=" + tmLat + "&tmLng=" + tmLng;
-        });
-
-        $(document).on('click', '.pageClass', (e) => {
-            var page = $(e.target).data('page');
-            var totalPageCnt = $(e.target).data('total_page_count');
-            if (page > totalPageCnt) return false;
-            if (page == 0) return false;
-            $("#page").val(page);
-            var formSer = $('#searchForm').serialize();
-            this.loadList(formSer);
-        });
-
-        $('#listViewBtn').click(() => this.switchView('list'));
-        $('#galleryViewBtn').click(() => this.switchView('gallery'));
-    }
 
     initList() {
         var formSer = $('#searchForm').serialize();
@@ -118,20 +118,21 @@ class GcsDashboard {
         `;
     }
 
-    projectGalleryView(row) {
-        return `
-            <div class="gallery-item">
-                <img src="/images/sample_map.png" alt="Map Image">
-                <div class="content">
-                    <h3>${row.dlName}</h3> 
-                    <div class="meta">
-                        <span>${this.formatDate(row.dlCreateTime)}</span>
-                        <span><button type="button" onclick="GcsDashboard.fn_waypoint(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">Edit</button></span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+	projectGalleryView(row) {
+	    return `
+	        <div class="gallery-item">
+	            <img src="/images/sample_map.png" alt="Map Image">
+	            <div class="content">
+	                <h3>${row.dlName}</h3>
+	                <div class="meta">
+	                    <span>${this.formatDate(row.dlCreateTime)}</span>
+	                    <span><button type="button" onclick="GcsDashboard.fn_waypoint(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">Edit</button></span>
+	                </div>
+	            </div>
+	        </div>
+	    `;
+	}
+
 
     formatDate(dateString) {
         const dateParts = dateString.split('T');
@@ -154,19 +155,22 @@ class GcsDashboard {
         return $(data);
     }
 
-    switchView(view) {
-        if (view === 'list') {
-            $('.table').show();
-            $('#galleryView').hide();
-            $('#listViewBtn').addClass('active');
-            $('#galleryViewBtn').removeClass('active');
-        } else {
-            $('.table').hide();
-            $('#galleryView').show();
-            $('#galleryViewBtn').addClass('active');
-            $('#listViewBtn').removeClass('active');
-        }
-    }
+	switchView(view) {
+	    if (view === 'list') {
+	        $('.table').show();
+	        $('#galleryView').hide();
+	        $('#viewSwitchToggle').text('GV');
+	    } else {
+	        $('.table').hide();
+	        $('#galleryView').show();
+	        $('#viewSwitchToggle').text('LV');
+	    }
+	}
+	
+	toggleView() {
+	    const currentView = $('#viewSwitchToggle').text() === 'LV' ? 'list' : 'gallery';
+	    this.switchView(currentView);
+	}
 
     setGalleryColumns() {
         let columns = 5;

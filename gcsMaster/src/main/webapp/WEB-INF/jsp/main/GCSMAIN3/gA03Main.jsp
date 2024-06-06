@@ -31,37 +31,37 @@
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <div class="local-position">
-                                    <div class="left-group">
-                                        <a href="/gcs/dashboard/gA03Main.do">최근 프로젝트</a> | 
-                                        <a href="#">나의 프로젝트</a> |
-                                        <a href="#">조직 프로젝트</a>
-                                    </div>
-                                    <div class="view-switch-buttons">
-                                        <label for="tmLat">Latitude:</label>
-                                        <input type="text" id="tmLat" name="tmLat" value="" class="position-input">
-                                        <label for="tmLng">Longitude:</label>
-                                        <input type="text" id="tmLng" name="tmLng" value="" class="position-input">
-                                        <a id="createRouterPath" href="#" class="add-plan-link">
-                                            <button type="button" class="btn_style02 btn_green">
-                                                3D Plan <span>▷</span>
-                                            </button>
-                                        </a>
-                                        <a id="createRouterPolygonPath" href="#" class="add-plan-link">
-                                            <button type="button" class="btn_style02 btn_green">
-                                                2D Plan <span>▷</span>
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
+								<div class="local-position">
+								    <div class="left-group">
+								        <a href="/gcs/dashboard/gA03Main.do">최근 프로젝트</a> | 
+								        <a href="#">나의 프로젝트</a> |
+								        <a href="#">조직 프로젝트</a>
+								    </div>
+								    <div class="view-switch-buttons">
+								        <label for="tmLat">Latitude:</label>
+								        <input type="text" id="tmLat" name="tmLat" value="" class="position-input">
+								        <label for="tmLng">Longitude:</label>
+								        <input type="text" id="tmLng" name="tmLng" value="" class="position-input">
+								        <a id="createRouterPath" href="#" class="add-plan-link">
+								            <button type="button" class="btn_style02 btn_green">
+								                3D Plan <span>▷</span>
+								            </button>
+								        </a>
+								        <a id="createRouterPolygonPath" href="#" class="add-plan-link">
+								            <button type="button" class="btn_style02 btn_green">
+								                2D Plan <span>▷</span>
+								            </button>
+								        </a>
+								    </div>
+								</div>
+
                             
                                 <div class="local-position" style="margin-top:20px;">
                                     <div class="left-group">
 
                                     </div>
                                     <div class="view-switch-buttons">
-                                        <button id="listViewBtn" class="btn_style02 btn_green">List View</button>
-                                        <button id="galleryViewBtn" class="btn_style02 btn_green">Gallery View</button>
+                                        <button id="viewSwitchToggle" class="toggle-button btn_style02 btn_green">L</button>
                                     </div>
                                 </div>
                             </div>
