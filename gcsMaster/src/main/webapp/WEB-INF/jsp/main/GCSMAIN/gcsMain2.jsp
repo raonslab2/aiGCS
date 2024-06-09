@@ -27,8 +27,10 @@
         <meta name="viewport"
             content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
         <c:import url="/EmpPageLink.do?link=main/include/src" /> 
-        <script src="https://cesium.com/downloads/cesiumjs/releases/1.87.1/Build/Cesium/Cesium.js"></script>
-        <link href="/cesium/js/Widgets/widgets.css" rel="stylesheet">
+     
+		<script src="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Cesium.js"></script>
+		<link href="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
         <!-- Style our app. -->  
         <link href="<c:url value="/cesium/css/index.css" />" media="screen" rel="stylesheet"> 
 	  <!--Style-->

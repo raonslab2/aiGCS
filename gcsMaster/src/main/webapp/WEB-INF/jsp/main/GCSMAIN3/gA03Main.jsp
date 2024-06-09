@@ -13,14 +13,14 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User List</title> 
+<title>프로젝트</title> 
 <link rel="stylesheet" href="/common/css/gA03Main.css"> <!-- 새로운 CSS 파일 추가 -->
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/gcs/gA03Main.js"></script>
 </head>
 
-<body>
+<body page-data="menu-project">
     <!-- left menu List -->
     <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" />
 
@@ -33,15 +33,15 @@
                             <div class="card-header">
 								<div class="local-position">
 								    <div class="left-group">
-								        <a href="/gcs/dashboard/gA03Main.do">최근 프로젝트</a> | 
+								        <a href="/gcs/dashboard/projectMain1001.do">최근 프로젝트</a> | 
 								        <a href="#">나의 프로젝트</a> |
 								        <a href="#">조직 프로젝트</a>
 								    </div>
 								    <div class="view-switch-buttons">
 								        <label for="tmLat">Latitude:</label>
-								        <input type="text" id="tmLat" name="tmLat" value="" class="position-input">
+								        <input type="text" id="tmLat" style="width:120px;" name="tmLat" value="" class="position-input">
 								        <label for="tmLng">Longitude:</label>
-								        <input type="text" id="tmLng" name="tmLng" value="" class="position-input">
+								        <input type="text" style="width:120px;" id="tmLng" name="tmLng" value="" class="position-input">
 								        <a id="createRouterPath" href="#" class="add-plan-link">
 								            <button type="button" class="btn_style02 btn_green">
 								                3D Plan <span>▷</span>
@@ -59,10 +59,11 @@
                                 <div class="local-position" style="margin-top:20px;">
                                     <div class="left-group">
 
-                                    </div>
-                                    <div class="view-switch-buttons">
-                                        <button id="viewSwitchToggle" class="toggle-button btn_style02 btn_green">L</button>
-                                    </div>
+                                    </div> 
+									<!-- gA03Main.jsp 파일에서 view-switch-buttons 영역 수정 -->
+									<div class="view-switch-buttons">
+									    <button class="toggle-button list-view active" id="viewSwitchToggle"></button>
+									</div> 
                                 </div>
                             </div>
                             <form id="searchForm">

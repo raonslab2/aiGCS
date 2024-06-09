@@ -76,7 +76,7 @@
 						console.log(res.list);    
 						alert("Success");
 						//$("#aiPk").val(res.list.aiPk); 
-						$(location).attr('href', '/gcs/dashboard/gA03Main.do');
+						$(location).attr('href', '/gcs/dashboard/projectMain1001.do');
 					}).fail(function() {
 						alert("실패");
 					});

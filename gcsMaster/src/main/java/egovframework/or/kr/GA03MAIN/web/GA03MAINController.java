@@ -3,6 +3,9 @@ package egovframework.or.kr.GA03MAIN.web;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,7 +49,6 @@ import egovframework.or.kr.GA03MAIN.service.GA03MAINVO;
 import egovframework.or.kr.com.utill.CommUtil;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-
 /**
  * GCS 관제 시스템
  * 
@@ -106,7 +108,18 @@ public class GA03MAINController {
 		return "main/GCSMAIN3/gA03Main";
 	}  
 	
-	
+	@RequestMapping(value = "/gcs/dashboard/projectMain1001.do")
+	public String projectMain1001(HttpServletRequest request, ModelMap model)
+	  throws Exception{
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+  
+		return "main/GCSMAIN3/projectMain1001";
+	}  
 	
 	
 	/**
@@ -281,58 +294,136 @@ public class GA03MAINController {
 	 * @param model
 	 * @exception Exception Exception
 	 */ 
-	@RequestMapping("/gcs/dashboard/gA03Main9.do")
-	public String gA03Main9(@RequestParam Map<String, Object> param,@ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO,HttpServletRequest request, ModelMap model)
-	  throws Exception{  
+	@RequestMapping("/gcs/dashboard/projectMain1002.do")
+	public String projectMain1002(@RequestParam Map<String, Object> param, @ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO, HttpServletRequest request, ModelMap model)
+	  throws Exception {  
 		
-		//로그인 객체 선언 
-    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
-    	if(!isAuthenticated) {
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-    		return "main/login/empilogin";
-    	}
+		// 로그인 객체 선언 
+		Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") != null;
+		if (!isAuthenticated) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "main/login/empilogin";
+		}
 		
 		ModelAndView mav = new ModelAndView("jsonView");	 		
 		EgovMap map = CommUtil.makeEgovMap(param); 
+		
+	    // 사용자 정보 가져오기
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();
 
-		String tmLat = String.valueOf(map.get("tmLat"));
-		String tmLng = String.valueOf(map.get("tmLng"));
+
+		String tmLat = "";
+		String tmLng = "";
 		 
-		
 		String dlPk = gA03MAINVO.getDlPk();
-		LOGGER.debug("gA03Main2 : {}", dlPk);
+ 
 		
-		GA03MAINVO waypoints     = null;
-		String strWayPoint       = "";
+		GA03MAINVO waypoints = null;
+		String strWayPoint = "";
 		String strWayPointDetail = ""; 
-		//오늘 날짜
-		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyyMMddHHmm");
+		
+		// 오늘 날짜
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyyMMddHHmm");
 		Date time = new Date();
 		String time1 = format1.format(time);
 		
-		String strDlName         = "Route_"+time1;
-		if(dlPk !=null && !dlPk.equals("")) {
-			//파라미터 수신데이터
+		String strDlName = "Route_" + time1;
+		if (dlPk != null && !dlPk.equals("")) {
+			// 파라미터 수신 데이터
 			GA03MAINVO vo = new GA03MAINVO();
-			vo.setDlPk(dlPk);
-			waypoints         = gA03MAINService.selectWaypoint(vo);
-			strDlName         = waypoints.getDlName();
-			strWayPoint       = waypoints.getDlWaypoint();  
-			strWayPointDetail = waypoints.getDlWaypointDetail(); 
+			vo.setDlPk(dlPk); 
+			vo.setDlUserId(user_id);
+			try {
+				waypoints = gA03MAINService.selectWaypoint(vo);
+				strDlName = waypoints.getDlName();
+				strWayPoint = waypoints.getDlWaypoint();  
+				strWayPointDetail = waypoints.getDlWaypointDetail();
+
+				// JSON 파싱 및 tmLat, tmLng 값 설정
+				JSONObject waypointJson = new JSONObject(strWayPoint);
+				JSONObject home = waypointJson.getJSONObject("home");
+				JSONArray homeCoordinate = home.getJSONArray("coordinate");
+				tmLat = String.valueOf(homeCoordinate.getDouble(0));
+				tmLng = String.valueOf(homeCoordinate.getDouble(1));
+				model.addAttribute("tmLat", tmLat);
+				model.addAttribute("tmLng", tmLng);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 			
+
 		}
- 
-		
+
 		model.addAttribute("dlName", strDlName);
 		model.addAttribute("waypoints", strWayPoint);
 		model.addAttribute("waypointsDetail", strWayPointDetail);
 		model.addAttribute("dlPk", dlPk);
-		model.addAttribute("tmLat", tmLat);
-		model.addAttribute("tmLng", tmLng);
 		
-		return "main/GCSMAIN3/gA03Main9";
+ 
+		return "main/GCSMAIN3/projectMain1002";
 	}
 	
+ 
+	/**
+	 * Home > 2D : 비행경로 등록
+	 * @return 메인페이지 정보 Map [key : 항목명]
+	 *
+	 * @param request
+	 * @param model
+	 * @exception Exception Exception
+	 */ 
+	@RequestMapping(value = "/gcs/dashboard/selectWaypointView.do", method = RequestMethod.POST)
+	public @ResponseBody ModelAndView selectWaypointView(@RequestParam Map<String, Object> param,
+			HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("jsonView");
+		EgovMap map = CommUtil.makeEgovMap(param);
+
+ 
+		String dlPk = String.valueOf(map.get("dlPk"));
+ 
+		GA03MAINVO waypoints = null;
+		String strWayPoint = "";
+		String strWayPointDetail = ""; 
+		String tmLat = "";
+		String tmLng = "";
+		
+  
+		String strDlName = "";
+		
+		
+		GA03MAINVO vo = new GA03MAINVO(); 
+		vo.setDlPk(dlPk);
+		
+		try {
+			waypoints = gA03MAINService.selectWaypoint(vo);
+			strDlName = waypoints.getDlName();
+			strWayPoint = waypoints.getDlWaypoint();  
+			strWayPointDetail = waypoints.getDlWaypointDetail();
+
+			// JSON 파싱 및 tmLat, tmLng 값 설정
+			JSONObject waypointJson = new JSONObject(strWayPoint);
+			JSONObject home = waypointJson.getJSONObject("home");
+			JSONArray homeCoordinate = home.getJSONArray("coordinate");
+			tmLat = String.valueOf(homeCoordinate.getDouble(0));
+			tmLng = String.valueOf(homeCoordinate.getDouble(1));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} 
+	 
+	    mav.addObject("dlName", strDlName);
+	    mav.addObject("waypoints", strWayPoint);
+		mav.addObject("waypointsDetail", strWayPointDetail);
+		mav.addObject("dlPk", dlPk);
+		mav.addObject("tmLat", tmLat);
+		mav.addObject("tmLng", tmLng); 
+
+		return mav;
+	}
+
 	
 	/**
 	 * Home > 2D : 비행경로 등록
@@ -343,66 +434,85 @@ public class GA03MAINController {
 	 * @exception Exception Exception
 	 */ 
 	@RequestMapping(value = "/gcs/dashboard/insertDlWaypoint.do", method = RequestMethod.POST)
-	public @ResponseBody ModelAndView insertDlWaypoint(@RequestParam Map<String, Object> param,
-			HttpServletRequest request) throws Exception {
-		ModelAndView mav = new ModelAndView("jsonView");
-		EgovMap map = CommUtil.makeEgovMap(param);
+	public @ResponseBody ModelAndView insertDlWaypoint(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
+	    ModelAndView mav = new ModelAndView("jsonView");
+	    EgovMap map = CommUtil.makeEgovMap(param);
 
-		String tmData = String.valueOf(map.get("data"));
-		String addr = String.valueOf(map.get("addr"));
-		String dlPk = String.valueOf(map.get("dlPk"));
-		String missionName = String.valueOf(map.get("missionName"));
-		String waypointsDetail = String.valueOf(map.get("jsonObj2"));
+	    String tmData = String.valueOf(map.get("data"));
+	    String addr = String.valueOf(map.get("addr"));
+	    String dlPk = String.valueOf(map.get("dlPk"));
+	    String missionName = String.valueOf(map.get("missionName"));
+	    String waypointsDetail = String.valueOf(map.get("jsonObj2"));
+	    String dlDiv = String.valueOf(map.get("dlDiv")); // 2d 0 , 3d 1
 
-		LOGGER.debug("waypointsDetail : {}", waypointsDetail);
+	    LOGGER.debug("waypointsDetail : {}", waypointsDetail);
+	    LOGGER.debug("gA03Main2Waypoint : {}", tmData);
 
-		LOGGER.debug("gA03Main2Waypoint : {}", tmData);
+	    JSONObject jObject = new JSONObject(tmData);
+	    LOGGER.debug("gA03Main2Waypoint : {}", jObject.get("creationTime"));
 
-		JSONObject jObject = new JSONObject(tmData);
-		LOGGER.debug("gA03Main2Waypoint : {}", jObject.get("creationTime"));
+	    // home
+	    JSONObject home = new JSONObject(jObject.getStr("home"));
+	    JSONArray coordinateArry = new JSONArray(home.getStr("coordinate"));
+	    String home_x = coordinateArry.get(0).toString();
+	    String home_y = coordinateArry.get(1).toString();
 
-		// home
-		JSONObject home = new JSONObject(jObject.getStr("home"));
-		JSONArray coordinateArry = new JSONArray(home.getStr("coordinate"));
-		String home_x = coordinateArry.get(0).toString();
-		String home_y = coordinateArry.get(1).toString();
+	    // 사용자 정보 가져오기
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();
 
-		LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
-		String user_id = user.getMbCode();
+	    String waypoints = tmData;
+	    String create_time = jObject.getStr("creationTime");
 
-		String waypoints = tmData;
-		String create_time = jObject.getStr("creationTime");
+	    HashMap<String, Object> paramMap = new HashMap<String, Object>();
+	    paramMap.put("DL_NAME", missionName);
+	    
+	    if(dlDiv!=null&&dlDiv!="null"&&dlDiv!="") {
+	    	paramMap.put("DL_DIV", Integer.parseInt(dlDiv));
+	    } 
+	    paramMap.put("DL_USER_ID", user_id); // 사용자 ID 추가
+	    paramMap.put("DL_HOME_X", home_x);
+	    paramMap.put("DL_HOME_Y", home_y);
+	    paramMap.put("DL_WAYPOINT", waypoints);
+	    paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail); 
+	    paramMap.put("DL_CREATE_TIME", create_time);
+	    paramMap.put("DL_ADDR", addr);
+	    if (dlPk != null && !dlPk.isEmpty()) {
+	        paramMap.put("DL_PK", dlPk);
+	    }
 
-		HashMap<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("DL_NAME", missionName);
-		paramMap.put("DL_USER_ID", user_id);
-		paramMap.put("DL_HOME_X", home_x);
-		paramMap.put("DL_HOME_Y", home_y);
-		paramMap.put("DL_WAYPOINT", waypoints);
-		paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail);
-		paramMap.put("DL_CREATE_TIME", create_time);
-		paramMap.put("DL_ADDR", addr);
-		if (dlPk != null && dlPk != "") {
-			paramMap.put("DL_PK", dlPk);
-		}
+	    try {
+	        if (dlPk != null && !dlPk.isEmpty()) {
+	            gA03MAINService.updateWaypoint(paramMap);
+	        } else {
+	            gA03MAINService.insertWaypoint(paramMap);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } 
 
-		try {
-			if (dlPk != null && dlPk != "") {
-				gA03MAINService.updateWaypoint(paramMap);
-			} else {
-				gA03MAINService.insertWaypoint(paramMap);
-			}
-
-		} catch (IllegalAccessException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO: handle exception
-			e.getTargetException().printStackTrace();
-		}
-
-		return mav;
+	    return mav;
 	}
+	
+	
+    @RequestMapping(value = "/gcs/dashboard/uploadMapCapture.do", method = RequestMethod.POST)
+    public @ResponseBody String uploadMapCapture(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                // 파일 저장 경로 설정
+                String fileName = "mapCapture_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".png";
+                Path filePath = Paths.get("/home/mrdev/upload", fileName);
+                Files.write(filePath, file.getBytes());
+                return "Success";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Failed";
+            }
+        } else {
+            return "File is empty"; 
+        }
+    }
+
 		
 	
 	/**
@@ -1125,7 +1235,7 @@ public class GA03MAINController {
 	
 	
 	/**
-	 * GCS > MAIN > 개별 입력 목록 리스트
+	 * GCS > MAIN > 프로젝트 목록
 	 * @return 메인페이지 정보 Map [key : 항목명]
 	 *
 	 * @param request
@@ -1196,6 +1306,82 @@ public class GA03MAINController {
 		
 		return mav;
 	}
+	
+	/**
+	 * GCS > MAIN > 프로젝트 목록
+	 * @return 메인페이지 정보 Map [key : 항목명]
+	 *
+	 * @param request
+	 * @param model
+	 * @exception Exception Exception
+	 */ 
+	@RequestMapping(value = "/gcs/dashboard/selectListPj.do", method = RequestMethod.POST)
+	@CrossOrigin(origins = "*")
+	public @ResponseBody ModelAndView selectListPj(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
+		
+		//접속 사용자
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();
+		
+		ModelAndView mav = new ModelAndView("jsonView");		
+		EgovMap map = CommUtil.makeEgovMap(param); 
+		
+		String page = String.valueOf(map.get("page")); 
+		String pageUnit = String.valueOf(map.get("pageUnit")); 
+		
+		//파라미터 수신데이터
+		GA03MAINVO vo = new GA03MAINVO();
+		
+		if(page !=null && page !="null" && page !="") {
+			int page1 = Integer.parseInt(page);
+			vo.setPageIndex(page1);
+		} 
+		
+		if(pageUnit !=null && pageUnit !="null" && pageUnit !="") {
+			int pageUnitCnt = Integer.parseInt(pageUnit);
+			vo.setPageUnit(pageUnitCnt);
+		}
+		
+		PaginationInfo paginationInfo = new PaginationInfo();
+		
+		//paginationInfo.setCurrentPageNo(1);
+		paginationInfo.setCurrentPageNo(vo.getPageIndex());
+		paginationInfo.setRecordCountPerPage(vo.getPageUnit());
+		paginationInfo.setPageSize(vo.getPageSize());
+
+		vo.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		vo.setLastIndex(paginationInfo.getLastRecordIndex());
+		vo.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+		vo.setDlUserId(user_id);
+		
+		List<GA03MAINVO> list = null;
+		int totalCnt = 0;
+		int resultCnt = 0; 
+		try {
+			
+			list = gA03MAINService.selectListPj(vo); 
+			resultCnt = gA03MAINService.selectListPjCnt(vo);
+			
+			paginationInfo.setTotalRecordCount(resultCnt);
+			
+			totalCnt = list.size();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} 
+		
+ 
+		
+		LOGGER.debug("selectTaskProcess: {}",list);
+		mav.addObject("list", list);
+		
+		mav.addObject("totalCnt", totalCnt);
+		mav.addObject("paginationInfo", paginationInfo); 
+		
+		return mav;
+	}
+	
 	
 	
 	/**

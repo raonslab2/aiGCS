@@ -63,7 +63,7 @@
    <table align="center" >
      
       <td width="20px" height="40px"> 
-          <p5 style="margin-left:20px;margin-right:20px;"><a style="color:yellow" href="<c:url value='/gcs/dashboard/gA03Main.do'/>">
+          <p5 style="margin-left:20px;margin-right:20px;"><a style="color:yellow" href="<c:url value='/gcs/dashboard/projectMain1001.do'/>">
              <img src="<c:url value='/images/samsungdrone_logo.png' />"   height="30" /> 
           </a></p5>
   

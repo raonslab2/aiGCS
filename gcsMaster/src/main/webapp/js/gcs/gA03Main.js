@@ -1,3 +1,5 @@
+// /webapp/js/gcs/gA03Main.js
+
 class GcsDashboard {
     constructor() {
         this.initGeolocation();
@@ -16,22 +18,8 @@ class GcsDashboard {
                     $("#tmLng").val(pos.coords.longitude); 
                 },
                 (error) => {
-                    let errorMsg = '';
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMsg = "사용자가 위치 정보 공유를 거부했습니다.";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMsg = "위치 정보를 사용할 수 없습니다.";
-                            break;
-                        case error.TIMEOUT:
-                            errorMsg = "요청 시간이 초과되었습니다.";
-                            break;
-                        case error.UNKNOWN_ERROR:
-                            errorMsg = "알 수 없는 오류가 발생했습니다.";
-                            break;
-                    }
-                    alert("Error: " + errorMsg + " (" + error.message + ")");
+                    const errorMsg = this.getGeolocationErrorMessage(error.code);
+                    alert(`Error: ${errorMsg} (${error.message})`);
                 }
             );
         } else {
@@ -39,36 +27,44 @@ class GcsDashboard {
         }
     }
 
-	bindEvents() {
-	    $('#createRouterPath').click((e) => {  
-	        var tmLat = $("#tmLat").val(); 
-	        var tmLng = $("#tmLng").val(); 
-	        window.location.href = "/gcs/dashboard/gA03Main2.do?tmLat=" + tmLat + "&tmLng=" + tmLng;
-	    });
-	
-	    $('#createRouterPolygonPath').click((e) => {  
-	        var tmLat = $("#tmLat").val(); 
-	        var tmLng = $("#tmLng").val(); 
-	        window.location.href = "/gcs/dashboard/gA03Main9.do?tmLat=" + tmLat + "&tmLng=" + tmLng;
-	    });
-	
-	    $(document).on('click', '.pageClass', (e) => {
-	        var page = $(e.target).data('page');
-	        var totalPageCnt = $(e.target).data('total_page_count');
-	        if (page > totalPageCnt) return false;
-	        if (page == 0) return false;
-	        $("#page").val(page);
-	        var formSer = $('#searchForm').serialize();
-	        this.loadList(formSer);
-	    });
-	
-	    $('#viewSwitchToggle').click(() => this.toggleView());
-	}
+    getGeolocationErrorMessage(code) {
+        switch (code) {
+            case error.PERMISSION_DENIED:
+                return "사용자가 위치 정보 공유를 거부했습니다.";
+            case error.POSITION_UNAVAILABLE:
+                return "위치 정보를 사용할 수 없습니다.";
+            case error.TIMEOUT:
+                return "요청 시간이 초과되었습니다.";
+            case error.UNKNOWN_ERROR:
+                return "알 수 없는 오류가 발생했습니다.";
+        }
+    }
 
+    bindEvents() {
+        $('#createRouterPath').click(() => this.navigateToPath("/gcs/dashboard/gA03Main2.do"));
+        $('#createRouterPolygonPath').click(() => this.navigateToPath("/gcs/dashboard/gA03Main9.do"));
+        $(document).on('click', '.pageClass', (e) => this.handlePageClick(e));
+
+        // 뷰 전환 버튼 이벤트 처리
+        $('#viewSwitchToggle').click(() => this.toggleView());
+    }
+
+    navigateToPath(url) {
+        const tmLat = $("#tmLat").val(); 
+        const tmLng = $("#tmLng").val(); 
+        window.location.href = `${url}?tmLat=${tmLat}&tmLng=${tmLng}`;
+    }
+
+    handlePageClick(e) {
+        const page = $(e.target).data('page');
+        const totalPageCnt = $(e.target).data('total_page_count');
+        if (page > totalPageCnt || page == 0) return false;
+        $("#page").val(page);
+        this.loadList($('#searchForm').serialize());
+    }
 
     initList() {
-        var formSer = $('#searchForm').serialize();
-        this.loadList(formSer);
+        this.loadList($('#searchForm').serialize());
     }
 
     loadList(formSer) {
@@ -79,7 +75,7 @@ class GcsDashboard {
         }).done((res) => {
             this.renderList(res);
         }).fail((jqXHR, textStatus, errorThrown) => {
-            alert("AJAX 요청 실패: " + textStatus + " - " + errorThrown);
+            alert(`AJAX 요청 실패: ${textStatus} - ${errorThrown}`);
         });
     }
 
@@ -90,6 +86,7 @@ class GcsDashboard {
         galleryView.empty();
         $('.pagination').empty();
         $('.subTr').remove();
+
         if (res.totalCnt === '0') {
             const data = "<tr class='subTr'><td colspan='9' style='height:100px;'>자료가 존재하지 않습니다.</td></tr>";
             resultList.append(data);
@@ -100,25 +97,32 @@ class GcsDashboard {
             });
         }
         $('.pagination').append(this.paginationView(res.paginationInfo));
-        $('.' + res.paginationInfo.currentPageNo).addClass("active");
+        $(`.${res.paginationInfo.currentPageNo}`).addClass("active");
         $('.pagination > li').css('cursor', 'pointer');
     }
 
-    projectListView(row) {
-        return `
-            <tr id="subRow" class="subTr" style="cursor:pointer;">
-                <td class="dlPk">${row.dlPk}</td>
-                <td><img src="/images/sample_map.png" height="32" /></td>
-                <td><button type="button" onclick="GcsDashboard.fn_waypoint33(${row.dlPk}); return false;" class="btn_style03 btn_green btnMoveReg">${row.dlName}</button></td>
-                <td>${row.dlHomeX} , ${row.dlHomeY}</td>
-                <td><button type="button" onclick="GcsDashboard.fn_waypoint(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">Edit</button></td>
-                <td><span onclick="GcsDashboard.fn_del(${row.dlPk}); return false;" style="margin-left:20px;">DEL</span></td>
-                <td>${this.formatDate(row.dlCreateTime)}</td>
-            </tr>
-        `;
-    }
+	projectListView(row) {
+	    return `
+	        <tr id="subRow" class="subTr" style="cursor:pointer;">
+	            <td class="dlPk">${row.dlPk}</td>
+	            <td><img src="/images/sample_map.png" height="32" /></td>
+	            <td><button type="button" onclick="GcsDashboard.fn_waypoint33(${row.dlPk}); return false;" class="btn_style03 btn_green btnMoveReg">${row.dlName}</button></td>
+	            <td>${row.dlHomeX} , ${row.dlHomeY}</td>
+	            <td>
+	                ${row.dlDiv === "0"
+	                    ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">2D</button>`
+	                    : `<button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">3D</button>`
+	                }
+	            </td>
+	            <td><span onclick="GcsDashboard.fn_del(${row.dlPk}); return false;" style="margin-left:20px;">DEL</span></td>
+	            <td>${this.formatDate(row.dlCreateTime)}</td>
+	        </tr>
+	    `;
+	}
+
 
 	projectGalleryView(row) {
+	  
 	    return `
 	        <div class="gallery-item">
 	            <img src="/images/sample_map.png" alt="Map Image">
@@ -126,7 +130,10 @@ class GcsDashboard {
 	                <h3>${row.dlName}</h3>
 	                <div class="meta">
 	                    <span>${this.formatDate(row.dlCreateTime)}</span>
-	                    <span><button type="button" onclick="GcsDashboard.fn_waypoint(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">Edit</button></span>
+	                    ${row.dlDiv === "0" 
+	                        ? `<span><button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">2D</button></span>` 
+	                        : `<span><button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">3D</button></span>`
+	                    }
 	                </div>
 	            </div>
 	        </div>
@@ -134,9 +141,9 @@ class GcsDashboard {
 	}
 
 
+
     formatDate(dateString) {
-        const dateParts = dateString.split('T');
-        return dateParts[0];
+        return dateString.split('T')[0];
     }
 
     paginationView(page) {
@@ -155,22 +162,24 @@ class GcsDashboard {
         return $(data);
     }
 
-	switchView(view) {
-	    if (view === 'list') {
-	        $('.table').show();
-	        $('#galleryView').hide();
-	        $('#viewSwitchToggle').text('GV');
-	    } else {
-	        $('.table').hide();
-	        $('#galleryView').show();
-	        $('#viewSwitchToggle').text('LV');
-	    }
-	}
-	
-	toggleView() {
-	    const currentView = $('#viewSwitchToggle').text() === 'LV' ? 'list' : 'gallery';
-	    this.switchView(currentView);
-	}
+    switchView(view) {
+        const isListView = view === 'list';
+        $('.table').toggle(isListView);
+        $('#galleryView').toggle(!isListView);
+
+        // 버튼 배경 이미지 및 상태 토글
+        const button = $('#viewSwitchToggle');
+        if (isListView) {
+            button.removeClass('grid-view').addClass('list-view');
+        } else {
+            button.removeClass('list-view').addClass('grid-view');
+        }
+    }
+
+    toggleView() {
+        const currentView = $('#viewSwitchToggle').hasClass('list-view') ? 'gallery' : 'list';
+        this.switchView(currentView);
+    }
 
     setGalleryColumns() {
         let columns = 5;
@@ -179,7 +188,6 @@ class GcsDashboard {
         if (width <= 992) columns = 3;
         if (width <= 768) columns = 2;
         if (width <= 576) columns = 1;
-
         $('.gallery').css('column-count', columns);
     }
 }
@@ -188,26 +196,28 @@ $(document).ready(() => {
     new GcsDashboard();
 });
 
-GcsDashboard.fn_waypoint = function (dlPk) {
-    window.location.href = "/gcs/dashboard/gA03Main2.do?dlPk=" + dlPk;
+GcsDashboard.fn_waypoint3D = function (dlPk) {
+    window.location.href = `/gcs/dashboard/gA03Main2.do?dlPk=${dlPk}`;
+};
+
+GcsDashboard.fn_waypoint2D = function (dlPk) {
+    window.location.href = `/gcs/dashboard/gA03Main9.do?dlPk=${dlPk}`;
 };
 
 GcsDashboard.fn_waypoint33 = function (dlPk) {
-    var popup = window.open("/gcs/dashboard/gA03Main33.do?dlPk=" + dlPk, "waypoint", "fullscreen=yes, toolbar=no, location=no, directories=no, status=no, menubar=no,scrollbars=no,resizable=no");
+    window.open(`/gcs/dashboard/gA03Main33.do?dlPk=${dlPk}`, "waypoint", "fullscreen=yes, toolbar=no, location=no, directories=no, status=no, menubar=no,scrollbars=no,resizable=no");
 };
 
 GcsDashboard.fn_del = function (dlPk) {
-    var result = confirm('Are you sure you want to do this?');
-    if (result) {
+    if (confirm('Are you sure you want to do this?')) {
         $.ajax({
             url: '/gcs/dashboard/gA03MainDelete.do',
             type: 'post',
             data: { "dlPk": dlPk },
             async: false
         }).done((res) => {
-            console.log(res.list);
             alert("Success");
-            $(location).attr('href', '/gcs/dashboard/gA03Main.do');
+            $(location).attr('href', '/gcs/dashboard/projectMain1001.do');
         }).fail(() => {
             alert("실패");
         });

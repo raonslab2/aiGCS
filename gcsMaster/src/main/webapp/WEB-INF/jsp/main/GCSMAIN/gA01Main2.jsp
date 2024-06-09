@@ -163,7 +163,7 @@
 </script>
 
 </head>
-<body>
+<body page-data="menu-drone">
 
 	<!-- left menu List -->
 	<!--

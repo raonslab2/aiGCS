@@ -46,43 +46,18 @@
 	  infoBox: false,
 	  selectionIndicator: false,
 	  shadows: true,
-	  shouldAnimate: true,
+	  shouldAnimate: true 
 	  //terrainProvider: Cesium.createWorldTerrain()
 	});
-    
+ 
     
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.animation.container.style.visibility = 'hidden';
    
     var scene = viewer.scene;
     var numberOfWaypoints = 0;
+    
 
- 
-	// 3D Tiles 데이터셋을 로드합니다.
-	const tileset = new Cesium.Cesium3DTileset({
-	    url: '/home/mrdev/offlinemap/tileset.json' // JSON 파일 경로
-	});
-	 
-	// 뷰어에 3D Tiles 데이터셋을 추가합니다.
-	viewer.scene.primitives.add(tileset);
-	
-	// 3D Tiles의 루트 위치로 카메라를 이동시킵니다.
-	viewer.zoomTo(tileset);
-		
-	tileset.readyPromise.then(function(tileset) {
-	    // 타일셋의 루트 변환 행렬을 조정합니다.
-	    //var heightOffset = 145.0; // 높이 조정값 (미터 단위)
-	    var heightOffset = 71; // 높이 조정값 (미터 단위)
-	    var boundingSphere = tileset.boundingSphere;
-	    var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-	    var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
-	    var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
-	    var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
-	    var newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
-	
-	    // 기존의 변환 매트릭스와 새로운 매트릭스를 결합합니다.
-	    Cesium.Matrix4.multiply(tileset.modelMatrix, newModelMatrix, tileset.modelMatrix);
-	});
 
   
  /*
@@ -964,6 +939,58 @@
 	 if(waypointsJson!=""){  
 		 waypointFly(waypointsJson);  
 	 }
+
+
+        // 첫 번째 타일셋을 로드합니다.
+        const tileset1 = new Cesium.Cesium3DTileset({
+            url: '/home/mrdev/offlinemap/1001/tileset.json' // 첫 번째 JSON 파일 경로
+        });
+
+        // 뷰어에 첫 번째 타일셋을 추가합니다.
+        viewer.scene.primitives.add(tileset1);
+
+        tileset1.readyPromise.then(function(tileset) {
+            var heightOffset = 41; // 첫 번째 타일셋의 높이 조정값
+            var boundingSphere = tileset.boundingSphere;
+            var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+            var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+            var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
+            var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+            var newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
+
+            // 기존의 변환 매트릭스와 새로운 매트릭스를 결합합니다.
+            Cesium.Matrix4.multiply(tileset.modelMatrix, newModelMatrix, tileset.modelMatrix);
+        });
+
+
+
+        // 두 번째 타일셋을 로드합니다.
+        const tileset2 = new Cesium.Cesium3DTileset({
+            url: '/home/mrdev/offlinemap/1002/tileset.json' // 두 번째 JSON 파일 경로
+        });
+
+        // 뷰어에 두 번째 타일셋을 추가합니다.
+        viewer.scene.primitives.add(tileset2);
+
+        tileset2.readyPromise.then(function(tileset) {
+            var heightOffset = 71; // 두 번째 타일셋의 높이 조정값
+            var boundingSphere = tileset.boundingSphere;
+            var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+            var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+            var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
+            var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+            var newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
+
+            // 기존의 변환 매트릭스와 새로운 매트릭스를 결합합니다.
+            Cesium.Matrix4.multiply(tileset.modelMatrix, newModelMatrix, tileset.modelMatrix);
+        });
+
+        // 두 타일셋이 로드된 후 카메라 초기 위치 설정
+        Promise.all([tileset1.readyPromise, tileset2.readyPromise]).then(() => {
+            viewer.zoomTo(tileset1);
+        }).otherwise(function (error) {
+            console.error(error);
+        });
 
 
 //드론 시뮬레이션

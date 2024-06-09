@@ -30,7 +30,7 @@
         <li class="menu01"><a <% if (url.indexOf("gA01Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA01Main.do'/>" >DATA</a></li>
         <li class="menu02"><a <% if (url.indexOf("gA02Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA02Main.do'/>" >PLAN</a></li>
   
-		<li class="menu03"><a <% if (url.indexOf("gA03Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA03Main.do'/>" >SETUP</a></li>
+		<li class="menu03"><a <% if (url.indexOf("gA03Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/projectMain1001.do'/>" >SETUP</a></li>
 		<li class="menu04"><a <% if (url.indexOf("process") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA04Main.do'/>" >CONFIG</a></li>
 		<li class="menu05"><a <% if (url.indexOf("business") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA05Main.do'/>" >BIG DATA</a></li>
 		<li class="menu06"><a <% if (url.indexOf("auth") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA06Main.do'/>" >Manage</a></li>

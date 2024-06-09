@@ -1,3 +1,4 @@
+<%-- /main/include/droneHeadMenu.jsp --%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -68,38 +69,66 @@
         float: none;
     }
 }
+
+/* 로딩 스피너 CSS 추가 */
+.spinner {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin: -25px 0 0 -25px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
+
 <div class="topnav" id="myTopnav">
     <a href="javascript:void(0)" class="menu-icon" onclick="toggleNav()">&#9776;</a>
-    <a href="#"></a>
-    <a href="/gcs/dashboard/gA03Main.do" id="menu-project">프로젝트</a> 
-    <a href="/gcs/dashboard/gcsMain2.do" target="_blank" id="menu-realtime">실시간 관제시스템</a>
-    <a href="/gcs/dashboard/gA030OfflineMain.do" target="_blank" id="menu-offline">오프라인 관제시스템</a>
-    <a href="/gcs/dashboard/gA01Main2.do" id="menu-drone">군집드론</a>
-    <a href="/gcs/dashboard/gA034Main.do" id="menu-status">기체현황</a>
+    <a href="/gcs/dashboard/projectMain1001.do" page-data="menu-project" id="menu-project">프로젝트</a> 
+    <a href="/gcs/dashboard/gcsMain2.do" page-data="menu-realtime" target="_blank" id="menu-realtime">실시간 관제시스템</a>
+    <a href="/gcs/dashboard/gA030OfflineMain.do" page-data="menu-offline" target="_blank" id="menu-offline">오프라인 관제시스템</a>
+    <a href="/gcs/dashboard/gA01Main2.do" page-data="menu-drone" id="menu-drone">군집드론</a>
+    <a href="/gcs/dashboard/gA034Main.do" page-data="menu-status" id="menu-status">기체현황</a>
     <a href="#" id="menu-report">보고서</a>
     <div class="topnav-right">
-        <a href="/gcs/dashboard/gA035Main.do" id="menu-user">사용자정보</a>
-        <a href="/gcs/TD0001/TodayWork900.do" target="_blank" id="menu-today">오늘 할 일</a>
+        <a href="/gcs/dashboard/gA035Main.do" page-data="menu-user" id="menu-user">사용자정보</a>
+        <a href="/gcs/TD0001/TodayWork900.do" page-data="menu-today" target="_blank" id="menu-today">오늘 할 일</a>
         <a href="#" id="menu-logout">로그아웃</a>
     </div>
 </div>
+
+<!-- 로딩 스피너 추가 -->
+<div class="spinner" id="spinner"></div>
+
 <script>
 // jQuery를 사용하여 로그아웃 버튼에 클릭 이벤트 추가
 $(document).ready(function() {
   $("#menu-logout").on("click", function() {
-    // 클릭 시 실행할 동작을 정의합니다.
-    // 예를 들어, 로그아웃 기능을 여기에 추가할 수 있습니다.
     $(location).attr('href', '/gcs/login/actionLogout.do');
   });
 
-  // 현재 URL을 기반으로 active 클래스를 추가
-  var currentUrl = window.location.pathname;
-  $('.topnav a').each(function() {
-    if ($(this).attr('href') === currentUrl) {
-      $(this).addClass('active');
-    }
-  });
+  // 현재 페이지의 page-data 속성을 기반으로 active 클래스를 추가
+  var pageData = $('body').attr('page-data');
+  if (pageData) {
+    $('.topnav a[page-data="' + pageData + '"]').addClass('active');
+  }
+});
+
+// AJAX 요청이 시작될 때 스피너를 표시하고, 완료되거나 실패할 때 스피너를 숨깁니다.
+$(document).ajaxStart(function() {
+    $("#spinner").show();
+}).ajaxStop(function() {
+    $("#spinner").hide();
 });
 
 function toggleNav() {

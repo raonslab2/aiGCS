@@ -67,7 +67,7 @@
 		</script>
 </head>
 
-<body>
+<body page-data="menu-status">
      <!-- head menu -->
     <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
  

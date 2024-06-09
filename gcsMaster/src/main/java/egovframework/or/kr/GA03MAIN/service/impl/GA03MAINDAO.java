@@ -128,5 +128,16 @@ public class GA03MAINDAO extends EgovAbstractDAO {
 		// TODO Auto-generated method stub
 		return (GA03MAINVO) select("GA03MAIN.selectWaypoint2", vo);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<GA03MAINVO> selectListPj(GA03MAINVO vo) {
+		// TODO Auto-generated method stub
+		return (List<GA03MAINVO>) list("GA03MAIN.selectListPj", vo);
+	}
+
+	public int selectListPjCnt(GA03MAINVO vo) {
+		// TODO Auto-generated method stub
+		return (int) select("GA03MAIN.selectListPjCnt", vo);
+	}
  
 }

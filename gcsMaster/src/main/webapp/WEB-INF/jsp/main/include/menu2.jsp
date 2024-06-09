@@ -27,7 +27,7 @@
     <div id="nav2">
 	<ul>
         <li class="menu00"><a <% if (url.indexOf("gA030Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA030Main.do'/>" >Dashboard</a></li>
-        <li class="menu01"><a <% if (url.indexOf("gA03Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA03Main.do'/>" >Drone Path List</a></li>
+        <li class="menu01"><a <% if (url.indexOf("gA03Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/projectMain1001.do'/>" >Drone Path List</a></li>
         <li class="menu02"><a <% if (url.indexOf("gA034Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA034Main.do'/>" >Drone Aircraft Management</a></li>
         <li class="menu03"><a <% if (url.indexOf("gA035Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA035Main.do'/>" >User management</a></li>
         <li class="menu04"><a <% if (url.indexOf("gA036Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA036Main.do'/>" >Flight approval management</a></li>

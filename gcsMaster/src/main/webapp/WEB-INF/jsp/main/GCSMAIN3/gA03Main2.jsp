@@ -374,7 +374,7 @@
 	</script>
     
 </head> 
-<body style="overflow-x: hidden;overflow-y: hidden">  
+<body style="overflow-x: hidden;overflow-y: hidden" page-data="menu-project"> 
      <!-- head menu -->
     <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
     

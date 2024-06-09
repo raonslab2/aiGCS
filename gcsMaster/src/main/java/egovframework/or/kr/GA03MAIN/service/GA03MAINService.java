@@ -86,6 +86,10 @@ public interface GA03MAINService {
 
 	GA03MAINVO selectWaypoint2(GA03MAINVO vo)throws Exception;
 
+	List<GA03MAINVO> selectListPj(GA03MAINVO vo);
+
+	int selectListPjCnt(GA03MAINVO vo);
+
 	
 	
 }

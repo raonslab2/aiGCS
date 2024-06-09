@@ -38,11 +38,8 @@ $(document).ready(function() {
 			this.initGridAndPath();
 			this.setupEventListeners();
 
-			this.updateArea();
-			this.addVertexAndMidpointHoverEffect();
+			updatePolygonArea(this.poly); // 폴리곤 생성 시 면적 정보 갱신
 		}
-
-
 
 		importData(data) {
 			this.removePolygon();
@@ -63,34 +60,53 @@ $(document).ready(function() {
 			this.drawGridAndPathInPolygon(0.00009 * data.gridSize, 0.00009 * data.gridSize);
 
 			this.setupEventListeners();
+			updatePolygonArea(this.poly); // 폴리곤 불러오기 시 면적 정보 갱신
 		}
 
 		setupEventListeners() {
-			this.gridSizeSlider.on('input', () => {
-				const gridSize = parseInt(this.gridSizeSlider.val());
-				this.gridSizeValue.text(gridSize);
-				const latStep = 0.00009 * gridSize;
-				const lngStep = 0.00009 * gridSize;
-				this.drawGridAndPathInPolygon(latStep, lngStep);
-			});
-
-			const redrawGridAndPath = () => {
-				const gridSize = parseInt(this.gridSizeSlider.val());
-				const latStep = 0.00009 * gridSize;
-				const lngStep = 0.00009 * gridSize;
-				this.drawGridAndPathInPolygon(latStep, lngStep);
-			};
-
-			this.poly.on('edit', redrawGridAndPath);
-			this.poly.on('editable:vertex:dragend', redrawGridAndPath);
-			this.poly.on('editable:dragend', redrawGridAndPath);
-
-			$('#checkCamera').on('change', () => {
-				this.toggleGridMarkers();
-			});
-
-			$('#checkMulti').on('change', redrawGridAndPath);
+		    this.gridSizeSlider.on('input', () => {
+		        const gridSize = parseInt(this.gridSizeSlider.val());
+		        this.gridSizeValue.text(gridSize);
+		        const latStep = 0.00009 * gridSize;
+		        const lngStep = 0.00009 * gridSize;
+		        this.drawGridAndPathInPolygon(latStep, lngStep);
+		    });
+		
+		    const redrawGridAndPath = () => {
+		        const gridSize = parseInt(this.gridSizeSlider.val());
+		        const latStep = 0.00009 * gridSize;
+		        const lngStep = 0.00009 * gridSize;
+		        this.drawGridAndPathInPolygon(latStep, lngStep);
+		    };
+		
+		    this.poly.on('edit', () => {
+		        redrawGridAndPath();
+		        updatePolygonArea(this.poly);
+		    });
+		
+		    this.poly.on('editable:vertex:dragend', () => {
+		        redrawGridAndPath();
+		        updatePolygonArea(this.poly);
+		    });
+		
+		    this.poly.on('editable:dragend', () => {
+		        redrawGridAndPath();
+		        updatePolygonArea(this.poly);
+		    });
+		
+		    // 사용자 정의 꼭짓점 삭제 이벤트 리스너 추가
+		    this.poly.on('editable:vertex:deleted', () => {
+		        redrawGridAndPath();
+		        updatePolygonArea(this.poly);
+		    });
+		
+		    $('#checkCamera').on('change', () => {
+		        this.toggleGridMarkers();
+		    });
+		
+		    $('#checkMulti').on('change', redrawGridAndPath);
 		}
+
 
 
 		isPointInPolygon(point) {
@@ -173,7 +189,6 @@ $(document).ready(function() {
 			this.toggleGridMarkers(); // 교차점 마커 추가
 		}
 
-
 		updateArea() {
 			const bounds = this.poly.getBounds();
 			const latLngs = bounds.toBBoxString().split(",");
@@ -195,33 +210,6 @@ $(document).ready(function() {
 			this.drawGridAndPathInPolygon(latStep, lngStep);
 		}
 
-		setupEventListeners() {
-			this.gridSizeSlider.on('input', () => {
-				const gridSize = parseInt(this.gridSizeSlider.val());
-				this.gridSizeValue.text(gridSize);
-				const latStep = 0.00009 * gridSize;
-				const lngStep = 0.00009 * gridSize;
-				this.drawGridAndPathInPolygon(latStep, lngStep);
-			});
-
-			const redrawGridAndPath = () => {
-				const gridSize = parseInt(this.gridSizeSlider.val());
-				const latStep = 0.00009 * gridSize;
-				const lngStep = 0.00009 * gridSize;
-				this.drawGridAndPathInPolygon(latStep, lngStep);
-			};
-
-			this.poly.on('edit', redrawGridAndPath);
-			this.poly.on('editable:vertex:dragend', redrawGridAndPath);
-			this.poly.on('editable:dragend', redrawGridAndPath);
-
-			$('#checkCamera').on('change', () => {
-				this.toggleGridMarkers();
-			});
-
-			$('#checkMulti').on('change', redrawGridAndPath); // checkMulti 변경 시 실시간 적용
-		}
-
 		removePolygon() {
 			if (this.poly) {
 				this.map.removeLayer(this.poly);
@@ -231,7 +219,7 @@ $(document).ready(function() {
 				this.updateDistance([]);
 				this.removeMarkers();
 				this.removeGridMarkers(); // 기존 마커 제거
-				$('#areaAarea').text('에이커: 0');
+				$('#statsArea').text('0.00'); // 폴리곤 제거 시 면적을 0으로 설정 
 			}
 		}
 
@@ -249,13 +237,13 @@ $(document).ready(function() {
 			const startIcon = L.divIcon({
 				className: 'custom-start-icon',
 				html: '<div style="background-color: blue; width: 24px; height: 24px; border-radius: 50%;"></div>',
-				iconSize: [24, 24]
+				iconSize: [20, 20]
 			});
 
 			const endIcon = L.divIcon({
 				className: 'custom-end-icon',
 				html: '<div style="background-color: red; width: 24px; height: 24px; border-radius: 50%;"></div>',
-				iconSize: [24, 24]
+				iconSize: [20, 20]
 			});
 
 			this.startMarker = L.marker(start, { icon: startIcon }).addTo(this.map);
@@ -273,80 +261,81 @@ $(document).ready(function() {
 			}
 		}
 
-		addVertexAndMidpointHoverEffect() {
-			const latlngs = this.poly.getLatLngs()[0];
-			const map = this.map;
+addVertexAndMidpointHoverEffect() {
+    const latlngs = this.poly.getLatLngs()[0];
+    const map = this.map;
 
-			latlngs.forEach((latlng) => {
-				const vertex = L.circleMarker(latlng, {
-					radius: 5,
-					color: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
-					fillColor: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
-					fillOpacity: 1,
-					className: 'vertex'
-				}).addTo(map);
+    latlngs.forEach((latlng) => {
+        const vertex = L.circleMarker(latlng, {
+            radius: 3, // Decreased from 5 to 3
+            color: '#FFFFFF',
+            fillColor: '#FFFFFF',
+            fillOpacity: 1,
+            className: 'vertex'
+        }).addTo(map);
 
-				vertex.on('mouseover', function() {
-					this.setStyle({
-						radius: 7,
-						color: 'blue',
-						fillColor: 'blue',
-						weight: 2,
-						fillOpacity: 1,
-						className: 'vertex-hover'
-					});
-				});
+        vertex.on('mouseover', function() {
+            this.setStyle({
+                radius: 5, // Adjust hover size
+                color: 'blue',
+                fillColor: 'blue',
+                weight: 2,
+                fillOpacity: 1,
+                className: 'vertex-hover'
+            });
+        });
 
-				vertex.on('mouseout', function() {
-					this.setStyle({
-						radius: 5,
-						color: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
-						fillColor: '#FFFFFF', // 여기에 이미지에서 추출한 색상 코드로 변경
-						weight: 0,
-						fillOpacity: 1,
-						className: 'vertex'
-					});
-				});
-			});
+        vertex.on('mouseout', function() {
+            this.setStyle({
+                radius: 3, // Decreased from 5 to 3
+                color: '#FFFFFF',
+                fillColor: '#FFFFFF',
+                weight: 0,
+                fillOpacity: 1,
+                className: 'vertex'
+            });
+        });
+    });
 
-			for (let i = 0; i < latlngs.length; i++) {
-				const nextIndex = (i + 1) % latlngs.length;
-				const midpointLatlng = L.latLng(
-					(latlngs[i].lat + latlngs[nextIndex].lat) / 2,
-					(latlngs[i].lng + latlngs[nextIndex].lng) / 2
-				);
+    for (let i = 0; i < latlngs.length; i++) {
+        const nextIndex = (i + 1) % latlngs.length;
+        const midpointLatlng = L.latLng(
+            (latlngs[i].lat + latlngs[nextIndex].lat) / 2,
+            (latlngs[i].lng + latlngs[nextIndex].lng) / 2
+        );
 
-				const midpoint = L.circleMarker(midpointLatlng, {
-					radius: 5,
-					color: 'green',
-					fillColor: 'green',
-					fillOpacity: 1,
-					className: 'midpoint'
-				}).addTo(map);
+        const midpoint = L.circleMarker(midpointLatlng, {
+            radius: 3, // Decreased from 5 to 3
+            color: 'green',
+            fillColor: 'green',
+            fillOpacity: 1,
+            className: 'midpoint'
+        }).addTo(map);
 
-				midpoint.on('mouseover', function() {
-					this.setStyle({
-						radius: 7,
-						color: 'orange',
-						fillColor: 'orange',
-						weight: 2,
-						fillOpacity: 1,
-						className: 'midpoint-hover'
-					});
-				});
+        midpoint.on('mouseover', function() {
+            this.setStyle({
+                radius: 5, // Adjust hover size
+                color: 'orange',
+                fillColor: 'orange',
+                weight: 2,
+                fillOpacity: 1,
+                className: 'midpoint-hover'
+            });
+        });
 
-				midpoint.on('mouseout', function() {
-					this.setStyle({
-						radius: 5,
-						color: 'green',
-						fillColor: 'green',
-						weight: 0,
-						fillOpacity: 1,
-						className: 'midpoint'
-					});
-				});
-			}
-		}
+        midpoint.on('mouseout', function() {
+            this.setStyle({
+                radius: 3, // Decreased from 5 to 3
+                color: 'green',
+                fillColor: 'green',
+                weight: 0,
+                fillOpacity: 1,
+                className: 'midpoint'
+            });
+        });
+    }
+}
+
 
 		addGridMarkers() {
 			this.gridMarkers.forEach(marker => this.map.removeLayer(marker)); // 기존 마커 제거
@@ -376,14 +365,22 @@ $(document).ready(function() {
 			}
 		}
 
-		exportGridIntersections() {
-			const elevation = parseFloat($('#droneAlt').val());
+		exportGridIntersections(dlPk) {
+		    // 폴리곤이 없는 경우 알림
+		    if (!this.poly) {
+		        alert('폴리곤을 먼저 생성해 주세요.');
+		        return;
+		    }
+			
+			const elevation = parseFloat($('#droneAlt').val()); // 고도 값을 가져옴
 			const projectName = $('#projectName').val();
+			const gridSize = parseInt($('#gridSizeSlider').val()); // 간격 값을 가져옴
+			const droneSpeed = parseFloat($('#droneSpeed').val()); // 속도 값을 가져옴
 
 			const gridLines = [];
 			const bounds = this.poly.getBounds();
-			const latStep = 0.00009 * parseInt(this.gridSizeSlider.val());
-			const lngStep = 0.00009 * parseInt(this.gridSizeSlider.val());
+			const latStep = 0.00009 * gridSize;
+			const lngStep = 0.00009 * gridSize;
 
 			// 가로 격자선에서 좌측 끝과 우측 끝을 선택
 			for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
@@ -426,8 +423,23 @@ $(document).ready(function() {
 				name: projectName,
 				rallys: [],
 				version: 1,
-				missionDetail: []
+				missionDetail: [],
+				polygons: [],
+				gridSize: gridSize,          // 추가: 간격 정보 저장
+				droneAltitude: elevation,   // 추가: 고도 정보 저장
+				droneSpeed: droneSpeed      // 추가: 속도 정보 저장
 			};
+
+			// 다각형의 꼭지점 정보 추가
+			const vertices = this.poly.getLatLngs()[0];  // 다각형의 꼭지점 배열을 가져옴
+			vertices.forEach(vertex => {
+				dl_waypoint.polygons.push({
+					lat: vertex.lat,
+					lng: vertex.lng
+				});
+			});
+
+ 
 
 			// 격자선의 좌측 끝과 우측 끝을 추가하고 연결
 			let path = [];
@@ -471,28 +483,51 @@ $(document).ready(function() {
 			});
 
 			console.log(JSON.stringify(dl_waypoint, null, 2)); // JSON 형식으로 dl_waypoint 로그 출력
-			
-		    // 추가 매개변수 정의
-		    const addr = ""; // 실제 값으로 변경
-		    const dlPk = ""; // 실제 값으로 변경
-		    const missionName = projectName; // 실제 값으로 변경
-		 
-		    // 데이터 URL 인코딩 형식으로 변환
-		    const jsonObj = JSON.stringify(dl_waypoint);
-		    // AJAX 요청을 사용하여 데이터를 서버로 전송
-		    $.post("/gcs/dashboard/insertDlWaypoint.do", {
-		        data: jsonObj,
-		        addr: addr,
-		        dlPk: dlPk,
-		        missionName: missionName
-		    }).done(function(res) {
-		        alert("Registered successfully.");
-		    }).fail(function() {
-		        alert("실패");
-		    });
+
+			// 추가 매개변수 정의
+			const addr = ""; // 실제 값으로 변경
+
+			const missionName = projectName; // 실제 값으로 변경
+
+			// 데이터 URL 인코딩 형식으로 변환
+			const jsonObj = JSON.stringify(dl_waypoint);
+			// AJAX 요청을 사용하여 데이터를 서버로 전송
+			$.post("/gcs/dashboard/insertDlWaypoint.do", {
+				data: jsonObj,
+				dlDiv: "0",
+				addr: addr,
+				dlPk: dlPk,
+				missionName: missionName
+			}).done(function(res) {
+				alert("Registered successfully.");
+			}).fail(function() {
+				alert("실패");
+			});
 		}
 
-
+	    async captureMap() {
+	        const mapContainer = document.getElementById('map');
+	        const canvas = await html2canvas(mapContainer);
+	
+	        canvas.toBlob((blob) => {
+	            const formData = new FormData();
+	            formData.append('file', blob, 'mapCapture.png');
+	
+	            $.ajax({
+	                url: '/gcs/dashboard/uploadMapCapture.do', // 서버 업로드 엔드포인트
+	                type: 'POST',
+	                data: formData,
+	                processData: false,
+	                contentType: false,
+	                success: function(response) {
+	                    alert('Map capture uploaded successfully.');
+	                },
+	                error: function() {
+	                    alert('Failed to upload map capture.');
+	                }
+	            });
+	        });
+	    }
 
 	}
 
@@ -522,69 +557,24 @@ $(document).ready(function() {
 
 	$('#resetButton').on('click', function() {
 		rectangleCreator.removePolygon();
+		$('#statsArea').text('0.00'); // 초기화 버튼 클릭 시 면적을 0으로 설정
 	});
 
 	$('#exportButton').on('click', function() {
-		rectangleCreator.exportGridIntersections();
-
+	    var tmDlPk = "";
+	    if (dlPk) {
+	        tmDlPk = dlPk;
+	    }
+	    rectangleCreator.exportGridIntersections(tmDlPk); // 데이터 업로드
+	    //rectangleCreator.captureMap(); // 지도 캡쳐 및 업로드
 	});
+
 
 	// 임시로 JSON 데이터를 불러오는 버튼 핸들러 추가
 	$('#importButton').on('click', function() {
-		/*
-		var data = {
-			"polygons": [{
-				"latlngs": [[37.5665, 126.9780], [37.5665, 126.9790], [37.5655, 126.9790], [37.5655, 126.9780]],
-				"style": {
-					"fillColor": "rgba(0, 128, 0, 0.7)",
-					"color": "white",
-					"weight": 2
-				}
-			}],
-			"gridSize": 5,
-			"grid": [{"lat": 37.5665, "lng": 126.9781}, {"lat": 37.5664, "lng": 126.9782}],
-			"droneAltitude": 100,
-			"droneSpeed": 10
-		};
-		*/
-		const data = `{
-          "polygons": [
-            {
-              "latlngs": [
-                [37.20647849602711, 127.75017142295836],
-                [37.20531817368949, 127.7498209988414],
-                [37.20563679845143, 127.74739801883692]
-              ],
-              "style": {
-                "fillColor": "rgba(0, 128, 0, 0.7)",
-                "color": "white",
-                "weight": 2
-              }
-            }
-          ],
-          "gridSize": "4",
-          "grid": [
-            {"lat": 37.20567817368949, "lng": 127.74775801883692},
-            {"lat": 37.20567817368949, "lng": 127.74811801883692},
-            {"lat": 37.20567817368949, "lng": 127.74847801883692},
-            {"lat": 37.20567817368949, "lng": 127.74883801883692},
-            {"lat": 37.20567817368949, "lng": 127.74919801883692},
-            {"lat": 37.20567817368949, "lng": 127.74955801883692},
-            {"lat": 37.20567817368949, "lng": 127.74991801883692},
-            {"lat": 37.20603817368949, "lng": 127.74883801883692},
-            {"lat": 37.20603817368949, "lng": 127.74919801883692},
-            {"lat": 37.20603817368949, "lng": 127.74955801883692},
-            {"lat": 37.20603817368949, "lng": 127.74991801883692},
-            {"lat": 37.20639817368949, "lng": 127.74991801883692}
-          ],
-          "droneAltitude": "49",
-          "droneSpeed": "2"
-        }`;
 
-
-		const jsonData = JSON.parse(data);
-
-		rectangleCreator.importData(jsonData);
+		const data = getData(dlPk);
+		rectangleCreator.importData(data);
 	});
 
 	$("#gridSizeSlider").on("input", function() {
@@ -601,21 +591,109 @@ $(document).ready(function() {
 		var currentValue = $(this).val();
 		$('#droneSpeedValue').text(currentValue);
 	});
+
+	// 기존 데이터를 불러온다면
+	if (dlPk) {
+		const data = getData(dlPk);
+		rectangleCreator.importData(data);
+	}
 });
 
-function loadMapData(map, data) {
-	data.polygons.forEach(polygonData => {
-		var latlngs = polygonData.latlngs.map(polygon => polygon.map(latlng => L.latLng(latlng.lat, latlng.lng)));
-		L.polygon(latlngs, polygonData.style).addTo(map);
+function getData(dlPk) {
+	var result = null;
+	$.ajax({
+		url: '/gcs/dashboard/selectWaypointView.do',
+		type: 'post',
+		data: { "dlPk": dlPk },
+		async: false,
+	}).done((res) => {
+		try {
+			const waypoints = JSON.parse(res.waypoints);
+			const polygons = waypoints.polygons; // 폴리곤 데이터를 가져옴
+			const gridSize = waypoints.gridSize; // 간격 데이터를 가져옴
+			const droneAltitude = waypoints.droneAltitude; // 고도 데이터를 가져옴
+			const droneSpeed = waypoints.droneSpeed; // 속도 데이터를 가져옴
+			const projectName = waypoints.name; // 프로젝트 이름 데이터를 가져옴
+
+			if (polygons) {
+				const polygonData = polygons.map(point => {
+					if (point.lat && point.lng) {
+						return { lat: point.lat, lng: point.lng };
+					}
+				}).filter(item => item); // undefined 요소 제거
+
+				if (polygonData.length === 0) {
+					console.warn("No valid polygon data found");
+				}
+
+				result = {
+					"polygons": [
+						{
+							"latlngs": polygonData,
+							"style": {
+								"fillColor": "rgba(0, 128, 0, 0.7)",
+								"color": "white",
+								"weight": 2
+							}
+						}
+					],
+					"gridSize": gridSize,
+					"grid": [
+						// 기존 또는 기본 grid 값 필요 시 추가
+					],
+					"droneAltitude": droneAltitude,
+					"droneSpeed": droneSpeed,
+					"projectName": projectName // 프로젝트 이름 추가
+				};
+
+				// 프로젝트 이름을 설정
+				$('#projectName').val(projectName);
+			} else {
+				console.error("Invalid polygons structure", polygons);
+			}
+		} catch (error) {
+			console.error("Error parsing response", error);
+		}
+	}).fail(() => {
+		alert("실패");
 	});
-	data.paths.forEach(pathData => {
-		var latlngs = pathData.latlngs.map(latlng => L.latLng(latlng.lat, latlng.lng));
-		L.polyline(latlngs, pathData.style).addTo(map);
-	});
-	$('#gridSizeSlider').val(data.gridSize);
-	$('#gridSizeValue').text(data.gridSize);
-	$('#droneAlt').val(data.droneAltitude);
-	$('#droneAltValue').text(data.droneAltitude);
-	$('#droneSpeed').val(data.droneSpeed);
-	$('#droneSpeedValue').text(data.droneSpeed);
+
+	return result;
 }
+
+
+function calculatePolygonArea(vertices) {
+	const earthRadius = 6378137; // 지구 반지름 (미터 단위)
+	let area = 0;
+
+	if (vertices.length > 2) {
+		for (let i = 0; i < vertices.length; i++) {
+			let j = (i + 1) % vertices.length;
+			let lat1 = vertices[i].lat * (Math.PI / 180);
+			let lng1 = vertices[i].lng * (Math.PI / 180);
+			let lat2 = vertices[j].lat * (Math.PI / 180);
+			let lng2 = vertices[j].lng * (Math.PI / 180);
+
+			area += (lng2 - lng1) * (2 + Math.sin(lat1) + Math.sin(lat2));
+		}
+		area = area * earthRadius * earthRadius / 2.0;
+	}
+	return Math.abs(area); // 면적은 항상 양수로 반환
+}
+
+function squareMetersToHectares(squareMeters) {
+	return squareMeters * 0.0001; // 제곱미터를 헥타르로 변환
+}
+
+function updatePolygonArea(polygon) {
+	if (!polygon || polygon.getLatLngs()[0].length < 3) {
+		$('#statsArea').text('0.00'); // 폴리곤이 없으면 면적을 0으로 설정
+		return;
+	}
+
+	const vertices = polygon.getLatLngs()[0];
+	const areaSquareMeters = calculatePolygonArea(vertices);
+	const areaHectares = squareMetersToHectares(areaSquareMeters);
+	$('#statsArea').text(areaHectares.toFixed(2)); // 소수점 두 자리까지 표시
+}
+

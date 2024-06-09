@@ -89,7 +89,7 @@ public class GA01MAINController {
     		return "main/login/empilogin";
     	}
   
-    	return "forward:/gcs/dashboard/gA03Main.do";  
+    	return "forward:/gcs/dashboard/projectMain1001.do";  
 	}  
 	
 	@RequestMapping(value = "/gcs/login/loginMobile.do")

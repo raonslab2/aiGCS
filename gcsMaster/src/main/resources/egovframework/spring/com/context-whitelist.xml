@@ -58,8 +58,10 @@
 		
 		
 		<value>main/include/droneHeadMenu</value>
+		<value>main/include/projectMainHead</value>
 		
 		<value>main/*</value>
+		 
 	 
 	    <!-- 
 		<value>main/inc/EgovIncHeader</value>

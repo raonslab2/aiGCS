@@ -160,6 +160,18 @@ public class GA03MAINServiceImpl extends EgovAbstractServiceImpl implements GA03
 		return gA03MAINDAO.selectWaypoint2(vo);
 	}
 
+	@Override
+	public List<GA03MAINVO> selectListPj(GA03MAINVO vo) {
+		// TODO Auto-generated method stub
+		return gA03MAINDAO.selectListPj(vo);
+	}
+
+	@Override
+	public int selectListPjCnt(GA03MAINVO vo) {
+		// TODO Auto-generated method stub
+		return gA03MAINDAO.selectListPjCnt(vo);
+	}
+
  
 
 }

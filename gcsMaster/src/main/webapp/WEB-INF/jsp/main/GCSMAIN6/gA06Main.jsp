@@ -224,7 +224,7 @@ p {display:table-cell;width:200px;height:inherit;vertical-align:middle;}
 			     </label>
 			     
 			     <label class="btnPath">
-			       <a <% if (url.indexOf("gA03Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/gA03Main.do'/>" ><p4>SETUP</p4></a>
+			       <a <% if (url.indexOf("gA03Main") > -1) { %> class="active" <% } %> href="<c:url value='/gcs/dashboard/projectMain1001.do'/>" ><p4>SETUP</p4></a>
 			     </label>
 			     
 			     <label class="btnPath">

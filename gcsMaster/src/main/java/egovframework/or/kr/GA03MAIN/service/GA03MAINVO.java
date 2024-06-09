@@ -37,7 +37,7 @@ public class GA03MAINVO implements Serializable{
 	private String dlWaypoint = "";
 	
 	private String dlWaypointDetail = "";
-	
+ 
 	private String dlCreateTime = ""; 
 	
 	private String dlNamePk = "";
@@ -47,9 +47,26 @@ public class GA03MAINVO implements Serializable{
 	private String dlDroneNum = "";
 	
 	private String id="";
+	 
+	private String dlDiv =""; 
 	
-	
-	
+	private String dlModifyTime ="";
+	 
+	public String getDlModifyTime() {
+		return dlModifyTime;
+	}
+
+	public void setDlModifyTime(String dlModifyTime) {
+		this.dlModifyTime = dlModifyTime;
+	}
+
+	public String getDlDiv() {
+		return dlDiv;
+	}
+
+	public void setDlDiv(String dlDiv) {
+		this.dlDiv = dlDiv;
+	}
 
 	public String getId() {
 		return id;

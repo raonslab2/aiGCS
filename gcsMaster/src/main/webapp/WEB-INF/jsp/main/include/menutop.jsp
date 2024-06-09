@@ -32,7 +32,7 @@
           </a>
     </div>
     <div class="menu-item  " data-tab="monthlyChartTab">
-          <a href="/gcs/dashboard/gA03Main.do" data-active="4">
+          <a href="/gcs/dashboard/projectMain1001.do" data-active="4">
             <span class="link hide">Drone Mission</span>
           </a>
     </div>

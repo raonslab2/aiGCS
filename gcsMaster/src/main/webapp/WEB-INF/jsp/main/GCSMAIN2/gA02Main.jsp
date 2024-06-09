@@ -134,7 +134,7 @@ $('.toggle-menu').jPushMenu();
     -->
       <p5 style="margin-right:20px;"><a style="color:yellow" href="<c:url value='/gcs/dashboard/gA01Main.do'/>">FLIGHT</a></p5>
       <span style="color:white">|</span>
-      <p5 style="margin-left:20px;margin-right:20px;"><a style="color:white" href="<c:url value='/gcs/dashboard/gA03Main.do'/>">PLAN</a></p5> 
+      <p5 style="margin-left:20px;margin-right:20px;"><a style="color:white" href="<c:url value='/gcs/dashboard/projectMain1001.do'/>">PLAN</a></p5> 
       <span style="color:white">|</span>
       <p5 style="margin-left:20px;margin-right:20px;"><a style="color:white" id="smenutop6" class="smenutop6" href="<c:url value='#'/>">DATA</a></p5>  
       <span style="color:white">|</span>
