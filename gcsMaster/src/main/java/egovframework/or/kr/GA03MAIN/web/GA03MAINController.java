@@ -423,6 +423,47 @@ public class GA03MAINController {
 
 		return mav;
 	}
+	
+	/**
+	 * Home > 2D : 비행경로 등록
+	 * @return 메인페이지 정보 Map [key : 항목명]
+	 *
+	 * @param request
+	 * @param model
+	 * @exception Exception Exception
+	 */ 
+	@RequestMapping(value = "/gcs/dashboard/insertNewProject.do", method = RequestMethod.POST)
+	public @ResponseBody ModelAndView insertNewProject(@RequestParam Map<String, Object> param,
+			HttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("jsonView");
+		EgovMap map = CommUtil.makeEgovMap(param);
+
+	    // 사용자 정보 가져오기
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();
+	    
+		String dlPk = String.valueOf(map.get("dlPk"));
+ 
+		GA03MAINVO gA03MAINVO = null;
+		String strWayPoint = "";
+ 
+		
+		
+		GA03MAINVO vo = new GA03MAINVO(); 
+		vo.setDlPk(dlPk);
+		
+		try {
+		 
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} 
+	 
+ 
+		//mav.addObject("tmLng", tmLng); 
+
+		return mav;
+	}
 
 	
 	/**

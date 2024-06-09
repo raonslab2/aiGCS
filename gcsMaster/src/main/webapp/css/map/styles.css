@@ -36,23 +36,7 @@ body {
     text-align: center;
 }
 
-.sidebar {
-	display: block; /* 기본적으로 표시되도록 수정 */
-    width: 300px;
-    background-color: #f4f4f4;
-    color: black;
-    border-right: 1px solid #ccc;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    display: none;
-    position: fixed;
-    height: 100%;
-    overflow-y: auto;
-    transition: 0.5s;
-    z-index: 9998;
-    user-select: none;
-    margin-top:10px;
-}
+
 
 .sidebar a.closebtn {
     font-size: 36px;
@@ -306,18 +290,37 @@ body {
     cursor: pointer;
 }
 
+.sidebar {
+    display: block; /* 기본적으로 표시되도록 수정 */
+    width: 300px;
+    background-color: #f4f4f4;
+    color: black;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    transition: 0.5s;
+    z-index: 9998;
+    user-select: none;
+    margin-top: 10px;
+    left: 0; /* 좌측 정렬 */
+}
+
 .toggle-btn {
-    position: absolute;
+    position: fixed; /* fixed로 설정하여 항상 보이도록 함 */
     top: 50%;
-    right: 0;
+    left: calc(300px + 41px); /* 사이드바 폭(300px) + 여유(41px) */
     transform: translateY(-50%);
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 0 5px 5px 0;
     padding: 10px;
     cursor: pointer;
-    z-index: 10000;
+    z-index: 9999; /* .sidebar보다 한 단계 위 */
 }
+
 
 .btn {
     background-color: #007bff;
@@ -492,3 +495,184 @@ select.form-control:focus {
     background-color: yellow; /* 마우스 오버 시 색상 */
 }
 
+.leaflet-top.leaflet-right {
+    top: 60px; /* 원하는 상단 여백 */
+    right: 30px; /* 원하는 오른쪽 여백 */
+}
+
+.custom-zoom-control {
+    position: absolute !important;
+    bottom: 50px; /* 원하는 위치로 조정 */
+    right: 20px; /* 원하는 위치로 조정 */
+    z-index: 1000; /* 다른 컨트롤과 겹치지 않도록 */
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+    width: 52px; /* 2배로 키움 */
+    height: 52px; /* 2배로 키움 */
+    line-height: 52px; /* 2배로 키움 */
+    font-size: 30px; /* 텍스트 크기 조정 */
+}
+
+.zoom-button {
+    width: 52px; /* 2배로 키움 */
+    height: 52px; /* 2배로 키움 */
+    line-height: 52px; /* 2배로 키움 */
+    font-size: 30px; /* 텍스트 크기 조정 */
+}
+
+/* styles.css 파일에 추가 */
+.center-marker-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* 맨 위에 표시 */
+    pointer-events: none; /* 마우스 이벤트 무시 */
+}
+
+.center-marker {
+    width: 208px; /* 4배 크게 */
+    height: 160px; /* 4배 크게 */
+    border: 6px solid rgba(255, 255, 255, 0.8); /* 하얀색 테두리 */
+    border-radius: 12px; /* 둥근 모서리 */
+    background-color: transparent; /* 투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner-marker {
+    width: 40px; /* 4배 크게 */
+    height: 40px; /* 4배 크게 */
+    border-radius: 50%;
+    border: 6px solid rgba(255, 255, 255, 0.8); /* 하얀색 테두리 */
+    background-color: rgba(255, 255, 255, 0); /* 투명한 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner-marker .transparent-circle {
+    width: 20px; /* 투명한 원의 크기 */
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0); /* 투명한 배경 */
+    border: 4px solid white; /* 하얀색 테두리 */
+}
+
+.marker-label {
+    margin-top: 10px;
+    background-color: rgba(63, 72, 216, 0.8); /* 파란색 배경에 투명도 추가 */
+    color: white;
+    padding: 10px 10px;
+    border-radius: 5px;
+    pointer-events: auto; /* 마우스 이벤트 허용 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+}
+
+/* 팝업 스타일 */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 투명도 추가 */
+    z-index: 99000; /* 높게 설정 */
+    display: none; /* 초기 상태 숨김 */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1001; /* overlay보다 높게 설정 */
+    max-width: 500px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* "여기에서 프로젝트 만들기" 버튼 스타일 */
+.marker-label {
+    margin-top: 10px;
+    background-color: rgba(63, 72, 216, 0.8); /* 파란색 배경에 투명도 추가 */
+    color: white;
+    padding: 10px 10px;
+    border-radius: 5px;
+    pointer-events: auto; /* 마우스 이벤트 허용 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    z-index: 999; /* 팝업보다 낮게 설정 */
+}
+
+/* 팝업 내부 스타일 */
+.popup-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+    text-align: center;
+}
+
+.popup-pj-tit {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #444;
+}
+
+.popup-pj-sub {
+    margin-bottom: 20px;
+}
+
+.popup-pj-sub span {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.popup-pj-sub input[type="text"],
+.popup-pj-sub select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.popup-pj-sub input[type="text"]:focus,
+.popup-pj-sub select:focus {
+    border-color: #3F48D8;
+    outline: none;
+}
+
+.popup-pj-sub div {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.continue-button {
+    background-color: #3F48D8; /* 파란색 배경에 투명도 추가 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.continue-button:hover {
+    background-color: #2C358C;
+}

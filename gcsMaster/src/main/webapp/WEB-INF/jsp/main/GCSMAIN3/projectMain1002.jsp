@@ -13,18 +13,21 @@
     <link rel="stylesheet" href="/css/map/leaflet.css">
     <link rel="stylesheet" href="/css/map/styles.css">
     <link rel="stylesheet" href="/css/map/leaflet-path-transform.css"> <!-- 추가 -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
     <script src="https://npmcdn.com/leaflet@1.3.4/dist/leaflet.js"></script>
     <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
-    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
-    
-    
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script> 
+
+    <!-- 추가 -->
+
+    <script src="/js/map/mapInit.js"></script>
     <script src="/js/map/Leaflet.Editable.js"></script>
     <script src="/js/map/controls.js"></script> 
     <script src="/js/map/polygonService.js"></script> 
-    <script src="/js/map/leaflet-path-transform.js"></script> <!-- 추가 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/map/leaflet-path-transform.js"></script> 
 </head>
 <body page-data="menu-project">
 <form id="dataUpdate">
@@ -131,72 +134,99 @@
     <div class="toggle-btn" onclick="toggleNav()">❮</div>
 </div>
 
+<!-- 팝업과 투명 레이어를 위한 HTML 추가 -->
+<div id="overlay" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+        <h3>프로젝트 만들기</h3>
+        <div class="popup-pj-tit"><label for="projectNameInput">프로젝트 이름</label></div>
+        <div class="popup-pj-sub">
+            <span>프로젝트 이름</span>
+            <input type="text" id="projectNameInput" placeholder="프로젝트 이름">
+        </div>
+        <div class="popup-pj-sub">
+            <span>추천 좌표계</span>
+            <select id="coordinateSystem">
+                <option value="Korea 2000 / Unified CS">Korea 2000 / Unified CS</option>
+                <!-- 다른 옵션 추가 -->
+            </select>
+        </div>
+        <div class="popup-pj-sub">
+            <div>프로젝트 설정은 나중에도 변경 가능합니다.</div>
+            <div><button id="continueButton" class="continue-button">계속</button></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- JavaScript 변수 설정 -->
 <!-- JavaScript 변수 설정 -->
 <script>
     var tmLat = "${tmLat}";
     var tmLng = "${tmLng}";
     var dlPk = "${dlPk}"; 
-    
- 
+
+    if (!dlPk || dlPk.trim() === "") {
+        tmLat = "37.20889279";
+        tmLng = "127.75102006";
+    }
 
     $(document).ready(function() {
-        // dlPk 값이 있을 때만 "임시 불러오기" 버튼을 표시
         if (dlPk === null || dlPk.trim() === "") {
-            alert("신규생성.");
+            $('#importButton').hide();
+            $('#mySidebar').hide();
+            $('.toggle-btn').html('❯');
+            $('.toggle-btn').css('left', '0px'); // 사이드바가 닫혀있을 때 토글 버튼을 왼쪽으로 이동
         } else {
-        	$('#importButton').show();
+            $('#importButton').show();
+            $('#mySidebar').show();
+            $('.toggle-btn').html('❮');
+            updateToggleBtnPosition();
         }
         
-       
-    	
-        // 현재 날짜와 시간을 가져옵니다.
         var now = new Date();
-        
-        // 년, 월, 일, 시, 분을 각각 가져옵니다.
         var year = now.getFullYear();
-        var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줍니다.
+        var month = String(now.getMonth() + 1).padStart(2, '0');
         var day = String(now.getDate()).padStart(2, '0');
         var hours = String(now.getHours()).padStart(2, '0');
         var minutes = String(now.getMinutes()).padStart(2, '0');
-        
-        // 원하는 형식으로 문자열을 만듭니다.
         var formattedDate = 'Route_' + year + month + day + hours + minutes;
-        
-        // input 요소의 값을 설정합니다.
         $('#projectName').val(formattedDate);
-    	
-        // 좌표값이 정의되지 않은 경우를 대비한 기본값 설정
+
         tmLat = (tmLat !== undefined && tmLat !== null) ? tmLat.toString() : "";
         tmLng = (tmLng !== undefined && tmLng !== null) ? tmLng.toString() : "";
 
-        // 앞 6자리만 가져오기
         var truncatedLat = tmLat.substring(0, 10);
         var truncatedLng = tmLng.substring(0, 10);
 
-        // 좌표값을 span 요소에 설정
         $('#tmLat').text(truncatedLat);
         $('#tmLng').text(truncatedLng);
          
-        // 사이드바 기본 표시
-        document.getElementById("mySidebar").style.display = "block";
-        
-
     });
 
     function toggleNav() {
-        var sidebar = document.getElementById("mySidebar");
-        var toggleBtn = document.querySelector(".toggle-btn");
-        if (sidebar.style.display === "block") {
-            sidebar.style.display = "none";
-            toggleBtn.innerHTML = "❮";
+        var sidebar = $('#mySidebar');
+        var toggleBtn = $('.toggle-btn');
+        if (sidebar.css('display') === 'block') {
+            sidebar.css('display', 'none');
+            toggleBtn.html('❯');
+            toggleBtn.css('left', '0px'); // 사이드바가 닫힐 때 토글 버튼을 왼쪽으로 이동
         } else {
-            sidebar.style.display = "block";
-            toggleBtn.innerHTML = "❯";
+            sidebar.css('display', 'block');
+            toggleBtn.html('❮');
+            updateToggleBtnPosition();
         }
+    }
+
+    function updateToggleBtnPosition() {
+        var sidebarWidth = $('#mySidebar').width();
+        $('.toggle-btn').css('left', sidebarWidth + 41 + 'px'); // 사이드바가 열릴 때 토글 버튼을 사이드바 너비 + 여유 공간으로 이동
     }
 </script>
 
+
+
 <!-- 외부 JavaScript 파일 포함 -->
-<script src="/js/map/mapInit.js"></script>
+
 </body>
 </html>
