@@ -1,3 +1,7 @@
+<%--
+not delete
+- this page : projectMain1002.jsp
+ --%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -139,12 +143,10 @@
     <div class="popup-content">
         <h3>프로젝트 만들기</h3>
         <div class="popup-pj-tit"><label for="projectNameInput">프로젝트 이름</label></div>
-        <div class="popup-pj-sub">
-            <span>프로젝트 이름</span>
+        <div class="popup-pj-sub"> 
             <input type="text" id="projectNameInput" placeholder="프로젝트 이름">
         </div>
-        <div class="popup-pj-sub">
-            <span>추천 좌표계</span>
+        <div class="popup-pj-sub"> 
             <select id="coordinateSystem">
                 <option value="Korea 2000 / Unified CS">Korea 2000 / Unified CS</option>
                 <!-- 다른 옵션 추가 -->

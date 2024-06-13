@@ -1,3 +1,8 @@
+/*--
+no delete
+this page - mapInit.js
+--*/
+
 $(document).ready(function() {
 
 
@@ -623,6 +628,14 @@ $(document).ready(function() {
     // 팝업 외부 클릭 시 닫기 방지
     $('.popup-content').on('click', function(e) {
         e.stopPropagation();
+    });
+
+    $('#continueButton').on('click', function() {
+        var projectNameInput = $('#projectNameInput').val();
+        if(projectNameInput.length===0){ 
+           alert("프로젝트 이름을 입력하세요.");
+           $('#projectNameInput').focus();
+        }
     });
 });
 

@@ -1,3 +1,8 @@
+/*--
+no delete
+this page - leaflet-path-transform.js
+--*/
+
 /**
  * Leaflet vector features drag functionality
  * @author Alexander Milevski <info@w8r.name>
