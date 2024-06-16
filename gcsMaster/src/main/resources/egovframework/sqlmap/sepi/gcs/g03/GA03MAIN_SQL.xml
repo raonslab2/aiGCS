@@ -150,7 +150,9 @@
     <![CDATA[
 	 UPDATE br_drone_project
 		SET 
-			dl_name=#DL_NAME# 
+			dl_name=#DL_NAME#,
+			dl_home_x = #DL_HOME_X#,
+			dl_home_y = #DL_HOME_Y#
 		WHERE dl_pk=#DL_PROJECT_DL_PK# 
     ]]>
 	</update>

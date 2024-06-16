@@ -350,7 +350,7 @@ public class GA03MAINController {
 			
 
 		}
-
+ 
 		model.addAttribute("dlName", strDlName);
 		model.addAttribute("waypoints", strWayPoint);
 		model.addAttribute("waypointsDetail", strWayPointDetail);
@@ -531,6 +531,8 @@ public class GA03MAINController {
 	    String missionName = String.valueOf(map.get("missionName"));
 	    String waypointsDetail = "";
 	    String dlDiv = String.valueOf(map.get("dlDiv")); // 2d 0 , 3d 1
+	    String polyCenterLat =  String.valueOf(map.get("polyCenterLat"));
+	    String polyCenterLng = String.valueOf(map.get("polyCenterLng"));
 
 	    LOGGER.debug("waypointsDetail : {}", waypointsDetail);
 	    LOGGER.debug("gA03Main2Waypoint : {}", tmData);
@@ -565,6 +567,9 @@ public class GA03MAINController {
 	    paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail); 
 	    paramMap.put("DL_CREATE_TIME", create_time);
 	    paramMap.put("DL_ADDR", addr);
+	    paramMap.put("DL_HOME_X", polyCenterLat);
+ 	    paramMap.put("DL_HOME_Y", polyCenterLng);
+	 
 	    
 	    if (dlPk != null && !dlPk.isEmpty()) {
 	        paramMap.put("DL_PROJECT_DL_PK", dlPk);
@@ -583,7 +588,7 @@ public class GA03MAINController {
 	        } else {
 	            gA03MAINService.insertWaypoint(paramMap);
 	        }
-	        
+  
 	        //프로젝트 정보
 	        gA03MAINService.updateDroneProject(paramMap);
 	    } catch (Exception e) {

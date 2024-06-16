@@ -1,5 +1,4 @@
-/*-- no delete this page - mapInit.js --*/
-
+var map; // 전역 변수로 map 선언
 $(document).ready(function () {
     const RectangleCreator = class {
         constructor(map) {
@@ -42,11 +41,13 @@ $(document).ready(function () {
             updatePolygonArea(this.poly);
         }
 
-        importData(data) { 
-	        if(data==null ||data=="null"){
-		        return false;
-	        }
-	
+        importData(data) {
+            if (data == null || data == "null" || data.polygons.length === 0) {
+                $('#newSidebar').show();
+                $('#mySidebar').hide();
+                return false;
+            }
+
             this.removePolygon();
 
             const polygonData = data.polygons[0];
@@ -76,23 +77,23 @@ $(document).ready(function () {
                 this.drawGridAndPathInPolygon(latStep, lngStep);
             };
 
-            this.gridSizeSlider.on('input', () => {
+            this.gridSizeSlider.off('input').on('input', () => {
                 const gridSize = parseInt(this.gridSizeSlider.val());
                 this.gridSizeValue.text(gridSize);
                 redrawGridAndPath();
             });
 
-            this.poly.on('edit', () => {
+            this.poly.off('edit').on('edit', () => {
                 redrawGridAndPath();
                 updatePolygonArea(this.poly);
             });
 
-            this.poly.on('editable:vertex:dragend', redrawGridAndPath);
-            this.poly.on('editable:dragend', redrawGridAndPath);
-            this.poly.on('editable:vertex:deleted', redrawGridAndPath);
+            this.poly.off('editable:vertex:dragend').on('editable:vertex:dragend', redrawGridAndPath);
+            this.poly.off('editable:dragend').on('editable:dragend', redrawGridAndPath);
+            this.poly.off('editable:vertex:deleted').on('editable:vertex:deleted', redrawGridAndPath);
 
-            $('#checkCamera').on('change', () => this.toggleGridMarkers());
-            $('#checkMulti').on('change', redrawGridAndPath);
+            $('#checkCamera').off('change').on('change', () => this.toggleGridMarkers());
+            $('#checkMulti').off('change').on('change', redrawGridAndPath);
         }
 
         isPointInPolygon(point) {
@@ -279,6 +280,9 @@ $(document).ready(function () {
             const gridSize = parseInt($('#gridSizeSlider').val());
             const droneSpeed = parseFloat($('#droneSpeed').val());
 
+		    // 중심 좌표 계산
+		    const polyCenter = this.getPolygonCenter();
+
             const gridLines = [];
             const bounds = this.poly.getBounds();
             const latStep = 0.00009 * gridSize;
@@ -315,14 +319,24 @@ $(document).ready(function () {
             const missionName = projectName;
             const jsonObj = JSON.stringify(dl_waypoint); 
 
+ 
+ 
             $.post("/gcs/dashboard/insertDlWaypoint.do", {
                 data: jsonObj,
                 dlDiv: "0",
                 addr: addr,
                 dlPk: dlPk,
+                polyCenterLat: polyCenter.lat,
+                polyCenterLng: polyCenter.lng,
                 missionName: missionName 
             }).done(function () {
-                alert("Registered successfully.");
+                //지도정보 다시 로딩
+                 alert("경로정보가 적용되었습니다.");
+			    // 현재 페이지의 URL 가져오기
+			    var currentUrl = window.location.href;
+			    
+			    // 페이지 리로드
+			    window.location.href = currentUrl.split('?')[0] + "?dlPk=" + dlPk;
             }).fail(function () {
                 alert("실패");
             });
@@ -387,6 +401,16 @@ $(document).ready(function () {
             });
         }
 
+        //중심 좌표 계산 함수
+		getPolygonCenter() {
+		    if (!this.poly) {
+		        return null;
+		    }
+		    const bounds = this.poly.getBounds();
+		    return bounds.getCenter();
+		}
+
+
         async captureMap() {
             const mapContainer = document.getElementById('map');
             const canvas = await html2canvas(mapContainer);
@@ -412,19 +436,66 @@ $(document).ready(function () {
         }
     };
 
-    const map = initializeMap();
-    const rectangleCreator = new RectangleCreator(map);
+	function checkAndShowSidebar() {
+	    const polygonExists = map.hasLayer(rectangleCreator.poly);
+	    if (!polygonExists) {
+	        $('#mySidebar').hide();
+	        $('#newSidebar').show();
+	    } else {
+	        $('#mySidebar').show();
+	        $('#newSidebar').hide();
+	    }
+	}
+	
+	// 주소 검색 기능 추가
+	$('#searchButton').on('click', function (e) {
+	    e.preventDefault();
+	    const address = $('#addressInput').val();
+	    if (address) {
+	        geocodeAddress(address);
+	    } else {
+	        alert('주소를 입력하세요');
+	    }
+	});
+	
+	function geocodeAddress(address) {
+	    const geocoder = new google.maps.Geocoder();
+	    geocoder.geocode({ 'address': address }, function (results, status) {
+	        if (status === 'OK') {
+	            const latLng = results[0].geometry.location;
+	            map.setView([latLng.lat(), latLng.lng()], 18);
+	            L.marker([latLng.lat(), latLng.lng()]).addTo(map)
+	                .bindPopup(address).openPopup();
+	        } else {
+	            alert('Geocode was not successful for the following reason: ' + status);
+	        }
+	    });
+	}
 
-    setupButtonEventListeners(rectangleCreator);
+    map = initializeMap();
+    const rectangleCreator = new RectangleCreator(map);
 
     if (dlPk) {
         const data = getData(dlPk);
-        console.log("[getData]"+data);
-        rectangleCreator.importData(data);
+        console.log("[getData]", data);
+        if (data) { 
+            rectangleCreator.importData(data);
+            if (data.polygons.length === 0) { 
+                $('#newSidebar').show();
+                $('#mySidebar').hide();
+            }
+        } else { 
+            $('#newSidebar').show();
+            $('#mySidebar').hide(); 
+        }
     } else {
+        $('#searchContainer').show();  // dlPk 값이 없을 때 주소 검색 필드 보이기
         addCenterMarker(map);
     }
+    setupButtonEventListeners(rectangleCreator);
 });
+
+
 
 function initializeMap() { 
     tmLat = parseFloat(tmLat);
@@ -520,7 +591,8 @@ function addCenterMarker(map) {
     );
     $('body').append(centerMarkerDiv);
 
-    $('#newProject').on('click', function () {
+    $('#newProject').off('click').on('click', function () {
+        $('#newSidebar').show();
         $('#overlay').css('display', 'flex');
         $('#newProject').css('display', 'none');
 
@@ -533,16 +605,16 @@ function addCenterMarker(map) {
 	    $('#projectNameInput').val(projectName);
     });
 
-    $('#overlay').on('click', function () {
-        $(this).css('display', 'none');
-        $('#newProject').css('display', 'block');
+    $('#overlay').off('click').on('click', function () {
+        //$(this).css('display', 'none');
+        //$('#newProject').css('display', 'block');
     });
 
-    $('.popup-content').on('click', function (e) {
+    $('.popup-content').off('click').on('click', function (e) {
         e.stopPropagation();
     });
 
-	$('#continueButton').on('click', function () {
+	$('#continueButton').off('click').on('click', function () {
 	    const projectName = $('#projectNameInput').val();
 	    const codination = $('#coordinateSystem').val(); // coordinateSystem 값 추가
 
@@ -566,8 +638,12 @@ function addCenterMarker(map) {
 		                homeY: homeY,
                       },
 	            success: function(response) {
-	                const dlPk = response.result;
-	                window.location.href = `http://localhost:8081/gcs/dashboard/projectMain1002.do?dlPk=${dlPk}`;
+	                var dlPk = response.result; 
+			       // 현재 페이지의 URL 가져오기
+			       var currentUrl = window.location.href;
+			    
+			        // 페이지 리로드
+			       window.location.href = currentUrl.split('?')[0] + "?dlPk=" + dlPk; 
 	            },
 	            error: function(error) {
 	                alert("프로젝트 이름 저장에 실패했습니다.");
@@ -575,9 +651,6 @@ function addCenterMarker(map) {
 	        });
 	    }
 	});
-
-
-
 }
 
 function getData(dlPk) {
@@ -589,21 +662,19 @@ function getData(dlPk) {
         async: false,
     }).done((res) => {
         try {
-            
-            // 기존 등록된 경로가 없는경우
-            if(res.waypoints==null || res.waypoints=="null"){
-	           return false;
+ 
+            if (res.waypoints == null || res.waypoints == "null") {
+                console.log("No waypoints found.");
+                return;
             }
-          
+
             const waypoints = JSON.parse(res.waypoints);
-            console.log("[waypoints] "+waypoints);
+            console.log("[waypoints] ", waypoints);
             const polygons = waypoints.polygons;
             const gridSize = waypoints.gridSize;
             const droneAltitude = waypoints.droneAltitude;
             const droneSpeed = waypoints.droneSpeed;
             const projectName = waypoints.name;
-
-     
 
             if (polygons) {
                 const polygonData = polygons.map(point => {
@@ -642,11 +713,13 @@ function getData(dlPk) {
             console.error("Error parsing response", error);
         }
     }).fail(() => {
-        alert("실패");
+        alert("Failed to retrieve data.");
     });
 
+    console.log("getData result: ", result);
     return result;
 }
+
 
 function calculatePolygonArea(vertices) {
     const earthRadius = 6378137;

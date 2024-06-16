@@ -5,7 +5,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page import="egovframework.com.cmm.LoginVO" %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -27,6 +26,13 @@
     <script src="/js/map/controls.js"></script>
     <script src="/js/map/polygonService.js"></script>
     <script src="/js/map/leaflet-path-transform.js"></script>
+    <link rel="stylesheet" href="/mnt/data/styles.css">
+    
+ 
+   <!-- Google Maps JavaScript API -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAd_7gJ7UDeN_gKMAomqj2_wLovzFkBuc&libraries=places">
+    </script>
 </head>
 <body page-data="menu-project">
 <form id="dataUpdate">
@@ -34,10 +40,18 @@
     <input type="hidden" id="strWayPoint" name="strWayPoint" value="${strWayPoint}">
 </form>
 
+ <!-- 주소 검색 필드 추가 -->
+<div class="search-container">
+    <input type="text" id="addressInput" placeholder="이름, 우편번호 또는 좌표로 검색">
+    <button id="searchButton">검색</button>
+</div>
+
+
 <!-- head menu -->
 <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu"/>
 
-<div id="mySidebar" class="sidebar" ondragstart="return false;" ondrop="return false;">
+<!-- 기존 좌측 메뉴 -->
+<div id="mySidebar" class="sidebar" ondragstart="return false;" ondrop="return false;" style="display: none;">
     <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()"></a>
     <div class="control-container">
         <div class="section">
@@ -126,6 +140,8 @@
         </div>
     </div>
 </div>
+ 
+
 
 <div id="main">
     <button class="openbtn" onclick="toggleNav()">&#9776; 설정</button>
@@ -154,11 +170,11 @@
     </div>
 </div>
 
-<!-- JavaScript 변수 설정 -->
 <script>
     var tmLat = "${tmLat}";
     var tmLng = "${tmLng}";
     var dlPk = "${dlPk}";
+
 
     if (!dlPk || dlPk.trim() === "") {
         tmLat = "37.20889279";
@@ -168,26 +184,72 @@
     $(document).ready(function () {
         var now = new Date();
         var formattedDate = 'Route_' + now.toISOString().slice(0, 10).replace(/-/g, '') + now.toTimeString().slice(0, 5).replace(/:/g, '');
-    	
+        
         if (!dlPk || dlPk.trim() === "") {
             $('#importButton').hide();
             $('#mySidebar').hide();
             $('#toggle-btn').hide();  // toggle-btn 요소 숨기기
+            $('#newSidebar').hide(); // newSidebar 요소 보이기
         } else {
+        	
             $('#importButton').show();
             $('#mySidebar').show();
-            $('#toggle-btn').show();  // toggle-btn 요소 보이기
+            $('#toggle-btn').hide();  // toggle-btn 요소 보이기
             $('#toggle-btn').html('❮');
             formattedDate = "${dlName}"; 
             updateToggleBtnPosition();
         }
-
 
         $('#projectName').val(formattedDate);
 
         // tmLat와 tmLng를 문자열로 변환한 후 substring 호출
         $('#tmLat').text(String(tmLat).substring(0, 10));
         $('#tmLng').text(String(tmLng).substring(0, 10));
+    });
+ 
+
+    $('#overlay').on('click', function (e) {
+        if (!$(e.target).closest('.popup-content').length) {
+            e.stopPropagation();
+        }
+    });
+
+    $('.popup-content').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    $('#continueButton').on('click', function () {
+        const projectName = $('#projectNameInput').val();
+        const codination = $('#coordinateSystem').val(); // coordinateSystem 값 추가
+
+        // 지도 중심 좌표값 가져오기
+        const center = map.getCenter();
+        const homeX = center.lat;
+        const homeY = center.lng;
+
+        if (projectName.length === 0) {
+            alert("프로젝트 이름을 입력하세요.");
+            $('#projectNameInput').focus();
+        } else {
+            // 서버로 프로젝트 이름 저장 요청
+            $.ajax({
+                url: '/gcs/dashboard/saveProjectName.do', // 서버의 적절한 엔드포인트 URL로 변경 필요
+                type: 'POST',
+                data: {
+                    projectName: projectName,
+                    codination: codination,
+                    homeX: homeX,
+                    homeY: homeY,
+                },
+                success: function (response) {
+                    const dlPk = response.result;
+                    window.location.href = `http://localhost:8081/gcs/dashboard/projectMain1002.do?dlPk=${dlPk}`;
+                },
+                error: function (error) {
+                    alert("프로젝트 이름 저장에 실패했습니다.");
+                }
+            });
+        }
     });
 
     function toggleNav() {
@@ -209,5 +271,6 @@
         $('.toggle-btn').css('left', sidebarWidth + 41 + 'px');
     }
 </script>
+
 </body>
 </html>
