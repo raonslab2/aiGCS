@@ -1,11 +1,6 @@
-/*--
-no delete
-this page - mapInit.js
---*/
+/*-- no delete this page - mapInit.js --*/
 
-$(document).ready(function() {
-
-
+$(document).ready(function () {
     const RectangleCreator = class {
         constructor(map) {
             this.map = map;
@@ -44,10 +39,14 @@ $(document).ready(function() {
             this.initGridAndPath();
             this.setupEventListeners();
 
-            updatePolygonArea(this.poly); 
+            updatePolygonArea(this.poly);
         }
 
-        importData(data) {
+        importData(data) { 
+	        if(data==null ||data=="null"){
+		        return false;
+	        }
+	
             this.removePolygon();
 
             const polygonData = data.polygons[0];
@@ -66,18 +65,10 @@ $(document).ready(function() {
             this.drawGridAndPathInPolygon(0.00009 * data.gridSize, 0.00009 * data.gridSize);
 
             this.setupEventListeners();
-            updatePolygonArea(this.poly); 
+            updatePolygonArea(this.poly);
         }
 
         setupEventListeners() {
-            this.gridSizeSlider.on('input', () => {
-                const gridSize = parseInt(this.gridSizeSlider.val());
-                this.gridSizeValue.text(gridSize);
-                const latStep = 0.00009 * gridSize;
-                const lngStep = 0.00009 * gridSize;
-                this.drawGridAndPathInPolygon(latStep, lngStep);
-            });
-
             const redrawGridAndPath = () => {
                 const gridSize = parseInt(this.gridSizeSlider.val());
                 const latStep = 0.00009 * gridSize;
@@ -85,30 +76,22 @@ $(document).ready(function() {
                 this.drawGridAndPathInPolygon(latStep, lngStep);
             };
 
+            this.gridSizeSlider.on('input', () => {
+                const gridSize = parseInt(this.gridSizeSlider.val());
+                this.gridSizeValue.text(gridSize);
+                redrawGridAndPath();
+            });
+
             this.poly.on('edit', () => {
                 redrawGridAndPath();
                 updatePolygonArea(this.poly);
             });
 
-            this.poly.on('editable:vertex:dragend', () => {
-                redrawGridAndPath();
-                updatePolygonArea(this.poly);
-            });
+            this.poly.on('editable:vertex:dragend', redrawGridAndPath);
+            this.poly.on('editable:dragend', redrawGridAndPath);
+            this.poly.on('editable:vertex:deleted', redrawGridAndPath);
 
-            this.poly.on('editable:dragend', () => {
-                redrawGridAndPath();
-                updatePolygonArea(this.poly);
-            });
-
-            this.poly.on('editable:vertex:deleted', () => {
-                redrawGridAndPath();
-                updatePolygonArea(this.poly);
-            });
-
-            $('#checkCamera').on('change', () => {
-                this.toggleGridMarkers();
-            });
-
+            $('#checkCamera').on('change', () => this.toggleGridMarkers());
             $('#checkMulti').on('change', redrawGridAndPath);
         }
 
@@ -127,31 +110,17 @@ $(document).ready(function() {
         }
 
         drawGridAndPathInPolygon(latStep, lngStep) {
-            this.gridLayers.forEach(layer => this.map.removeLayer(layer));
-            this.gridLayers = [];
-            this.gridIntersections = [];
+            this.clearGridLayers();
 
             const bounds = this.poly.getBounds();
             let path = [];
-            let gridLines = [];
             let isPathReversed = false;
 
             for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
-                let linePoints = [];
-                for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
-                    const point = new L.LatLng(lat, lng);
-                    if (this.isPointInPolygon(point)) {
-                        linePoints.push(point);
-                        this.gridIntersections.push([point.lat, point.lng]);
-                    }
-                }
+                let linePoints = this.getLinePoints(lat, bounds.getWest(), bounds.getEast(), lngStep, 'lat');
                 if (linePoints.length > 1) {
-                    const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
-                    gridLines.push(gridLine);
-                    this.gridLayers.push(gridLine);
-                    if (isPathReversed) {
-                        linePoints.reverse();
-                    }
+                    this.addGridLine(linePoints);
+                    if (isPathReversed) linePoints.reverse();
                     path = path.concat(linePoints);
                     isPathReversed = !isPathReversed;
                 }
@@ -159,35 +128,46 @@ $(document).ready(function() {
 
             if ($('#checkMulti').is(':checked')) {
                 for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
-                    let linePoints = [];
-                    for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
-                        const point = new L.LatLng(lat, lng);
-                        if (this.isPointInPolygon(point)) {
-                            linePoints.push(point);
-                            this.gridIntersections.push([point.lat, point.lng]);
-                        }
-                    }
-                    if (linePoints.length > 1) {
-                        const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
-                        gridLines.push(gridLine);
-                        this.gridLayers.push(gridLine);
-                    }
+                    let linePoints = this.getLinePoints(lng, bounds.getSouth(), bounds.getNorth(), latStep, 'lng');
+                    if (linePoints.length > 1) this.addGridLine(linePoints);
                 }
             }
 
-            gridLines.forEach(line => line.addTo(this.map));
+            this.addPathLine(path);
+            this.updateDistance(path);
+            if (path.length > 0) this.addStartAndEndMarkers(path[0], path[path.length - 1]);
+            this.updateArea();
+            this.toggleGridMarkers();
+        }
+
+        getLinePoints(fixed, start, end, step, type) {
+            let linePoints = [];
+            for (let variable = start; variable <= end; variable += step) {
+                const point = type === 'lat' ? new L.LatLng(fixed, variable) : new L.LatLng(variable, fixed);
+                if (this.isPointInPolygon(point)) {
+                    linePoints.push(point);
+                    this.gridIntersections.push([point.lat, point.lng]);
+                }
+            }
+            return linePoints;
+        }
+
+        addGridLine(linePoints) {
+            const gridLine = L.polyline(linePoints, { color: '#00FF00', weight: 1 });
+            gridLine.addTo(this.map);
+            this.gridLayers.push(gridLine);
+        }
+
+        addPathLine(path) {
             const pathLine = L.polyline(path, { color: "#00FF00", weight: 1 });
             pathLine.addTo(this.map);
             this.gridLayers.push(pathLine);
+        }
 
-            this.updateDistance(path);
-
-            if (path.length > 0) {
-                this.addStartAndEndMarkers(path[0], path[path.length - 1]);
-            }
-
-            this.updateArea();
-            this.toggleGridMarkers();
+        clearGridLayers() {
+            this.gridLayers.forEach(layer => this.map.removeLayer(layer));
+            this.gridLayers = [];
+            this.gridIntersections = [];
         }
 
         updateArea() {
@@ -207,16 +187,13 @@ $(document).ready(function() {
             this.gridSizeValue.text(initialGridSize);
             const latStep = 0.00009 * initialGridSize;
             const lngStep = 0.00009 * initialGridSize;
-
             this.drawGridAndPathInPolygon(latStep, lngStep);
         }
 
         removePolygon() {
             if (this.poly) {
                 this.map.removeLayer(this.poly);
-                this.gridLayers.forEach(layer => this.map.removeLayer(layer));
-                this.poly = null;
-                this.gridLayers = [];
+                this.clearGridLayers();
                 this.updateDistance([]);
                 this.removeMarkers();
                 this.removeGridMarkers();
@@ -225,30 +202,31 @@ $(document).ready(function() {
         }
 
         updateDistance(path) {
-            let totalDistance = 0;
-            for (let i = 1; i < path.length; i++) {
-                totalDistance += path[i - 1].distanceTo(path[i]);
-            }
+            let totalDistance = path.reduce((distance, point, index) => {
+                if (index > 0) {
+                    distance += path[index - 1].distanceTo(point);
+                }
+                return distance;
+            }, 0);
             this.distanceDisplay.text(`${totalDistance.toFixed(2)} m`);
         }
 
         addStartAndEndMarkers(start, end) {
             this.removeMarkers();
 
-            const startIcon = L.divIcon({
-                className: 'custom-start-icon',
-                html: '<div style="background-color: blue; width: 24px; height: 24px; border-radius: 50%;"></div>',
-                iconSize: [20, 20]
-            });
-
-            const endIcon = L.divIcon({
-                className: 'custom-end-icon',
-                html: '<div style="background-color: red; width: 24px; height: 24px; border-radius: 50%;"></div>',
-                iconSize: [20, 20]
-            });
+            const startIcon = this.createMarkerIcon('blue');
+            const endIcon = this.createMarkerIcon('red');
 
             this.startMarker = L.marker(start, { icon: startIcon }).addTo(this.map);
             this.endMarker = L.marker(end, { icon: endIcon }).addTo(this.map);
+        }
+
+        createMarkerIcon(color) {
+            return L.divIcon({
+                className: `custom-${color}-icon`,
+                html: `<div style="background-color: ${color}; width: 24px; height: 24px; border-radius: 50%;"></div>`,
+                iconSize: [20, 20]
+            });
         }
 
         removeMarkers() {
@@ -259,81 +237,6 @@ $(document).ready(function() {
             if (this.endMarker) {
                 this.map.removeLayer(this.endMarker);
                 this.endMarker = null;
-            }
-        }
-
-        addVertexAndMidpointHoverEffect() {
-            const latlngs = this.poly.getLatLngs()[0];
-            const map = this.map;
-
-            latlngs.forEach((latlng) => {
-                const vertex = L.circleMarker(latlng, {
-                    radius: 3,
-                    color: '#FFFFFF',
-                    fillColor: '#FFFFFF',
-                    fillOpacity: 1,
-                    className: 'vertex'
-                }).addTo(map);
-
-                vertex.on('mouseover', function() {
-                    this.setStyle({
-                        radius: 5,
-                        color: 'blue',
-                        fillColor: 'blue',
-                        weight: 2,
-                        fillOpacity: 1,
-                        className: 'vertex-hover'
-                    });
-                });
-
-                vertex.on('mouseout', function() {
-                    this.setStyle({
-                        radius: 3,
-                        color: '#FFFFFF',
-                        fillColor: '#FFFFFF',
-                        weight: 0,
-                        fillOpacity: 1,
-                        className: 'vertex'
-                    });
-                });
-            });
-
-            for (let i = 0; i < latlngs.length; i++) {
-                const nextIndex = (i + 1) % latlngs.length;
-                const midpointLatlng = L.latLng(
-                    (latlngs[i].lat + latlngs[nextIndex].lat) / 2,
-                    (latlngs[i].lng + latlngs[nextIndex].lng) / 2
-                );
-
-                const midpoint = L.circleMarker(midpointLatlng, {
-                    radius: 3,
-                    color: 'green',
-                    fillColor: 'green',
-                    fillOpacity: 1,
-                    className: 'midpoint'
-                }).addTo(map);
-
-                midpoint.on('mouseover', function() {
-                    this.setStyle({
-                        radius: 5,
-                        color: 'orange',
-                        fillColor: 'orange',
-                        weight: 2,
-                        fillOpacity: 1,
-                        className: 'midpoint-hover'
-                    });
-                });
-
-                midpoint.on('mouseout', function() {
-                    this.setStyle({
-                        radius: 3,
-                        color: 'green',
-                        fillColor: 'green',
-                        weight: 0,
-                        fillOpacity: 1,
-                        className: 'midpoint'
-                    });
-                });
             }
         }
 
@@ -382,19 +285,51 @@ $(document).ready(function() {
             const lngStep = 0.00009 * gridSize;
 
             for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += latStep) {
-                let linePoints = [];
-                for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += lngStep) {
-                    const point = new L.LatLng(lat, lng);
-                    if (this.isPointInPolygon(point)) {
-                        linePoints.push(point);
-                    }
-                }
-                if (linePoints.length > 1) {
-                    gridLines.push(linePoints);
-                }
+                let linePoints = this.getLinePoints(lat, bounds.getWest(), bounds.getEast(), lngStep, 'lat');
+                if (linePoints.length > 1) gridLines.push(linePoints);
             }
 
-            const dl_waypoint = {
+            const dl_waypoint = this.createWaypointObject(elevation, projectName, gridSize, droneSpeed);
+
+            const vertices = this.poly.getLatLngs()[0];
+            vertices.forEach(vertex => {
+                dl_waypoint.polygons.push({ lat: vertex.lat, lng: vertex.lng });
+            });
+
+            let path = [];
+            gridLines.forEach((linePoints, index) => {
+                if (index % 2 === 0) {
+                    path.push(linePoints[0]);
+                    path.push(linePoints[linePoints.length - 1]);
+                } else {
+                    path.push(linePoints[linePoints.length - 1]);
+                    path.push(linePoints[0]);
+                }
+            });
+
+            this.addActionsToWaypoint(path, dl_waypoint, elevation);
+
+            console.log(JSON.stringify(dl_waypoint, null, 2));
+
+            const addr = "";
+            const missionName = projectName;
+            const jsonObj = JSON.stringify(dl_waypoint); 
+
+            $.post("/gcs/dashboard/insertDlWaypoint.do", {
+                data: jsonObj,
+                dlDiv: "0",
+                addr: addr,
+                dlPk: dlPk,
+                missionName: missionName 
+            }).done(function () {
+                alert("Registered successfully.");
+            }).fail(function () {
+                alert("실패");
+            });
+        }
+
+        createWaypointObject(elevation, projectName, gridSize, droneSpeed) {
+            return {
                 actions: [],
                 defaultFrame: "Home",
                 creationTime: new Date().toISOString(),
@@ -411,10 +346,7 @@ $(document).ready(function() {
                 defaultSpeed: 0,
                 defaultWidth: 0,
                 home: {
-                    coordinate: [
-                        this.poly.getBounds().getCenter().lat,
-                        this.poly.getBounds().getCenter().lng
-                    ],
+                    coordinate: [this.poly.getBounds().getCenter().lat, this.poly.getBounds().getCenter().lng],
                     version: 1
                 },
                 name: projectName,
@@ -426,27 +358,9 @@ $(document).ready(function() {
                 droneAltitude: elevation,
                 droneSpeed: droneSpeed
             };
+        }
 
-            const vertices = this.poly.getLatLngs()[0];
-            vertices.forEach(vertex => {
-                dl_waypoint.polygons.push({
-                    lat: vertex.lat,
-                    lng: vertex.lng
-                });
-            });
-
-            let path = [];
-            for (let i = 0; i < gridLines.length; i++) {
-                const linePoints = gridLines[i];
-                if (i % 2 === 0) {
-                    path.push(linePoints[0]);
-                    path.push(linePoints[linePoints.length - 1]);
-                } else {
-                    path.push(linePoints[linePoints.length - 1]);
-                    path.push(linePoints[0]);
-                }
-            }
-
+        addActionsToWaypoint(path, dl_waypoint, elevation) {
             path.forEach((point, index) => {
                 dl_waypoint.actions.push({
                     command: "Waypoint",
@@ -471,24 +385,6 @@ $(document).ready(function() {
                     _waypoinframe: "3"
                 }]);
             });
-
-            console.log(JSON.stringify(dl_waypoint, null, 2));
-
-            const addr = "";
-            const missionName = projectName;
-            const jsonObj = JSON.stringify(dl_waypoint);
-            
-            $.post("/gcs/dashboard/insertDlWaypoint.do", {
-                data: jsonObj,
-                dlDiv: "0",
-                addr: addr,
-                dlPk: dlPk,
-                missionName: missionName
-            }).done(function(res) {
-                alert("Registered successfully.");
-            }).fail(function() {
-                alert("실패");
-            });
         }
 
         async captureMap() {
@@ -505,61 +401,77 @@ $(document).ready(function() {
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function () {
                         alert('Map capture uploaded successfully.');
                     },
-                    error: function() {
+                    error: function () {
                         alert('Failed to upload map capture.');
                     }
                 });
             });
         }
     };
- 
- 
-   // 좌표값을 숫자로 변환
+
+    const map = initializeMap();
+    const rectangleCreator = new RectangleCreator(map);
+
+    setupButtonEventListeners(rectangleCreator);
+
+    if (dlPk) {
+        const data = getData(dlPk);
+        console.log("[getData]"+data);
+        rectangleCreator.importData(data);
+    } else {
+        addCenterMarker(map);
+    }
+});
+
+function initializeMap() { 
     tmLat = parseFloat(tmLat);
     tmLng = parseFloat(tmLng);
- 
-    // 좌표값이 유효한지 확인
+
     if (isNaN(tmLat) || isNaN(tmLng)) {
         alert("유효한 좌표값이 아닙니다.");
         return;
     }
 
-    var map = L.map('map', { editable: true }).setView([tmLat, tmLng], 18);
+    const map = L.map('map', { editable: true }).setView([tmLat, tmLng], 18);
 
-    map.on('editable:created', function(e) {
-        var layer = e.layer;
+    map.on('editable:created', function (e) {
+        const layer = e.layer;
         layer.enableEdit();
         layer.dragging.enable();
         layer.transform.enable({ rotation: true, scaling: false });
     });
 
-    var satelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+    const satelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
         maxZoom: 20,
         attribution: 'Map data &copy; <a href="https://www.google.com/maps">Google Maps</a>'
     }).addTo(map);
 
- 
+    const orthophotoLayer = L.tileLayer('/home/mrdev/offlinemap/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        attribution: 'Orthophoto tiles from WebODM'
+    }).addTo(map);
 
-    var controls = new MapControls(map);
+    const controls = new MapControls(map);
     controls.addDefaultControls();
- 
 
-    const rectangleCreator = new RectangleCreator(map);
+    return map;
+}
 
-    $('#rectangleButton').on('click', function() {
+function setupButtonEventListeners(rectangleCreator) {
+    $('#rectangleButton').on('click', function () {
         rectangleCreator.removePolygon();
         rectangleCreator.createRectangle();
     });
 
-    $('#resetButton').on('click', function() {
+    $('#resetButton').on('click', function () {
         rectangleCreator.removePolygon();
         $('#statsArea').text('0.00');
     });
 
-    $('#exportButton').on('click', function() {
+    $('#exportButton').on('click', function () {
         var tmDlPk = "";
         if (dlPk) {
             tmDlPk = dlPk;
@@ -567,80 +479,109 @@ $(document).ready(function() {
         rectangleCreator.exportGridIntersections(tmDlPk);
     });
 
-    $('#importButton').on('click', function() {
+    $('#importButton').on('click', function () {
         const data = getData(dlPk);
         rectangleCreator.importData(data);
     });
 
-    $("#gridSizeSlider").on("input", function() {
+    $("#gridSizeSlider").on("input", function () {
         var value = (this.value / 10).toFixed(1);
         $("#gridSizeValue").text(value);
     });
 
-    $('#droneAlt').on('input', function() {
+    $('#droneAlt').on('input', function () {
         var currentValue = $(this).val();
         $('#droneAltValue').text(currentValue);
     });
 
-    $('#droneSpeed').on('input', function() {
+    $('#droneSpeed').on('input', function () {
         var currentValue = $(this).val();
         $('#droneSpeedValue').text(currentValue);
     });
- 
-    if (dlPk) {
-        const data = getData(dlPk);
-        rectangleCreator.importData(data);
-    } else {
-        // dlPk 값이 없을 때 지도 중심에 고정된 심볼 추가
-        const centerMarker = L.circleMarker([tmLat, tmLng], {
-            color: 'blue',
-            radius: 8,
-            fillColor: 'blue',
-            fillOpacity: 1
-        }).addTo(map);
+}
 
-        // 지도 중심에 하얀색 테두리만 있는 사각형 추가
-        var centerMarkerDiv = $(
-            '<div class="center-marker-container">' +
-                '<div class="center-marker">' +
-                    '<div class="inner-marker">' +
-                        '<div class="transparent-circle"></div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="marker-label" id="newProject">여기에서 프로젝트 만들기</div>' +
-            '</div>'
-        );
-        $('body').append(centerMarkerDiv);
-    }
+function addCenterMarker(map) {
+    const centerMarker = L.circleMarker([tmLat, tmLng], {
+        color: 'blue',
+        radius: 8,
+        fillColor: 'blue',
+        fillOpacity: 1
+    }).addTo(map);
 
-    // 클릭 이벤트 추가
-    $('#newProject').on('click', function() {
+    const centerMarkerDiv = $(
+        '<div class="center-marker-container">' +
+        '<div class="center-marker">' +
+        '<div class="inner-marker">' +
+        '<div class="transparent-circle"></div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="marker-label" id="newProject">여기에서 프로젝트 만들기</div>' +
+        '</div>'
+    );
+    $('body').append(centerMarkerDiv);
+
+    $('#newProject').on('click', function () {
         $('#overlay').css('display', 'flex');
         $('#newProject').css('display', 'none');
+
+	    // Generate the formatted string
+	    const currentDate = new Date();
+	    const formattedDate = currentDate.toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);
+	    const projectName = `ROUTE-${formattedDate}`;
+	
+	    // Set the value of the input field
+	    $('#projectNameInput').val(projectName);
     });
 
-    // 팝업 닫기 이벤트
-    $('#overlay').on('click', function() {
+    $('#overlay').on('click', function () {
         $(this).css('display', 'none');
         $('#newProject').css('display', 'block');
     });
 
-    // 팝업 외부 클릭 시 닫기 방지
-    $('.popup-content').on('click', function(e) {
+    $('.popup-content').on('click', function (e) {
         e.stopPropagation();
     });
 
-    $('#continueButton').on('click', function() {
-        var projectNameInput = $('#projectNameInput').val();
-        if(projectNameInput.length===0){ 
-           alert("프로젝트 이름을 입력하세요.");
-           $('#projectNameInput').focus();
-        }
-    });
-});
+	$('#continueButton').on('click', function () {
+	    const projectName = $('#projectNameInput').val();
+	    const codination = $('#coordinateSystem').val(); // coordinateSystem 값 추가
+
+	    // 지도 중심 좌표값 가져오기
+	    const center = map.getCenter();
+	    const homeX = center.lat;
+	    const homeY = center.lng;
+ 
+	    if (projectName.length === 0) {
+	        alert("프로젝트 이름을 입력하세요.");
+	        $('#projectNameInput').focus();
+	    } else {
+	        // 서버로 프로젝트 이름 저장 요청
+	        $.ajax({
+	            url: '/gcs/dashboard/saveProjectName.do', // 서버의 적절한 엔드포인트 URL로 변경 필요
+	            type: 'POST',
+	            data: { 
+		                projectName: projectName,
+		                codination: codination,
+		                homeX: homeX,
+		                homeY: homeY,
+                      },
+	            success: function(response) {
+	                const dlPk = response.result;
+	                window.location.href = `http://localhost:8081/gcs/dashboard/projectMain1002.do?dlPk=${dlPk}`;
+	            },
+	            error: function(error) {
+	                alert("프로젝트 이름 저장에 실패했습니다.");
+	            }
+	        });
+	    }
+	});
+
+
+
+}
 
 function getData(dlPk) {
-    var result = null;
+    let result = null;
     $.ajax({
         url: '/gcs/dashboard/selectWaypointView.do',
         type: 'post',
@@ -648,12 +589,21 @@ function getData(dlPk) {
         async: false,
     }).done((res) => {
         try {
+            
+            // 기존 등록된 경로가 없는경우
+            if(res.waypoints==null || res.waypoints=="null"){
+	           return false;
+            }
+          
             const waypoints = JSON.parse(res.waypoints);
+            console.log("[waypoints] "+waypoints);
             const polygons = waypoints.polygons;
             const gridSize = waypoints.gridSize;
             const droneAltitude = waypoints.droneAltitude;
             const droneSpeed = waypoints.droneSpeed;
             const projectName = waypoints.name;
+
+     
 
             if (polygons) {
                 const polygonData = polygons.map(point => {

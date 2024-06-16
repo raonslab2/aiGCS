@@ -1,7 +1,4 @@
-<%--
-not delete
-- this page : projectMain1002.jsp
- --%>
+<%-- not delete - this page : projectMain1002.jsp --%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -16,34 +13,32 @@ not delete
     <title>Drone Flight Plan</title>
     <link rel="stylesheet" href="/css/map/leaflet.css">
     <link rel="stylesheet" href="/css/map/styles.css">
-    <link rel="stylesheet" href="/css/map/leaflet-path-transform.css"> <!-- 추가 -->
-    
+    <link rel="stylesheet" href="/css/map/leaflet-path-transform.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
     <script src="https://npmcdn.com/leaflet@1.3.4/dist/leaflet.js"></script>
     <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
-    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script> 
-
-    <!-- 추가 -->
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
     <script src="/js/map/mapInit.js"></script>
     <script src="/js/map/Leaflet.Editable.js"></script>
-    <script src="/js/map/controls.js"></script> 
-    <script src="/js/map/polygonService.js"></script> 
-    <script src="/js/map/leaflet-path-transform.js"></script> 
+    <script src="/js/map/controls.js"></script>
+    <script src="/js/map/polygonService.js"></script>
+    <script src="/js/map/leaflet-path-transform.js"></script>
 </head>
 <body page-data="menu-project">
 <form id="dataUpdate">
-<input type="hidden" id="dlPk" name="dlPk" value="${dlPk}"> 
-<input type="hidden" id="strWayPoint" name="strWayPoint" value="${strWayPoint}">
+    <input type="hidden" id="dlPk" name="dlPk" value="${dlPk}">
+    <input type="hidden" id="strWayPoint" name="strWayPoint" value="${strWayPoint}">
 </form>
 
 <!-- head menu -->
-<c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
+<c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu"/>
 
 <div id="mySidebar" class="sidebar" ondragstart="return false;" ondrop="return false;">
-    <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()"> </a>
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()"></a>
     <div class="control-container">
         <div class="section">
             <div class="header">
@@ -58,7 +53,7 @@ not delete
                 <div><span id="statsTime">33:19</span>분</div>
                 <div><span id="statsArea">0</span>헥타르</div>
                 <div><span id="statsImgCnt">605</span>이미지</div>
-                <div><span id="statsBat">3</span>배터리 </div>
+                <div><span id="statsBat">3</span>배터리</div>
             </div>
             <div class="option">
                 <label>총 거리(M)</label>
@@ -66,12 +61,12 @@ not delete
                     <span id="distanceDisplay"></span>
                 </div>
             </div>
-            <div class="option"> 
+            <div class="option">
                 <label>중심좌표</label>
                 <div class="flight-altitude">
                     <span id="tmLat"></span> / <span id="tmLng"></span>
                 </div>
-            </div> 
+            </div>
             <div class="option">
                 <label>비행 경로</label>
                 <div class="flight-altitude">
@@ -82,22 +77,22 @@ not delete
             <div class="option">
                 <label for="gridSizeSlider">간격</label>
                 <div class="flight-altitude">
-                  <input type="range" id="gridSizeSlider" class="form-control" min="1" max="10" step="1" value="2">
-                  <span id="gridSizeValue">2.0</span>(m)
+                    <input type="range" id="gridSizeSlider" class="form-control" min="1" max="10" step="1" value="2">
+                    <span id="gridSizeValue">2.0</span>(m)
                 </div>
             </div>
             <div class="option">
                 <label for="gridSizeSlider">고도</label>
                 <div class="flight-altitude">
-                  <input type="range" id="droneAlt" class="form-control" min="10" max="150" step="1" value="20">
-                  <span id="droneAltValue">20</span>(m)
+                    <input type="range" id="droneAlt" class="form-control" min="10" max="150" step="1" value="20">
+                    <span id="droneAltValue">20</span>(m)
                 </div>
             </div>
             <div class="option">
                 <label for="gridSizeSlider">속도</label>
                 <div class="flight-altitude">
-                  <input type="range" id="droneSpeed" class="form-control" min="2" max="8" step="1" value="2">
-                  <span id="droneSpeedValue">2</span>(m/s)
+                    <input type="range" id="droneSpeed" class="form-control" min="2" max="8" step="1" value="2">
+                    <span id="droneSpeedValue">2</span>(m/s)
                 </div>
             </div>
             <div class="option">
@@ -106,14 +101,14 @@ not delete
                     <input id="checkCamera" type="checkbox">
                     <span></span>
                 </label>
-            </div> 
+            </div>
             <div class="option">
                 <label>고급 3D</label>
                 <label class="toggle-switch">
-                    <input id="checkMulti" type="checkbox" >
+                    <input id="checkMulti" type="checkbox">
                     <span></span>
                 </label>
-            </div> 
+            </div>
             <div class="option">
                 <label>RTK SetUp</label>
                 <span>●</span>
@@ -135,7 +130,7 @@ not delete
 <div id="main">
     <button class="openbtn" onclick="toggleNav()">&#9776; 설정</button>
     <div id="map" style="width: 100%; height: 100vh;"></div>
-    <div class="toggle-btn" onclick="toggleNav()">❮</div>
+    <div class="toggle-btn" id="toggle-btn" onclick="toggleNav()">❮</div>
 </div>
 
 <!-- 팝업과 투명 레이어를 위한 HTML 추가 -->
@@ -143,10 +138,10 @@ not delete
     <div class="popup-content">
         <h3>프로젝트 만들기</h3>
         <div class="popup-pj-tit"><label for="projectNameInput">프로젝트 이름</label></div>
-        <div class="popup-pj-sub"> 
+        <div class="popup-pj-sub">
             <input type="text" id="projectNameInput" placeholder="프로젝트 이름">
         </div>
-        <div class="popup-pj-sub"> 
+        <div class="popup-pj-sub">
             <select id="coordinateSystem">
                 <option value="Korea 2000 / Unified CS">Korea 2000 / Unified CS</option>
                 <!-- 다른 옵션 추가 -->
@@ -159,62 +154,51 @@ not delete
     </div>
 </div>
 
-
-
-<!-- JavaScript 변수 설정 -->
 <!-- JavaScript 변수 설정 -->
 <script>
     var tmLat = "${tmLat}";
     var tmLng = "${tmLng}";
-    var dlPk = "${dlPk}"; 
+    var dlPk = "${dlPk}";
 
     if (!dlPk || dlPk.trim() === "") {
         tmLat = "37.20889279";
         tmLng = "127.75102006";
     }
 
-    $(document).ready(function() {
-        if (dlPk === null || dlPk.trim() === "") {
+    $(document).ready(function () {
+        var now = new Date();
+        var formattedDate = 'Route_' + now.toISOString().slice(0, 10).replace(/-/g, '') + now.toTimeString().slice(0, 5).replace(/:/g, '');
+    	
+        if (!dlPk || dlPk.trim() === "") {
             $('#importButton').hide();
             $('#mySidebar').hide();
-            $('.toggle-btn').html('❯');
-            $('.toggle-btn').css('left', '0px'); // 사이드바가 닫혀있을 때 토글 버튼을 왼쪽으로 이동
+            $('#toggle-btn').hide();  // toggle-btn 요소 숨기기
         } else {
             $('#importButton').show();
             $('#mySidebar').show();
-            $('.toggle-btn').html('❮');
+            $('#toggle-btn').show();  // toggle-btn 요소 보이기
+            $('#toggle-btn').html('❮');
+            formattedDate = "${dlName}"; 
             updateToggleBtnPosition();
         }
-        
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = String(now.getMonth() + 1).padStart(2, '0');
-        var day = String(now.getDate()).padStart(2, '0');
-        var hours = String(now.getHours()).padStart(2, '0');
-        var minutes = String(now.getMinutes()).padStart(2, '0');
-        var formattedDate = 'Route_' + year + month + day + hours + minutes;
+
+
         $('#projectName').val(formattedDate);
 
-        tmLat = (tmLat !== undefined && tmLat !== null) ? tmLat.toString() : "";
-        tmLng = (tmLng !== undefined && tmLng !== null) ? tmLng.toString() : "";
-
-        var truncatedLat = tmLat.substring(0, 10);
-        var truncatedLng = tmLng.substring(0, 10);
-
-        $('#tmLat').text(truncatedLat);
-        $('#tmLng').text(truncatedLng);
-         
+        // tmLat와 tmLng를 문자열로 변환한 후 substring 호출
+        $('#tmLat').text(String(tmLat).substring(0, 10));
+        $('#tmLng').text(String(tmLng).substring(0, 10));
     });
 
     function toggleNav() {
         var sidebar = $('#mySidebar');
         var toggleBtn = $('.toggle-btn');
-        if (sidebar.css('display') === 'block') {
-            sidebar.css('display', 'none');
+        if (sidebar.is(':visible')) {
+            sidebar.hide();
             toggleBtn.html('❯');
-            toggleBtn.css('left', '0px'); // 사이드바가 닫힐 때 토글 버튼을 왼쪽으로 이동
+            toggleBtn.css('left', '0px');
         } else {
-            sidebar.css('display', 'block');
+            sidebar.show();
             toggleBtn.html('❮');
             updateToggleBtnPosition();
         }
@@ -222,13 +206,8 @@ not delete
 
     function updateToggleBtnPosition() {
         var sidebarWidth = $('#mySidebar').width();
-        $('.toggle-btn').css('left', sidebarWidth + 41 + 'px'); // 사이드바가 열릴 때 토글 버튼을 사이드바 너비 + 여유 공간으로 이동
+        $('.toggle-btn').css('left', sidebarWidth + 41 + 'px');
     }
 </script>
-
-
-
-<!-- 외부 JavaScript 파일 포함 -->
-
 </body>
 </html>

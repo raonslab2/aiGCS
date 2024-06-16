@@ -1,36 +1,11 @@
-// /webapp/js/gcs/gA03Main.js
-
 class GcsDashboard {
     constructor() {
-        //this.initGeolocation();
         this.initList();
         this.bindEvents();
         this.switchView('gallery'); // 기본적으로 갤러리 뷰로 설정
         this.setGalleryColumns();
         $(window).resize(() => this.setGalleryColumns());
     }
-    /*
-    initGeolocation() { 
-        if (navigator.geolocation) { 
-				navigator.geolocation.getCurrentPosition(
-				    (pos) => {
-				        console.log('Latitude:', pos.coords.latitude);
-				        console.log('Longitude:', pos.coords.longitude);
-				        $("#tmLat").val(pos.coords.latitude);
-				        $("#tmLng").val(pos.coords.longitude); 
-				    },
-				    (error) => {
-				        const errorMsg = this.getGeolocationErrorMessage(error.code);
-				        console.error(`Error: ${errorMsg} (${error.message})`);
-				        alert(`Error: ${errorMsg} (${error.message})`);
-				    }
-				);
-
-        } else {
-            alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
-        }
-    }
-    */
 
     getGeolocationErrorMessage(code) {
         switch (code) {
@@ -49,8 +24,6 @@ class GcsDashboard {
         $('#createRouterPath').click(() => this.navigateToPath("/gcs/dashboard/gA03Main2.do"));
         $('#createRouterPolygonPath').click(() => this.navigateToPath("/gcs/dashboard/projectMain1002.do"));
         $(document).on('click', '.pageClass', (e) => this.handlePageClick(e));
-
-        // 뷰 전환 버튼 이벤트 처리
         $('#viewSwitchToggle').click(() => this.toggleView());
     }
 
@@ -93,58 +66,56 @@ class GcsDashboard {
         if (res.totalCnt === '0') {
             const data = "<tr class='subTr'><td colspan='6' style='height:100px;'>자료가 존재하지 않습니다.</td></tr>";
             resultList.append(data);
+            $('.pagination').hide(); // 데이터가 없을 경우 페이징 숨기기
         } else {
             res.list.forEach((row) => {
                 resultList.append(this.projectListView(row));
                 galleryView.append(this.projectGalleryView(row));
             });
+            $('.pagination').append(this.paginationView(res.paginationInfo));
+            $(`.${res.paginationInfo.currentPageNo}`).addClass("active");
+            $('.pagination > li').css('cursor', 'pointer');
+            $('.pagination').show(); // 데이터가 있을 경우 페이징 표시
         }
-        $('.pagination').append(this.paginationView(res.paginationInfo));
-        $(`.${res.paginationInfo.currentPageNo}`).addClass("active");
-        $('.pagination > li').css('cursor', 'pointer');
     }
 
-	projectListView(row) {
-	    return `
-	        <tr id="subRow" class="subTr" style="cursor:pointer;">
-	            <td class="dlPk">${row.dlPk}</td>
-	            <td><img src="/images/sample_map.png" height="32" /></td>
-	            <td>
+    projectListView(row) {
+        return `
+            <tr id="subRow" class="subTr" style="cursor:pointer;">
+                <td class="dlPk">${row.dlPk}</td>
+                <td><img src="/images/sample_map.png" height="32" /></td>
+                <td>
                    <button type="button" onclick="GcsDashboard.fn_waypoint33(${row.dlPk}); return false;" class="btn_style03 btn_green btnMoveReg">${row.dlName}</button>
                 </td>
-	            <td>
-	                ${row.dlDiv === "0"
-	                    ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">2D</button>`
-	                    : `<button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">3D</button>`
-	                }
-	            </td>
-	            <td><span onclick="GcsDashboard.fn_del(${row.dlPk}); return false;" style="margin-left:20px;">DEL</span></td>
-	            <td>${this.formatDate(row.dlCreateTime)}</td>
-	        </tr>
-	    `;
-	}
+                <td>
+                    ${row.dlDiv === "0"
+                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false);" class="btn_style03 btn_red btnMoveReg">2D</button>`
+                        : `<button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false);" class="btn_style03 btn_red btnMoveReg">3D</button>`
+                    }
+                </td>
+                <td><span onclick="GcsDashboard.fn_del(${row.dlPk}); return false;" style="margin-left:20px;">DEL</span></td>
+                <td>${this.formatDate(row.dlCreateTime)}</td>
+            </tr>
+        `;
+    }
 
-
-	projectGalleryView(row) {
-	  
-	    return `
-	        <div class="gallery-item">
-	            <img src="/images/sample_map.png" alt="Map Image">
-	            <div class="content">
-	                <h3>${row.dlName}</h3>
-	                <div class="meta">
-	                    <span>${this.formatDate(row.dlCreateTime)}</span>
-	                    ${row.dlDiv === "0" 
-	                        ? `<span><button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">2D</button></span>` 
-	                        : `<span><button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">3D</button></span>`
-	                    }
-	                </div>
-	            </div>
-	        </div>
-	    `;
-	}
-
-
+    projectGalleryView(row) {
+        return `
+            <div class="gallery-item">
+                <img src="/images/sample_map.png" alt="Map Image">
+                <div class="content">
+                    <h3>${row.dlName}</h3>
+                    <div class="meta">
+                        <span>${this.formatDate(row.dlCreateTime)}</span>
+                        ${row.dlDiv === "0" 
+                            ? `<span><button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">2D</button></span>` 
+                            : `<span><button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false);" class="btn_style03 btn_red btnMoveReg">3D</button></span>`
+                        }
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
     formatDate(dateString) {
         return dateString.split('T')[0];
@@ -171,7 +142,6 @@ class GcsDashboard {
         $('.table').toggle(isListView);
         $('#galleryView').toggle(!isListView);
 
-        // 버튼 배경 이미지 및 상태 토글
         const button = $('#viewSwitchToggle');
         if (isListView) {
             button.removeClass('grid-view').addClass('list-view');

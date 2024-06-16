@@ -3,41 +3,32 @@
 
 <sqlMap namespace="GA03MAIN">
 
-	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
-	<typeAlias  alias="gA03MAINVO" type="egovframework.or.kr.GA03MAIN.service.GA03MAINVO"/> 
-	<typeAlias  alias="DeviceVO" type="egovframework.or.kr.GA03MAIN.service.DeviceVO"/> 
-	
-	
- 
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="gA03MAINVO"
+		type="egovframework.or.kr.GA03MAIN.service.GA03MAINVO" />
+	<typeAlias alias="DeviceVO"
+		type="egovframework.or.kr.GA03MAIN.service.DeviceVO" />
+
+
+
 	<insert id="GA03MAIN.insertWaypoint" parameterClass="Map">
 		<![CDATA[
-			INSERT INTO br_drone_waypoints
-			     ( 
-			       dl_name
-			      ,dl_div
-			      ,dl_user_id
-			      ,dl_addr 
-			      ,dl_home_x
-			      ,dl_home_y
-			      ,dl_waypoint
-			      ,dl_waypoint_detail
-			      ,dl_create_time
-			     )
-   				VALUES 
-	 			(
-	 			  #DL_NAME#
-	 			 ,#DL_DIV#
-	 			 ,#DL_USER_ID#
-	 			 ,#DL_ADDR#
-	 			 ,#DL_HOME_X#
-	 			 ,#DL_HOME_Y#
-	 			 ,#DL_WAYPOINT#
-	 			 ,#DL_WAYPOINT_DETAIL#
-	 			 ,#DL_CREATE_TIME#
-	 			) 
+			 INSERT INTO br_drone_waypoints
+				(
+				   dl_project_dl_pk,
+				   dl_waypoint, 
+				   dl_waypoint_detail
+				)
+				VALUES
+				(
+				  #DL_PROJECT_DL_PK#,
+				  #DL_WAYPOINT#,
+				  #DL_WAYPOINT_DETAIL#
+				) 
 		]]>
-	</insert> 
-	
+	</insert>
+
 	<insert id="GA03MAIN.insertDrone" parameterClass="Map">
 		<![CDATA[
 			INSERT INTO br_drone_path
@@ -51,19 +42,21 @@
 	 			 ,#DL_NAME# 
 	 			) 
 		]]>
-	</insert> 
-	
-	<resultMap id="PathWaypointPk" class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
-		<result property="dlNamePk" column="dl_name_pk" columnIndex="1"/> 
+	</insert>
+
+	<resultMap id="PathWaypointPk"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlNamePk" column="dl_name_pk" columnIndex="1" />
 	</resultMap>
-	
-		<select id="GA03MAIN.selectDroneSwarmPk" parameterClass="GA03MAINVO" resultMap="PathWaypointPk" >
+
+	<select id="GA03MAIN.selectDroneSwarmPk"
+		parameterClass="GA03MAINVO" resultMap="PathWaypointPk">
 				<![CDATA[
 						SELECT (ifnull(MAX(dl_pk),0)+1) dl_name_pk FROM br_drone_swarm_pk
-				 ]]> 
-		</select>
-	
-		<insert id="GA03MAIN.insertSwarmWaypoint" parameterClass="Map">
+				 ]]>
+	</select>
+
+	<insert id="GA03MAIN.insertSwarmWaypoint" parameterClass="Map">
 		<![CDATA[
 			INSERT INTO br_drone_swarm_waypoints
 			     ( 
@@ -90,8 +83,8 @@
 	 			 ,#DL_WAYPOINT# 
 	 			) 
 		]]>
-	</insert> 
-	
+	</insert>
+
 	<insert id="GA03MAIN.insertDroneSwarmPk" parameterClass="Map">
 		<![CDATA[
 			INSERT INTO br_drone_swarm_pk
@@ -109,40 +102,81 @@
 	 			 ,#DL_USER_ID# 
 	 			) 
 		]]>
-	</insert>  
+	</insert>
 
-<update id="GA03MAIN.updateWaypoint" parameterClass="Map">
+	<insert id="GA03MAIN.insertProjectName" parameterClass="Map">
+ 
+	    <![CDATA[
+	        INSERT INTO br_drone_project
+	            (
+	              dl_name, 
+	              dl_div, 
+	              dl_home_x, 
+	              dl_home_y, 
+	              dl_codination,
+	              dl_addr, 
+	              dl_user_id
+	            )
+	            VALUES 
+	            (
+	              #DL_NAME#,
+	              #DL_DIV#,
+	              #DL_HOME_X#,
+	              #DL_HOME_Y#,
+	              #DL_CODINATION#,
+	              "",
+	              #DL_USER_ID#
+	            ) 
+	    ]]>
+		<selectKey keyProperty="dlPk" resultClass="int">
+			SELECT
+			LAST_INSERT_ID() as dlPk
+		</selectKey>
+	</insert>
+
+
+
+	<update id="GA03MAIN.updateWaypoint" parameterClass="Map">
     <![CDATA[
-        UPDATE br_drone_waypoints SET 
-            dl_name = #DL_NAME#,
-            dl_div = #DL_DIV#,
-            dl_addr = #DL_ADDR#,
-            dl_home_x = #DL_HOME_X#,
-            dl_home_y = #DL_HOME_Y#,
-            dl_waypoint = #DL_WAYPOINT#,
-            dl_waypoint_detail = #DL_WAYPOINT_DETAIL#,
-            dl_create_time = #DL_CREATE_TIME#,
-            dl_user_id = #DL_USER_ID#   
-        WHERE dl_pk = #DL_PK#
+	 UPDATE br_drone_waypoints
+		SET 
+			dl_waypoint=#DL_WAYPOINT#,
+			dl_waypoint_detail=#DL_WAYPOINT_DETAIL#
+		WHERE dl_project_dl_pk=#DL_PROJECT_DL_PK# 
     ]]>
-</update>
+	</update>
 
-  
-	<resultMap id="PathWaypointList" class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
-		<result property="dlPk" column="dl_pk" columnIndex="1"/>
-		<result property="dlName" column="dl_name" columnIndex="2"/>
-		<result property="dlDiv" column="dl_div" columnIndex="3"/>
-		<result property="dlAddr" column="dl_addr" columnIndex="4"/>
-		<result property="dlUserId" column="dl_user_id" columnIndex="5"/>
-		<result property="dlHomeX" column="dl_home_x" columnIndex="6"/>
-		<result property="dlHomeY" column="dl_home_y" columnIndex="7"/>
-		<result property="dlWaypoint" column="dl_waypoint" columnIndex="8"/> 
-		<result property="dlWaypointDetail" column="dl_waypoint_detail" columnIndex="9"/> 
-		<result property="dlCreateTime" column="dl_create_time" columnIndex="10"/>
-		<result property="dlModifyTime" column="dl_modify_time" columnIndex="10"/>   
+	<update id="GA03MAIN.updateDroneProject" parameterClass="Map">
+    <![CDATA[
+	 UPDATE br_drone_project
+		SET 
+			dl_name=#DL_NAME# 
+		WHERE dl_pk=#DL_PROJECT_DL_PK# 
+    ]]>
+	</update>
+
+
+	<resultMap id="PathWaypointList"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1" />
+		<result property="dlName" column="dl_name" columnIndex="2" />
+		<result property="dlDiv" column="dl_div" columnIndex="3" />
+		<result property="dlAddr" column="dl_addr" columnIndex="4" />
+		<result property="dlUserId" column="dl_user_id" columnIndex="5" />
+		<result property="dlHomeX" column="dl_home_x" columnIndex="6" />
+		<result property="dlHomeY" column="dl_home_y" columnIndex="7" />
+		<result property="dlWaypoint" column="dl_waypoint"
+			columnIndex="8" />
+		<result property="dlWaypointDetail" column="dl_waypoint_detail"
+			columnIndex="9" />
+		<result property="dlCreateTime" column="dl_create_time"
+			columnIndex="10" />
+		<result property="dlModifyTime" column="dl_modify_time"
+			columnIndex="10" />
 	</resultMap>
-	
-	<select id="GA03MAIN.selectWaypoint" parameterClass="GA03MAINVO" resultMap="PathWaypointList" >
+
+	<select id="GA03MAIN.selectWaypoint" parameterClass="GA03MAINVO"
+		resultMap="PathWaypointList">
 			<![CDATA[
 				 SELECT 
 				     a.dl_pk, 
@@ -161,10 +195,11 @@
 					     ON a.dl_pk = b.dl_project_dl_pk
 					WHERE a.dl_user_id = #dlUserId#
 					  and a.dl_pk = #dlPk# 
-			 ]]> 
+			 ]]>
 	</select>
-	
-	<select id="GA03MAIN.selectWaypoint2" parameterClass="GA03MAINVO" resultMap="PathWaypointList" >
+
+	<select id="GA03MAIN.selectWaypoint2"
+		parameterClass="GA03MAINVO" resultMap="PathWaypointList">
 			<![CDATA[
 					SELECT 
 					   a.dl_pk
@@ -180,11 +215,12 @@
 					 FROM br_drone_waypoints2 a
 			      WHERE
 				     dl_pk = #dlPk#
-			 ]]> 
+			 ]]>
 	</select>
-	 
-	
-	<select id="GA03MAIN.selectWaypointList" parameterClass="GA03MAINVO" resultMap="PathWaypointList" >
+
+
+	<select id="GA03MAIN.selectWaypointList"
+		parameterClass="GA03MAINVO" resultMap="PathWaypointList">
 			<![CDATA[
 					SELECT 
 					   a.dl_pk
@@ -199,39 +235,44 @@
 					   ,a.dl_create_time
 					 FROM br_drone_waypoints a
 					]]>
-				<isNotEmpty property="dlUserId">		
-				where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
-				</isNotEmpty> 
+		<isNotEmpty property="dlUserId">
+			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+		</isNotEmpty> 
 				<![CDATA[
 			 		ORDER BY a.dl_create_time desc 
 			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
-				]]>	 
-	</select> 
-	
-	<select id="GA03MAIN.selectWaypointListCnt" parameterClass="GA03MAINVO" resultClass="int" >
+				]]>
+	</select>
+
+	<select id="GA03MAIN.selectWaypointListCnt"
+		parameterClass="GA03MAINVO" resultClass="int">
 		<![CDATA[      
 		SELECT     
         	COUNT(*)
 	    FROM
 			br_drone_waypoints a
 		]]>
-		<isNotEmpty property="dlUserId">		
-		where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
-		</isNotEmpty> 		
+		<isNotEmpty property="dlUserId">
+			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+		</isNotEmpty>
 	</select>
-	
-	
-	<resultMap id="selectListPjInfo" class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
-		<result property="dlPk" column="dl_pk" columnIndex="1"/>
-		<result property="dlName" column="dl_name" columnIndex="2"/>
-		<result property="dlDiv" column="dl_div" columnIndex="3"/>
-		<result property="dlAddr" column="dl_addr" columnIndex="4"/>
-		<result property="dlUserId" column="dl_user_id" columnIndex="5"/>
-		<result property="dlCreateTime" column="dl_create_time" columnIndex="6"/>	
-		<result property="dlModifyTime" column="dl_modify_time" columnIndex="7"/>   
+
+
+	<resultMap id="selectListPjInfo"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1" />
+		<result property="dlName" column="dl_name" columnIndex="2" />
+		<result property="dlDiv" column="dl_div" columnIndex="3" />
+		<result property="dlAddr" column="dl_addr" columnIndex="4" />
+		<result property="dlUserId" column="dl_user_id" columnIndex="5" />
+		<result property="dlCreateTime" column="dl_create_time"
+			columnIndex="6" />
+		<result property="dlModifyTime" column="dl_modify_time"
+			columnIndex="7" />
 	</resultMap>
-	
-	<select id="GA03MAIN.selectListPj" parameterClass="GA03MAINVO" resultMap="selectListPjInfo" >
+
+	<select id="GA03MAIN.selectListPj" parameterClass="GA03MAINVO"
+		resultMap="selectListPjInfo">
 			<![CDATA[
 					 SELECT 
 					      a.dl_pk,
@@ -247,20 +288,22 @@
 				<![CDATA[
 			 		ORDER BY a.dl_create_time desc 
 			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
-				]]>	 
-	</select> 
-	
-	<select id="GA03MAIN.selectListPjCnt" parameterClass="GA03MAINVO" resultClass="int" >
+				]]>
+	</select>
+
+	<select id="GA03MAIN.selectListPjCnt"
+		parameterClass="GA03MAINVO" resultClass="int">
 		<![CDATA[      
 		SELECT     
         	COUNT(*)
 	    FROM
 			br_drone_project a
 		  where a.dl_user_id = #dlUserId#
-		]]>		
+		]]>
 	</select>
-	
-	<select id="GA03MAIN.selectWaypointList2" parameterClass="GA03MAINVO" resultMap="PathWaypointList" >
+
+	<select id="GA03MAIN.selectWaypointList2"
+		parameterClass="GA03MAINVO" resultMap="PathWaypointList">
 			<![CDATA[
 					SELECT 
 					   a.dl_pk
@@ -275,40 +318,46 @@
 					   ,a.dl_create_time
 					 FROM br_drone_waypoints2 a
 					]]>
-				<isNotEmpty property="dlUserId">		
-				where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
-				</isNotEmpty> 
+		<isNotEmpty property="dlUserId">
+			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+		</isNotEmpty> 
 				<![CDATA[
 			 		ORDER BY a.dl_create_time desc 
 			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
-				]]>	
-	
-	</select> 
-	
-	<select id="GA03MAIN.selectWaypointListCnt2" parameterClass="GA03MAINVO" resultClass="int" >
+				]]>
+
+	</select>
+
+	<select id="GA03MAIN.selectWaypointListCnt2"
+		parameterClass="GA03MAINVO" resultClass="int">
 		<![CDATA[      
 		SELECT     
         	COUNT(*)
 	    FROM
 			br_drone_waypoints2 a
 		]]>
-		<isNotEmpty property="dlUserId">		
-		where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
-		</isNotEmpty> 		
+		<isNotEmpty property="dlUserId">
+			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+		</isNotEmpty>
 	</select>
-	
-	
-	<resultMap id="PathWaypointSwarmList" class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
-		<result property="dlPk" column="dl_pk" columnIndex="1"/>
-		<result property="dlNamePk" column="dl_name_pk" columnIndex="2"/>
-		<result property="dlName" column="dl_name" columnIndex="3"/>
-		<result property="dlNameEtc" column="dl_name_etc" columnIndex="4"/>
-		<result property="dlUserId" column="dl_user_id" columnIndex="5"/>
-		<result property="dlDroneNum" column="dlDroneNum" columnIndex="6"/>
-		<result property="dlCreateTime" column="dl_create_time" columnIndex="7"/>  
+
+
+	<resultMap id="PathWaypointSwarmList"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1" />
+		<result property="dlNamePk" column="dl_name_pk" columnIndex="2" />
+		<result property="dlName" column="dl_name" columnIndex="3" />
+		<result property="dlNameEtc" column="dl_name_etc"
+			columnIndex="4" />
+		<result property="dlUserId" column="dl_user_id" columnIndex="5" />
+		<result property="dlDroneNum" column="dlDroneNum"
+			columnIndex="6" />
+		<result property="dlCreateTime" column="dl_create_time"
+			columnIndex="7" />
 	</resultMap>
-	
-	<select id="GA03MAIN.selectWaypointSwarmList" parameterClass="GA03MAINVO" resultMap="PathWaypointSwarmList" >
+
+	<select id="GA03MAIN.selectWaypointSwarmList"
+		parameterClass="GA03MAINVO" resultMap="PathWaypointSwarmList">
 			<![CDATA[
 					SELECT 
 					   a.dl_pk
@@ -320,29 +369,31 @@
 					   ,a.dl_create_time
 					 FROM br_drone_swarm_pk a
 					]]>
-				<isNotEmpty property="dlUserId">		
-				where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
-				</isNotEmpty> 	
+		<isNotEmpty property="dlUserId">
+			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+		</isNotEmpty> 	
 				<![CDATA[
 			 		ORDER BY a.dl_create_time desc 
 			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
-				]]>	
-					 
-	</select> 
-	
-	<select id="GA03MAIN.selectWaypointSwarmListCnt" parameterClass="GA03MAINVO" resultClass="int" >
+				]]>
+
+	</select>
+
+	<select id="GA03MAIN.selectWaypointSwarmListCnt"
+		parameterClass="GA03MAINVO" resultClass="int">
 		<![CDATA[      
 		SELECT     
         	COUNT(*)
 	    FROM
 			br_drone_swarm_pk a
 		]]>
-		<isNotEmpty property="dlUserId">		
-		where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%') 
-		</isNotEmpty> 		
+		<isNotEmpty property="dlUserId">
+			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+		</isNotEmpty>
 	</select>
-	
-	<select id="GA03MAIN.selectDroneSwarmPkList" parameterClass="GA03MAINVO" resultMap="PathWaypointSwarmList" >
+
+	<select id="GA03MAIN.selectDroneSwarmPkList"
+		parameterClass="GA03MAINVO" resultMap="PathWaypointSwarmList">
 			<![CDATA[
 					SELECT 
 					   a.dl_pk
@@ -355,10 +406,10 @@
 					 FROM br_drone_swarm_pk a
 			      WHERE
 				     dl_pk = #dlPk#
-			 ]]> 
+			 ]]>
 	</select>
-	
- 	<update id="GA03MAIN.updateDroneSwarmPk" parameterClass="Map">
+
+	<update id="GA03MAIN.updateDroneSwarmPk" parameterClass="Map">
  		<![CDATA[
 			UPDATE br_drone_swarm_pk SET 
 				dl_name = #DL_NAME# ,
@@ -366,23 +417,32 @@
 				dl_user_id = #DL_USER_ID# 
 			WHERE dl_pk = #DL_PK# 
  		]]>
- 	</update>
-  
-	<resultMap id="selectDroneListInfo" class="egovframework.or.kr.GA03MAIN.service.DeviceVO">
-		<result property="aiPk" column="aiPk" columnIndex="1"/>
-		<result property="aiDevicename" column="aiDevicename" columnIndex="2"/>
-		<result property="aiDevicetype" column="aiDevicetype" columnIndex="3"/>
-		<result property="aiAgency" column="aiAgency" columnIndex="4"/>
-		<result property="aiMemo" column="aiMemo" columnIndex="5"/>
-		<result property="aiRegistername" column="aiRegistername" columnIndex="6"/>
-		<result property="aiWritetime" column="aiWritetime" columnIndex="7"/>  
-		<result property="aiDevicecode" column="aiDevicecode" columnIndex="8"/>  
-		<result property="aiRegisterid" column="aiRegisterid" columnIndex="9"/>  
-		<result property="aiUse" column="aiUse" columnIndex="10"/>  
-		<result property="aiDevicealias" column="aiDevicealias" columnIndex="11"/>  
+	</update>
+
+	<resultMap id="selectDroneListInfo"
+		class="egovframework.or.kr.GA03MAIN.service.DeviceVO">
+		<result property="aiPk" column="aiPk" columnIndex="1" />
+		<result property="aiDevicename" column="aiDevicename"
+			columnIndex="2" />
+		<result property="aiDevicetype" column="aiDevicetype"
+			columnIndex="3" />
+		<result property="aiAgency" column="aiAgency" columnIndex="4" />
+		<result property="aiMemo" column="aiMemo" columnIndex="5" />
+		<result property="aiRegistername" column="aiRegistername"
+			columnIndex="6" />
+		<result property="aiWritetime" column="aiWritetime"
+			columnIndex="7" />
+		<result property="aiDevicecode" column="aiDevicecode"
+			columnIndex="8" />
+		<result property="aiRegisterid" column="aiRegisterid"
+			columnIndex="9" />
+		<result property="aiUse" column="aiUse" columnIndex="10" />
+		<result property="aiDevicealias" column="aiDevicealias"
+			columnIndex="11" />
 	</resultMap>
-	
-	<select id="GA03MAIN.selectDroneList" parameterClass="DeviceVO" resultMap="selectDroneListInfo" >
+
+	<select id="GA03MAIN.selectDroneList" parameterClass="DeviceVO"
+		resultMap="selectDroneListInfo">
 	     <![CDATA[
 				SELECT 
 				    ai_pk as aiPk
@@ -400,16 +460,32 @@
 				WHERE ai_use = #aiUse#
 				 ORDER BY ai_devicename asc
 				 
- 		]]>	 
-	</select> 
-	
-	<select id="GA03MAIN.selectDroneListCnt" parameterClass="DeviceVO" resultClass="int" >
+ 		]]>
+	</select>
+
+	<select id="GA03MAIN.selectDroneListCnt"
+		parameterClass="DeviceVO" resultClass="int">
  		<![CDATA[  
 				SELECT 
 				    COUNT(*)
 				 FROM br_tb_aircraft
 				WHERE ai_use = #aiUse# 
-		 ]]>    
- 	</select>
-	
+		 ]]>
+	</select>
+
+
+	<resultMap id="selectWaypointCheckInfo"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1" />
+	</resultMap>
+
+	<select id="GA03MAIN.selectWaypointCheck"
+		parameterClass="GA03MAINVO" resultMap="selectWaypointCheckInfo">
+			<![CDATA[
+				SELECT dl_pk
+					FROM br_drone_waypoints
+					WHERE dl_project_dl_pk = #dlPk#
+					]]>
+	</select>
+
 </sqlMap>

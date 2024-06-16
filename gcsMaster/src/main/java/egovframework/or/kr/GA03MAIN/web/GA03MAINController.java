@@ -339,15 +339,9 @@ public class GA03MAINController {
 				strDlName = waypoints.getDlName();
 				strWayPoint = waypoints.getDlWaypoint();  
 				strWayPointDetail = waypoints.getDlWaypointDetail();
-
-				// JSON 파싱 및 tmLat, tmLng 값 설정
-				JSONObject waypointJson = new JSONObject(strWayPoint);
-				JSONObject home = waypointJson.getJSONObject("home");
-				JSONArray homeCoordinate = home.getJSONArray("coordinate");
-				tmLat = String.valueOf(homeCoordinate.getDouble(0));
-				tmLng = String.valueOf(homeCoordinate.getDouble(1));
-				model.addAttribute("tmLat", tmLat);
-				model.addAttribute("tmLng", tmLng);
+ 
+				model.addAttribute("tmLat", waypoints.getDlHomeX());
+				model.addAttribute("tmLng", waypoints.getDlHomeY());
 				
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -366,6 +360,55 @@ public class GA03MAINController {
 		return "main/GCSMAIN3/projectMain1002";
 	}
 	
+	/**
+	 * Home > 2D : 비행명 개설
+	 * @return 메인페이지 정보 Map [key : 항목명]
+	 *
+	 * @param request
+	 * @param model
+	 * @exception Exception Exception
+	 */ 
+	@RequestMapping(value = "/gcs/dashboard/saveProjectName.do", method = RequestMethod.POST)
+	public @ResponseBody ModelAndView saveProjectName(@RequestParam Map<String, Object> param,
+			HttpServletRequest request) throws Exception {
+		
+	    // 사용자 정보 가져오기
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();
+	    
+	    
+		ModelAndView mav = new ModelAndView("jsonView");
+		EgovMap map = CommUtil.makeEgovMap(param);
+
+ 
+		String projectName = String.valueOf(map.get("projectName"));
+		String codination = String.valueOf(map.get("codination"));
+		String homeX = String.valueOf(map.get("homeX"));
+		String homeY = String.valueOf(map.get("homeY"));
+  
+	    HashMap<String, Object> paramMap = new HashMap<String, Object>();
+	    paramMap.put("DL_NAME", projectName);
+	    paramMap.put("DL_CODINATION", codination);
+	    paramMap.put("DL_USER_ID", user_id);
+	    paramMap.put("DL_HOME_X", homeX);
+	    paramMap.put("DL_HOME_Y", homeY);
+	    paramMap.put("DL_DIV", "0");
+ 
+  
+		int rst=0;
+		try { 
+			rst = gA03MAINService.insertProjectName(paramMap); 
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} 
+	 
+	    mav.addObject("result", rst);
+	  
+
+		return mav;
+	}
+	
  
 	/**
 	 * Home > 2D : 비행경로 등록
@@ -378,6 +421,11 @@ public class GA03MAINController {
 	@RequestMapping(value = "/gcs/dashboard/selectWaypointView.do", method = RequestMethod.POST)
 	public @ResponseBody ModelAndView selectWaypointView(@RequestParam Map<String, Object> param,
 			HttpServletRequest request) throws Exception {
+		
+	    // 사용자 정보 가져오기
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();	    
+	    
 		ModelAndView mav = new ModelAndView("jsonView");
 		EgovMap map = CommUtil.makeEgovMap(param);
 
@@ -385,7 +433,7 @@ public class GA03MAINController {
 		String dlPk = String.valueOf(map.get("dlPk"));
  
 		GA03MAINVO waypoints = null;
-		String strWayPoint = "";
+		String strWayPoint = ""; 
 		String strWayPointDetail = ""; 
 		String tmLat = "";
 		String tmLng = "";
@@ -396,6 +444,7 @@ public class GA03MAINController {
 		
 		GA03MAINVO vo = new GA03MAINVO(); 
 		vo.setDlPk(dlPk);
+		vo.setDlUserId(user_id);
 		
 		try {
 			waypoints = gA03MAINService.selectWaypoint(vo);
@@ -403,12 +452,9 @@ public class GA03MAINController {
 			strWayPoint = waypoints.getDlWaypoint();  
 			strWayPointDetail = waypoints.getDlWaypointDetail();
 
-			// JSON 파싱 및 tmLat, tmLng 값 설정
-			JSONObject waypointJson = new JSONObject(strWayPoint);
-			JSONObject home = waypointJson.getJSONObject("home");
-			JSONArray homeCoordinate = home.getJSONArray("coordinate");
-			tmLat = String.valueOf(homeCoordinate.getDouble(0));
-			tmLng = String.valueOf(homeCoordinate.getDouble(1));
+			// JSON 파싱 및 tmLat, tmLng 값 설정 
+			tmLat = String.valueOf(waypoints.getDlHomeX());
+			tmLng = String.valueOf(waypoints.getDlHomeY());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -483,7 +529,7 @@ public class GA03MAINController {
 	    String addr = String.valueOf(map.get("addr"));
 	    String dlPk = String.valueOf(map.get("dlPk"));
 	    String missionName = String.valueOf(map.get("missionName"));
-	    String waypointsDetail = String.valueOf(map.get("jsonObj2"));
+	    String waypointsDetail = "";
 	    String dlDiv = String.valueOf(map.get("dlDiv")); // 2d 0 , 3d 1
 
 	    LOGGER.debug("waypointsDetail : {}", waypointsDetail);
@@ -491,7 +537,7 @@ public class GA03MAINController {
 
 	    JSONObject jObject = new JSONObject(tmData);
 	    LOGGER.debug("gA03Main2Waypoint : {}", jObject.get("creationTime"));
-
+	    waypointsDetail = jObject.get("missionDetail").toString();
 	    // home
 	    JSONObject home = new JSONObject(jObject.getStr("home"));
 	    JSONArray coordinateArry = new JSONArray(home.getStr("coordinate"));
@@ -511,6 +557,7 @@ public class GA03MAINController {
 	    if(dlDiv!=null&&dlDiv!="null"&&dlDiv!="") {
 	    	paramMap.put("DL_DIV", Integer.parseInt(dlDiv));
 	    } 
+	    paramMap.put("DL_NAME", missionName);
 	    paramMap.put("DL_USER_ID", user_id); // 사용자 ID 추가
 	    paramMap.put("DL_HOME_X", home_x);
 	    paramMap.put("DL_HOME_Y", home_y);
@@ -518,16 +565,27 @@ public class GA03MAINController {
 	    paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail); 
 	    paramMap.put("DL_CREATE_TIME", create_time);
 	    paramMap.put("DL_ADDR", addr);
+	    
 	    if (dlPk != null && !dlPk.isEmpty()) {
-	        paramMap.put("DL_PK", dlPk);
+	        paramMap.put("DL_PROJECT_DL_PK", dlPk);
 	    }
-
+	     
+	    
+	    GA03MAINVO vo = new GA03MAINVO();
+	    vo.setDlPk(dlPk);
+	    GA03MAINVO result;
 	    try {
-	        if (dlPk != null && !dlPk.isEmpty()) {
+	    	//상세 경로 등록 여부
+	    	result = gA03MAINService.selectWaypointCheck(vo);
+	    	
+	        if (result != null) {
 	            gA03MAINService.updateWaypoint(paramMap);
 	        } else {
 	            gA03MAINService.insertWaypoint(paramMap);
 	        }
+	        
+	        //프로젝트 정보
+	        gA03MAINService.updateDroneProject(paramMap);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    } 

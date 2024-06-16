@@ -114,6 +114,7 @@ public class GA03MAINDAO extends EgovAbstractDAO {
 		return (int) select("GA03MAIN.selectDroneListCnt", vo);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<GA03MAINVO> selectWaypointList2(GA03MAINVO vo) {
 		// TODO Auto-generated method stub
 		return (List<GA03MAINVO>) list("GA03MAIN.selectWaypointList2", vo);
@@ -138,6 +139,32 @@ public class GA03MAINDAO extends EgovAbstractDAO {
 	public int selectListPjCnt(GA03MAINVO vo) {
 		// TODO Auto-generated method stub
 		return (int) select("GA03MAIN.selectListPjCnt", vo);
+	}
+ 
+	public int insertProjectName(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		try {
+			return (int) insert("GA03MAIN.insertProjectName", paramMap);
+		} catch (Exception e) {
+			// TODO: handle exception 
+			//e.printStackTrace();
+			return 0;
+		}
+	} 
+
+	public int selectWaypointCheck(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return (int) select("GA03MAIN.selectWaypointCheck", paramMap);
+	}
+
+	public GA03MAINVO selectWaypointCheck(GA03MAINVO vo) {
+		// TODO Auto-generated method stub
+		return (GA03MAINVO) select("GA03MAIN.selectWaypointCheck", vo);
+	}
+
+	public void updateDroneProject(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		update("GA03MAIN.updateDroneProject", paramMap);
 	}
  
 }

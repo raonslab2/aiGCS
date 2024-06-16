@@ -86,9 +86,15 @@ public interface GA03MAINService {
 
 	GA03MAINVO selectWaypoint2(GA03MAINVO vo)throws Exception;
 
-	List<GA03MAINVO> selectListPj(GA03MAINVO vo);
+	List<GA03MAINVO> selectListPj(GA03MAINVO vo)throws Exception;
 
-	int selectListPjCnt(GA03MAINVO vo);
+	int selectListPjCnt(GA03MAINVO vo)throws Exception;  
+	
+	int insertProjectName(HashMap<String, Object> paramMap)throws Exception; 
+
+	GA03MAINVO selectWaypointCheck(GA03MAINVO vo)throws Exception;
+
+	void updateDroneProject(HashMap<String, Object> paramMap)throws Exception;
 
 	
 	

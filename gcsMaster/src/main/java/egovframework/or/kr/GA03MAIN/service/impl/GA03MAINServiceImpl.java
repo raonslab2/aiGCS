@@ -170,8 +170,26 @@ public class GA03MAINServiceImpl extends EgovAbstractServiceImpl implements GA03
 	public int selectListPjCnt(GA03MAINVO vo) {
 		// TODO Auto-generated method stub
 		return gA03MAINDAO.selectListPjCnt(vo);
+	} 
+
+	@Override
+	public int insertProjectName(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return gA03MAINDAO.insertProjectName(paramMap);
 	}
 
+	@Override
+	public GA03MAINVO selectWaypointCheck(GA03MAINVO vo) throws Exception {
+		// TODO Auto-generated method stub
+		return gA03MAINDAO.selectWaypointCheck(vo);
+	}
+
+	@Override
+	public void updateDroneProject(HashMap<String, Object> paramMap) throws Exception {
+		// TODO Auto-generated method stub
+		gA03MAINDAO.updateDroneProject(paramMap); 
+	}  
+	
  
 
 }

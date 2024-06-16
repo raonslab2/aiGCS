@@ -1,5 +1,5 @@
 let socket;  
-var wsLink = "ws://192.168.0.29:5010/websocket"; 
+var wsLink = "ws://34.47.97.35:5010/websocket"; 
 var audioElement = document.createElement('audio');
 
 function connect() {

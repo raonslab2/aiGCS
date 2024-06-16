@@ -51,7 +51,29 @@ public class GA03MAINVO implements Serializable{
 	private String dlDiv =""; 
 	
 	private String dlModifyTime ="";
+	
+	private String projectNameInput ="";
+	
+	private String coordinateSystem ="";
+	
+ 
 	 
+	public String getProjectNameInput() {
+		return projectNameInput;
+	}
+
+	public void setProjectNameInput(String projectNameInput) {
+		this.projectNameInput = projectNameInput;
+	}
+
+	public String getCoordinateSystem() {
+		return coordinateSystem;
+	}
+
+	public void setCoordinateSystem(String coordinateSystem) {
+		this.coordinateSystem = coordinateSystem;
+	}
+
 	public String getDlModifyTime() {
 		return dlModifyTime;
 	}
