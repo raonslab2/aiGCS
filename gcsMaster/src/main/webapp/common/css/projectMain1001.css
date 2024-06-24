@@ -2,9 +2,36 @@
 
 /* 기존 CSS 유지 */
 @import url('https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css');
+@import url('/css/map/fontawesome-free-6.5.2-web/css/all.min.css');
+@import url('/css/gcs/TodayWorkCommon.css');
+@import url('/css/gcs/gA035Main.css');
+
+/* 기존 CSS 유지 */
+@import url('https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 @import url('/css/gcs/TodayWorkCommon.css');
 @import url('/css/gcs/gA035Main.css');
+
+/* 버튼 스타일 추가 */
+.btn_dlDiv_0 {
+    background-color: red;
+    color: white;
+}
+
+.btn_dlDiv_1 {
+    background-color: blue;
+    color: white;
+}
+
+.btn_dlDiv_2 {
+    background-color: green;
+    color: white;
+}
+
+.btn_dlDiv_3 {
+    background-color: yellow;
+    color: black;
+}
 
 .table {
     width: 100%;

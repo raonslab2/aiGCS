@@ -156,6 +156,14 @@
 		WHERE dl_pk=#DL_PROJECT_DL_PK# 
     ]]>
 	</update>
+	
+	<update id="GA03MAIN.uploadDivProject" parameterClass="Map">
+    <![CDATA[
+	 UPDATE br_drone_project
+		SET dl_div=#DL_DIV# 
+		WHERE dl_pk=#DL_PK# 
+    ]]>
+	</update>
 
 
 	<resultMap id="PathWaypointList"
@@ -487,6 +495,21 @@
 				SELECT dl_pk
 					FROM br_drone_waypoints
 					WHERE dl_project_dl_pk = #dlPk#
+					]]>
+	</select>
+	
+	
+	<resultMap id="selectDetailWayPointInfo"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1" />
+	</resultMap>
+ 
+	<select id="GA03MAIN.selectDetailWayPoint"
+		parameterClass="Map" resultMap="selectDetailWayPointInfo">
+			<![CDATA[
+				SELECT dl_pk
+					FROM br_drone_waypoints
+					WHERE dl_project_dl_pk = #DL_PK# 
 					]]>
 	</select>
 

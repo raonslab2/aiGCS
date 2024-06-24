@@ -38,7 +38,7 @@ public class GA03MAINDAO extends EgovAbstractDAO {
 			return (int) insert("GA03MAIN.insertWaypoint", paramMap);
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println(e.getMessage());
+			//e.printStackTrace();
 			return 0;
 		}
 	}
@@ -165,6 +165,16 @@ public class GA03MAINDAO extends EgovAbstractDAO {
 	public void updateDroneProject(HashMap<String, Object> paramMap) {
 		// TODO Auto-generated method stub
 		update("GA03MAIN.updateDroneProject", paramMap);
+	}
+
+	public GA03MAINVO selectDetailWayPoint(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return (GA03MAINVO) select("GA03MAIN.selectDetailWayPoint", paramMap);
+	}
+
+	public void uploadDivProject(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		update("GA03MAIN.uploadDivProject", paramMap);
 	}
  
 }

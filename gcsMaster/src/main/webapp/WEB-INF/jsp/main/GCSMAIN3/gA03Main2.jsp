@@ -72,7 +72,10 @@
   <script type="text/javascript" src="/Semantic-UI-master/dist/components/popup.js"></script>
   <script type="text/javascript" src="/Semantic-UI-master/dist/components/transition.js"></script>
  
-	  
+  <!-- Google Maps JavaScript API -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAd_7gJ7UDeN_gKMAomqj2_wLovzFkBuc&libraries=places">
+    </script>
 	  
 	<script th:inline="javascript">
 	var paranTmLat = [[${tmLat}]];
@@ -548,9 +551,41 @@
 	  </div> 
 	  </form>
 	</div>
+</div> 
+ 
+
+<!-- 주소 검색 필드 추가 -->
+<div class="search-container">
+    <input type="text" id="addressInput" placeholder="이름, 우편번호 또는 좌표로 검색">
+    <button id="searchButton">검색</button>
 </div>
+  
+   <!-- 팝업과 투명 레이어를 위한 HTML 추가 -->
+   <div id="overlay" class="popup-overlay" style="display: none;">
+       <div class="popup-content">
+           <h3>프로젝트 만들기</h3>
+           <div class="popup-pj-tit"><label for="projectNameInput">프로젝트 이름</label></div>
+           <div class="popup-pj-sub">
+               <input type="text" id="projectNameInput" placeholder="프로젝트 이름">
+           </div>
+           <div class="popup-pj-sub">
+               <select id="coordinateSystem">
+                   <option value="Korea 2000 / Unified CS">Korea 2000 / Unified CS</option>
+                   <!-- 다른 옵션 추가 -->
+               </select>
+           </div>
+           <div class="popup-pj-sub">
+               <div>프로젝트 설정은 나중에도 변경 가능합니다.</div>
+               <div><button id="continueButton" class="continue-button">계속</button></div>
+           </div>
+       </div>
+   </div>
 
 	<script>
+    var tmLat = "${tmLat}";
+    var tmLng = "${tmLng}";
+    var dlPk = "${dlPk}";
+
 ;(function() {
 	
     $('#addMore').on('click', function() {

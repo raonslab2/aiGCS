@@ -17,6 +17,8 @@ class GcsDashboard {
                 return "요청 시간이 초과되었습니다.";
             case error.UNKNOWN_ERROR:
                 return "알 수 없는 오류가 발생했습니다.";
+            default:
+                return "알 수 없는 오류가 발생했습니다.";
         }
     }
 
@@ -79,43 +81,58 @@ class GcsDashboard {
         }
     }
 
-    projectListView(row) {
-        return `
-            <tr id="subRow" class="subTr" style="cursor:pointer;">
-                <td class="dlPk">${row.dlPk}</td>
-                <td><img src="/images/sample_map.png" height="32" /></td>
-                <td>
-                   <button type="button" onclick="GcsDashboard.fn_waypoint33(${row.dlPk}); return false;" class="btn_style03 btn_green btnMoveReg">${row.dlName}</button>
-                </td>
-                <td>
-                    ${row.dlDiv === "0"
-                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false);" class="btn_style03 btn_red btnMoveReg">2D</button>`
-                        : `<button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false);" class="btn_style03 btn_red btnMoveReg">3D</button>`
-                    }
-                </td>
-                <td><span onclick="GcsDashboard.fn_del(${row.dlPk}); return false;" style="margin-left:20px;">DEL</span></td>
-                <td>${this.formatDate(row.dlCreateTime)}</td>
-            </tr>
-        `;
-    }
+	  projectListView(row) {
+	    return `
+	        <tr id="subRow" class="subTr" style="cursor:pointer;">
+	            <td class="dlPk">${row.dlPk}</td>
+	            <td><img src="/images/sample_map.png" height="32" /></td>
+	            <td>
+	               <button type="button" onclick="GcsDashboard.fn_waypoint33(${row.dlPk}); return false;" class="btn_style03 btn_green btnMoveReg">${row.dlName}</button>
+	            </td>
+	            <td>
+	                    ${row.dlDiv === "0"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_0">View(2D)</button>`
+	                        : row.dlDiv === "1"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_1">View(2D-매핑)</button>`
+	                        : row.dlDiv === "2"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_2">View(3D-회랑)</button>`
+	                        : row.dlDiv === "3"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_3">View(2D-파사드)</button>`
+	                        : ''
+	                    }
+	            </td>
+	            <td><span onclick="GcsDashboard.fn_del(${row.dlPk}); return false;" style="margin-left:20px;">DEL</span></td>
+	            <td>${this.formatDate(row.dlCreateTime)}</td>
+	        </tr>
+	    `;
+	}
 
-    projectGalleryView(row) {
-        return `
-            <div class="gallery-item">
-                <img src="/images/sample_map.png" alt="Map Image">
-                <div class="content">
-                    <h3>${row.dlName}</h3>
-                    <div class="meta">
-                        <span>${this.formatDate(row.dlCreateTime)}</span>
-                        ${row.dlDiv === "0" 
-                            ? `<span><button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_red btnMoveReg">2D</button></span>` 
-                            : `<span><button type="button" onclick="GcsDashboard.fn_waypoint3D(${row.dlPk}); return false);" class="btn_style03 btn_red btnMoveReg">3D</button></span>`
-                        }
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+
+	projectGalleryView(row) {
+	    return `
+	        <div class="gallery-item">
+	            <img src="/images/sample_map.png" alt="Map Image">
+	            <div class="content">
+	                <h3>${row.dlName}</h3>
+	                <div class="meta">
+	                    <span>${this.formatDate(row.dlCreateTime)}</span>
+	                    ${row.dlDiv === "0"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_0">View(2D)</button>`
+	                        : row.dlDiv === "1"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_1">View(2D-매핑)</button>`
+	                        : row.dlDiv === "2"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_2">View(3D-회랑)</button>`
+	                        : row.dlDiv === "3"
+	                        ? `<button type="button" onclick="GcsDashboard.fn_waypoint2D(${row.dlPk}); return false;" class="btn_style03 btn_dlDiv_3">View(2D-파사드)</button>`
+	                        : ''
+	                    }
+	                </div>
+	            </div>
+	        </div>
+	    `;
+	}
+
+
 
     formatDate(dateString) {
         return dateString.split('T')[0];
@@ -170,8 +187,9 @@ $(document).ready(() => {
     new GcsDashboard();
 });
 
-GcsDashboard.fn_waypoint3D = function (dlPk) {
-    window.location.href = `/gcs/dashboard/gA03Main2.do?dlPk=${dlPk}`;
+GcsDashboard.fn_waypoint3D = function (dlPk) { 
+    //window.location.href = `/gcs/dashboard/gA03Main2.do?dlPk=${dlPk}`;
+    window.location.href = `/gcs/dashboard/projectMain1002.do?dlPk=${dlPk}`;
 };
 
 GcsDashboard.fn_waypoint2D = function (dlPk) {

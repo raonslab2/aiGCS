@@ -96,6 +96,10 @@ public interface GA03MAINService {
 
 	void updateDroneProject(HashMap<String, Object> paramMap)throws Exception;
 
+	GA03MAINVO selectDetailWayPoint(HashMap<String, Object> paramMap)throws Exception;
+
+	void uploadDivProject(HashMap<String, Object> paramMap)throws Exception;
+
 	
 	
 }

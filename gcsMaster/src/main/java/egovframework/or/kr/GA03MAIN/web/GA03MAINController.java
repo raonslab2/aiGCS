@@ -233,7 +233,6 @@ public class GA03MAINController {
 	 * @param model
 	 * @exception Exception Exception
 	 */
-	//@RequestMapping(value = "/gcs/dashboard/gA03Main2.do")
 	@RequestMapping("/gcs/dashboard/gA03Main2.do")
 	public String gA03Main2(@RequestParam Map<String, Object> param,@ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO,HttpServletRequest request, ModelMap model)
 	  throws Exception{  
@@ -243,13 +242,20 @@ public class GA03MAINController {
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
     		return "main/login/empilogin";
-    	}
-		
+    	} 
+	    LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
+	    String user_id = user.getMbCode();
+	    
 		ModelAndView mav = new ModelAndView("jsonView");	 		
 		EgovMap map = CommUtil.makeEgovMap(param); 
 
 		String tmLat = String.valueOf(map.get("tmLat"));
 		String tmLng = String.valueOf(map.get("tmLng"));
+		
+		if(tmLat==null||tmLat=="null"||tmLat =="") { 
+	        tmLat = "37.20889279";
+	        tmLng = "127.75102006";
+		}
 		 
 		
 		String dlPk = gA03MAINVO.getDlPk();
@@ -268,10 +274,14 @@ public class GA03MAINController {
 			//파라미터 수신데이터
 			GA03MAINVO vo = new GA03MAINVO();
 			vo.setDlPk(dlPk);
+			vo.setDlUserId(user_id);
+			
 			waypoints         = gA03MAINService.selectWaypoint(vo);
 			strDlName         = waypoints.getDlName();
 			strWayPoint       = waypoints.getDlWaypoint();  
 			strWayPointDetail = waypoints.getDlWaypointDetail(); 
+	        tmLat = waypoints.getDlHomeY();
+	        tmLng = waypoints.getDlHomeX();
 			
 		}
  
@@ -342,22 +352,48 @@ public class GA03MAINController {
  
 				model.addAttribute("tmLat", waypoints.getDlHomeX());
 				model.addAttribute("tmLng", waypoints.getDlHomeY());
+				model.addAttribute("dlDiv", waypoints.getDlDiv());
+
 				
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-			
-
 		}
  
-		model.addAttribute("dlName", strDlName);
+		model.addAttribute("dlName", strDlName); 
+		String detailData; 
+ 
+
+		model.addAttribute("dlPk", dlPk);
 		model.addAttribute("waypoints", strWayPoint);
 		model.addAttribute("waypointsDetail", strWayPointDetail);
-		model.addAttribute("dlPk", dlPk);
 		
- 
-		return "main/GCSMAIN3/projectMain1002";
+		String returnUrl = "main/GCSMAIN3/projectMain1002";
+		if(waypoints!=null && waypoints.getDlDiv().equals("0")) {
+			//프로젝트가 개설되어 있고, 구체적 경로가 설정되어 있지 않다면 ( 폴리곤 또는 파사드 등을 설정하지 않았다면 )
+			detailData = "0";
+			returnUrl = "main/GCSMAIN3/projectMain1002";//2차원 - 아직 구체적 경로 설정 안된상태
+		}else if(waypoints!=null && waypoints.getDlDiv().equals("1")) {
+			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 폴리곤 )
+			detailData = "1";
+			returnUrl = "main/GCSMAIN3/projectMain1002_1";//2차원 - 폴리곤
+		}else if(waypoints!=null && waypoints.getDlDiv().equals("2")) {
+			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 3차원 회랑 )
+			detailData = "2";
+			returnUrl = "main/GCSMAIN3/projectMain1002_2"; 
+		}else if(waypoints!=null && waypoints.getDlDiv().equals("3")) { 
+			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 2차원 파사드 )
+			detailData = "3";
+			returnUrl = "main/GCSMAIN3/projectMain1002_3"; 
+		}else {
+			//프로젝트가 개설되어 있지 않고, 신규 생성이라면
+			detailData = "-1";
+			returnUrl = "main/GCSMAIN3/projectMain1002";//2차원 - 아직 구체적 경로 설정 안된상태
+		}
+		
+		model.addAttribute("detailData", detailData);
+		return returnUrl;
 	}
 	
 	/**
@@ -385,6 +421,11 @@ public class GA03MAINController {
 		String codination = String.valueOf(map.get("codination"));
 		String homeX = String.valueOf(map.get("homeX"));
 		String homeY = String.valueOf(map.get("homeY"));
+		String dlDiv = String.valueOf(map.get("dlDiv"));
+		
+		if(dlDiv==null||dlDiv=="null"||dlDiv=="") {
+			dlDiv = "0";
+		}
   
 	    HashMap<String, Object> paramMap = new HashMap<String, Object>();
 	    paramMap.put("DL_NAME", projectName);
@@ -392,7 +433,7 @@ public class GA03MAINController {
 	    paramMap.put("DL_USER_ID", user_id);
 	    paramMap.put("DL_HOME_X", homeX);
 	    paramMap.put("DL_HOME_Y", homeY);
-	    paramMap.put("DL_DIV", "0");
+	    paramMap.put("DL_DIV", dlDiv); 
  
   
 		int rst=0;
@@ -618,7 +659,33 @@ public class GA03MAINController {
     }
 
 		
+	@RequestMapping(value = "/gcs/dashboard/uploadDivProject.do", method = RequestMethod.POST)
+	public @ResponseBody ModelAndView uploadDivProject(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
+	    ModelAndView mav = new ModelAndView("jsonView");
+	    EgovMap map = CommUtil.makeEgovMap(param);
+
+	    String dlDiv = String.valueOf(map.get("dlDiv"));
+	    String dlPk = String.valueOf(map.get("dlPk"));
+ 
+
+	    HashMap<String, Object> paramMap = new HashMap<String, Object>();
+	    paramMap.put("DL_DIV", Integer.parseInt(dlDiv));
+	    paramMap.put("DL_PK", dlPk);
+	    
+	    GA03MAINVO vo = new GA03MAINVO(); 
+	    vo.setDlPk(dlPk);
+	    GA03MAINVO result;
+	    try { 
+	        //프로젝트 정보
+	        gA03MAINService.uploadDivProject(paramMap);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } 
+
+	    return mav;
+	}
 	
+    
 	/**
 	 * GCS > MAIN > PLAN
 	 * @return 메인페이지 정보 Map [key : 항목명]
@@ -626,8 +693,7 @@ public class GA03MAINController {
 	 * @param request
 	 * @param model
 	 * @exception Exception Exception
-	 */
-	//@RequestMapping(value = "/gcs/dashboard/gA03Main2.do")
+	 */ 
 	@RequestMapping("/gcs/dashboard/gA03Main33.do")
 	public String gA03Main33(@RequestParam Map<String, Object> param,@ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO,HttpServletRequest request, ModelMap model)
 	  throws Exception{  
@@ -1282,9 +1348,7 @@ public class GA03MAINController {
 		String missionNmae        = String.valueOf(map.get("missionNmae"));
 		String waypointsDetail    = String.valueOf(map.get("jsonObj2"));
 		
-		LOGGER.debug("waypointsDetail : {}", waypointsDetail);  
-		
-		LOGGER.debug("gA03Main2Waypoint : {}", tmData);
+ 
 		
 	    JSONObject jObject = new JSONObject(tmData);   
 	    LOGGER.debug("gA03Main2Waypoint : {}", jObject.get("creationTime"));
@@ -1305,33 +1369,41 @@ public class GA03MAINController {
 	    
 	    HashMap<String, Object> paramMap = new HashMap<String, Object>();
 	    paramMap.put("DL_NAME", missionNmae);
-	    paramMap.put("DL_USER_ID", user_id);
+	    paramMap.put("DL_USER_ID", user_id); 
 	    paramMap.put("DL_HOME_X", home_x);
 	    paramMap.put("DL_HOME_Y", home_y);
 	    paramMap.put("DL_WAYPOINT", waypoints);
-	    paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail);
+	    paramMap.put("DL_WAYPOINT_DETAIL", waypointsDetail); 
 	    paramMap.put("DL_CREATE_TIME", create_time); 
-	    paramMap.put("DL_ADDR", addr); 
+	    paramMap.put("DL_ADDR", addr);  
 	    if(dlPk !=null && dlPk != "") {
 	       paramMap.put("DL_PK", dlPk); 
+	       paramMap.put("DL_PROJECT_DL_PK", dlPk); 
 	    }
 	    
+	    GA03MAINVO checkData = new GA03MAINVO();
 	    try {
-			if(dlPk !=null && dlPk != "") {
-				gA03MAINService.updateWaypoint(paramMap); 
-			}else {
-				gA03MAINService.insertWaypoint(paramMap);
-			}
 	    	
-		} catch (IllegalAccessException e) {
+	    	//기존에 비행 상세 정보 존재 유무
+	    	checkData = gA03MAINService.selectDetailWayPoint(paramMap);
+	    	
+	    	if(checkData==null) {
+	    		gA03MAINService.insertWaypoint(paramMap);
+	    	}else {
+	    		//기존 상세 경로 업데이트
+	    		gA03MAINService.updateWaypoint(paramMap); 
+	    		
+	    		//기존 프로젝트 정보 업데이트
+	    		gA03MAINService.updateDroneProject(paramMap);
+	    	} 
+	    	
+		} catch (Exception e) {
 			// TODO: handle exception
-			e.printStackTrace(); 
-		}catch (InvocationTargetException e) {
-			// TODO: handle exception
-			e.getTargetException().printStackTrace();
+			//e.printStackTrace(); 
 		}
-	     
-		return mav;
+	    
+	    mav.addObject("dlPk", dlPk);
+		return mav; 
 	}
 	
 	

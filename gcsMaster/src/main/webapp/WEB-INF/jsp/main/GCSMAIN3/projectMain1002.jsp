@@ -14,19 +14,21 @@
     <link rel="stylesheet" href="/css/map/styles.css">
     <link rel="stylesheet" href="/css/map/leaflet-path-transform.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
-    <script src="https://npmcdn.com/leaflet@1.3.4/dist/leaflet.js"></script>
-    <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
-    <script src="https://unpkg.com/@turf/turf"></script>
-    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <script src="/js/map/jquery-3.7.1.min.js"></script>
+    <script src="/js/map/leaflet/dist/html2canvas.min.js"></script>
+    <script src="/js/map/leaflet/dist/leaflet.js"></script>
+    <script src="/js/map/leaflet/dist/Path.Drag.js"></script>
+    <script src="/js/map/leaflet/dist/turf.min.js"></script>
+ 
 
-    <script src="/js/map/mapInit.js"></script>
+    <script src="/js/map/projectMain1002.js"></script>
     <script src="/js/map/Leaflet.Editable.js"></script>
     <script src="/js/map/controls.js"></script>
     <script src="/js/map/polygonService.js"></script>
     <script src="/js/map/leaflet-path-transform.js"></script>
     <link rel="stylesheet" href="/mnt/data/styles.css">
+ 
+    <link rel="stylesheet" href="/css/map/fontawesome-free-6.5.2-web/css/all.min.css">
     
  
    <!-- Google Maps JavaScript API -->
@@ -142,11 +144,10 @@
 </div>
  
 
-
 <div id="main">
     <button class="openbtn" onclick="toggleNav()">&#9776; 설정</button>
-    <div id="map" style="width: 100%; height: 100vh;"></div>
-    <div class="toggle-btn" id="toggle-btn" onclick="toggleNav()">❮</div>
+    <div id="map" style="width: 100%; height: 100vh;"></div> 
+    <div class="toggle-btn" id="toggle-btn" onclick="toggleBothNavs()">❮</div>
 </div>
 
 <!-- 팝업과 투명 레이어를 위한 HTML 추가 -->
@@ -170,11 +171,65 @@
     </div>
 </div>
 
+<div id="newMenuSidebar" class="sidebar" style="display: none;">
+    <h2>새로운 비행 계획</h2>
+    <div class="menu-section">
+        <button id="standardMappingButton2D" data-page="1" class="menu-button">
+            <i class="fas fa-map fa-2x"></i>
+            <div>
+                <div>지도 맵</div>
+                <div class="subtitle">2D/3D 매핑 지도 만들기</div>
+            </div>
+        </button> 
+        <hr>
+        <button id="facadeFlightButton" data-page="3" class="menu-button">
+            <i class="fas fa-building fa-2x"></i>
+            <div>
+                <div>파사드</div>
+                <div class="subtitle">3D 모델 비행 만들기</div>
+            </div>
+        </button>
+        <button id="corridorMappingButton" data-page="2" class="menu-button">
+            <i class="fas fa-road fa-2x"></i>
+            <div>
+                <div>회랑</div>
+                <div class="subtitle">3차원 회랑 지도 만들기</div>
+            </div>
+        </button>
+        <hr>
+        <button id="panoramaButton" class="menu-button">
+            <i class="fas fa-camera fa-2x"></i>
+            <div>
+                <div>파노라마</div>
+                <div class="subtitle">구형 사진 생성</div>
+            </div>
+        </button>
+        <button id="videoCaptureButton" class="menu-button">
+            <i class="fas fa-video fa-2x"></i>
+            <div>
+                <div>동영상</div>
+                <div class="subtitle">고화질 동영상 캡처</div>
+            </div>
+        </button>
+        <button id="photoReportButton" class="menu-button">
+            <i class="fas fa-file-alt fa-2x"></i>
+            <div>
+                <div>포토 리포트</div>
+                <div class="subtitle">고품질 사진 캡처</div>
+            </div>
+        </button>
+    </div>
+</div>
+
+
+
 <script>
     var tmLat = "${tmLat}";
     var tmLng = "${tmLng}";
     var dlPk = "${dlPk}";
-
+    var detailData = "${detailData}";
+    var dlDiv = "${dlDiv}";
+ 
 
     if (!dlPk || dlPk.trim() === "") {
         tmLat = "37.20889279";
@@ -185,15 +240,31 @@
         var now = new Date();
         var formattedDate = 'Route_' + now.toISOString().slice(0, 10).replace(/-/g, '') + now.toTimeString().slice(0, 5).replace(/:/g, '');
         
-        if (!dlPk || dlPk.trim() === "") {
+        if (detailData=="-1") {
+        	//신규생성이라면
             $('#importButton').hide();
             $('#mySidebar').hide();
             $('#toggle-btn').hide();  // toggle-btn 요소 숨기기
             $('#newSidebar').hide(); // newSidebar 요소 보이기
-        } else {
-        	
+        }else if(detailData=="0") {
+        	//dlPk 프로젝트는 개설되어 있으나, 아직 경로를 만들지 않았다면
+            $('#importButton').hide();
+            $('#mySidebar').hide();
+            if(dlDiv=="1"){
+                $('#newMenuSidebar').hide();
+                $('#mySidebar').show();
+            }else{
+                $('#newMenuSidebar').show();
+                $('#mySidebar').hide();
+            }
+
+            $('#toggle-btn').hide();  // toggle-btn 요소 숨기기
+            $('#newSidebar').hide(); // newSidebar 요소 보이기
+        } else if(detailData=="2") {
+        	//경로가 있다면
             $('#importButton').show();
             $('#mySidebar').show();
+            $('#newMenuSidebar').hide();
             $('#toggle-btn').hide();  // toggle-btn 요소 보이기
             $('#toggle-btn').html('❮');
             formattedDate = "${dlName}"; 
@@ -252,23 +323,27 @@
         }
     });
 
-    function toggleNav() {
+    function toggleBothNavs() {
         var sidebar = $('#mySidebar');
+        var newSidebar = $('#newMenuSidebar');
         var toggleBtn = $('.toggle-btn');
-        if (sidebar.is(':visible')) {
-            sidebar.hide();
+
+        if (sidebar.css('left') === '0px') {
+            sidebar.css('left', '-350px');
+            newSidebar.css('left', '0');
             toggleBtn.html('❯');
-            toggleBtn.css('left', '0px');
+            toggleBtn.css('left', '10px');
         } else {
-            sidebar.show();
+            sidebar.css('left', '0');
+            newSidebar.css('left', '-350px');
             toggleBtn.html('❮');
-            updateToggleBtnPosition();
+            toggleBtn.css('left', '360px'); // 350px + 10px
         }
     }
 
     function updateToggleBtnPosition() {
         var sidebarWidth = $('#mySidebar').width();
-        $('.toggle-btn').css('left', sidebarWidth + 41 + 'px');
+        $('.toggle-btn').css('left', sidebarWidth + 10 + 'px'); // 추가 조정
     }
 </script>
 

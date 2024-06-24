@@ -134,26 +134,23 @@ this page - Leaflet.Editable.js
 		// 다각형에 이동 아이콘을 추가하는 함수
 		addPolygonMoveIcon: function(polygon, map) {
 			var center = polygon.getBounds().getCenter();
-
-			var customIcon = L.divIcon({
-				className: 'custom-icon', // CSS 클래스 적용
-				iconSize: [20, 20]         // 아이콘 크기 지정
+	
+			var moveIcon = L.divIcon({
+				className: 'custom-move-icon',
+				html: '<div style="background-color: blue; width: 12px; height: 12px; border-radius: 50%;"></div>',
+				iconSize: [12, 12]
 			});
-			var moveIcon = L.icon({
-				iconUrl: '/images/map/move_icon.png', // 아이콘 이미지 URL 지정
-				iconSize: [20, 20] // 아이콘 크기 지정
-			});
-
+	
 			var moveMarker = L.marker(center, {
 				icon: moveIcon,
 				draggable: true
 			}).addTo(map);
-
+	
 			moveMarker.on('drag', function(e) {
 				var newCenter = e.target.getLatLng();
 				var latlngs = polygon.getLatLngs();
 				var translation = [newCenter.lat - center.lat, newCenter.lng - center.lng];
-
+	
 				// 다각형의 모든 좌표를 업데이트
 				polygon.setLatLngs(latlngs.map(function(part) {
 					return part.map(function(point) {
@@ -165,7 +162,8 @@ this page - Leaflet.Editable.js
 			});
 		},
 
-		initialize: function(map, options) {
+		initialize: function(map, options) { 
+			
 			L.setOptions(this, options);
 			this._lastZIndex = this.options.zIndex;
 			this.map = map;
@@ -355,7 +353,6 @@ this page - Leaflet.Editable.js
 			this.addPolygonMoveIcon(polygon, this.map); // 다각형에 이동 아이콘 추가
 			return polygon;
 		},
-
 		// 🍂method startMarker(latlng: L.LatLng, options: hash): L.Marker
 		// Start adding a Marker. If `latlng` is given, the Marker will be shown first at this point.
 		// In any case, it will follow the user mouse, and will have a final `latlng` on next click (or touch).
@@ -1165,13 +1162,16 @@ this page - Leaflet.Editable.js
 
 		},
 		onVertexRawMarkerClick: function(e) {
-			this.fireAndForward('editable:vertex:rawclick', e);
-			if (e._cancelled) return;
-			if (!this.vertexCanBeDeleted(e.vertex)) return;
-			e.vertex.delete();
-			// 다각형 변경을 알리는 사용자 정의 이벤트 발생
-			this.editor.fireAndForward('editable:vertex:deleted', { layer: this.feature });
+		    this.fireAndForward('editable:vertex:rawclick', e);
+		    if (e._cancelled) return;
+		    if (!this.vertexCanBeDeleted(e.vertex)) return;
+		    e.vertex.delete();
+		    // 다각형 변경을 알리는 사용자 정의 이벤트 발생
+		    if (this.editor) { // this.editor가 정의되어 있는지 확인
+		        this.editor.fireAndForward('editable:vertex:deleted', { layer: this.feature });
+		    }
 		},
+
 
 		vertexCanBeDeleted: function(vertex) {
 			return vertex.latlngs.length > this.MIN_VERTEX;

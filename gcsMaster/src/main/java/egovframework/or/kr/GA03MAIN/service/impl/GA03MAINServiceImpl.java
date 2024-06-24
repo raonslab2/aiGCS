@@ -188,6 +188,18 @@ public class GA03MAINServiceImpl extends EgovAbstractServiceImpl implements GA03
 	public void updateDroneProject(HashMap<String, Object> paramMap) throws Exception {
 		// TODO Auto-generated method stub
 		gA03MAINDAO.updateDroneProject(paramMap); 
+	}
+
+	@Override
+	public GA03MAINVO selectDetailWayPoint(HashMap<String, Object> paramMap) throws Exception {
+		// TODO Auto-generated method stub
+		return gA03MAINDAO.selectDetailWayPoint(paramMap); 
+	}
+
+	@Override
+	public void uploadDivProject(HashMap<String, Object> paramMap) throws Exception {
+		// TODO Auto-generated method stub
+		gA03MAINDAO.uploadDivProject(paramMap); 
 	}  
 	
  

@@ -331,7 +331,7 @@ $(document).ready(function () {
                 missionName: missionName 
             }).done(function () {
                 //지도정보 다시 로딩
-                 alert("경로정보가 적용되었습니다.");
+                // alert("경로정보가 적용되었습니다.");
 			    // 현재 페이지의 URL 가져오기
 			    var currentUrl = window.location.href;
 			    
@@ -435,17 +435,7 @@ $(document).ready(function () {
             });
         }
     };
-
-	function checkAndShowSidebar() {
-	    const polygonExists = map.hasLayer(rectangleCreator.poly);
-	    if (!polygonExists) {
-	        $('#mySidebar').hide();
-	        $('#newSidebar').show();
-	    } else {
-	        $('#mySidebar').show();
-	        $('#newSidebar').hide();
-	    }
-	}
+ 
 	
 	// 주소 검색 기능 추가
 	$('#searchButton').on('click', function (e) {
@@ -471,6 +461,17 @@ $(document).ready(function () {
 	        }
 	    });
 	}
+
+    function checkAndShowSidebar() {
+        const polygonExists = map.hasLayer(rectangleCreator.poly);
+        if (!polygonExists) {
+            $('#mySidebar').hide();
+            $('#newSidebar').show();
+        } else {
+            $('#mySidebar').show();
+            $('#newSidebar').hide();
+        }
+    }
 
     map = initializeMap();
     const rectangleCreator = new RectangleCreator(map);
@@ -568,6 +569,29 @@ function setupButtonEventListeners(rectangleCreator) {
     $('#droneSpeed').on('input', function () {
         var currentValue = $(this).val();
         $('#droneSpeedValue').text(currentValue);
+    });
+
+    // standardMappingButton2D 버튼 클릭 이벤트 추가
+    $('#standardMappingButton2D').on('click', function() {
+        // AJAX 통신 수행
+        $.ajax({
+            url: '/gcs/dashboard/uploadDivProject.do',
+            type: 'POST',
+            data: {
+                // 전송할 데이터 추가
+                dlDiv: '1',
+                dlPk: dlPk
+            },
+            success: function(response) { 
+                // 현재 페이지의 URL 가져오기
+                var currentUrl = window.location.href;
+                // 페이지 리로드
+                window.location.href = currentUrl;
+            },
+            error: function(error) {
+                alert('데이터 전송 실패');
+            }
+        });
     });
 }
 

@@ -38,14 +38,9 @@
 	                                    <a href="#">조직 프로젝트</a>
 	                                </div>
 	                                <div class="view-switch-buttons"> 
-	                                    <a id="createRouterPath" href="#" class="add-plan-link">
-	                                        <button type="button" class="btn_style02 btn_green">
-	                                            3D Plan <span>▷</span>
-	                                        </button>
-	                                    </a>
 	                                    <a id="createRouterPolygonPath" href="#" class="add-plan-link">
 	                                        <button type="button" class="btn_style02 btn_green">
-	                                            2D Plan <span>▷</span>
+	                                            신규생성 <span>▷</span>
 	                                        </button>
 	                                    </a>
 	                                </div>

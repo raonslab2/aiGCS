@@ -470,7 +470,7 @@
 		 			<isNotNull property="twRequester" prepend="and"> 
 						a.TW_REQUESTER = #twRequester# 
 					</isNotNull> 
-		 			<isNotNull property="twWorker2" prepend="and"> 
+		 			<isNotNull property="twWorker2" prepend="and">
 						( a.TW_REQUESTER = #twWorker2#  or a.TW_WORKER2 = #twWorker2#   ) 
 					</isNotNull> 
 

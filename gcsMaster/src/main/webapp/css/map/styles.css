@@ -1,299 +1,777 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f4f4f4;
 }
 
 #map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    width: 100%;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
 }
 
 .custom-vertex-icon {
-    background-color: green;
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    margin-left: -20px;
-    margin-top: -20px;
+	background-color: green;
+	border-radius: 50%;
+	width: 100px;
+	height: 100px;
+	margin-left: -20px;
+	margin-top: -20px;
 }
 
 .custom-icon {
-    width: 30px;
-    height: 30px;
-    background-color: black;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 12px;
-    text-align: center;
+	width: 30px;
+	height: 30px;
+	background-color: black;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 12px;
+	text-align: center;
 }
 
-
-
 .sidebar a.closebtn {
-    font-size: 36px;
-    margin-left: 50px;
-    text-decoration: none;
-    color: black;
+	font-size: 36px;
+	margin-left: 50px;
+	text-decoration: none;
+	color: black;
 }
 
 .sidebar .section {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .sidebar .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
 }
 
 .sidebar .section-header span {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .sidebar .add-button, .sidebar .upload-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 3px;
 }
 
 .sidebar .add-button:hover, .sidebar .upload-button:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 .sidebar .layer-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 .sidebar .layer-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px solid #ccc;
+	display: flex;
+	justify-content: space-between;
+	padding: 5px 0;
+	border-bottom: 1px solid #ccc;
 }
 
 .sidebar .count {
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    padding: 2px 8px;
+	background-color: #e0e0e0;
+	border-radius: 10px;
+	padding: 2px 8px;
 }
 
 .sidebar .media-info {
-    border: 1px solid #007bff;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+	border: 1px solid #007bff;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #f9f9f9;
 }
 
 .sidebar .media-info p {
-    margin: 0 0 10px 0;
-    color: #555;
+	margin: 0 0 10px 0;
+	color: #555;
 }
 
 .sidebar #mapSelect {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 5px;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin-top: 5px;
 }
 
 .openbtn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 9999;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	cursor: pointer;
+	border-radius: 5px;
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 9999;
 }
 
 .openbtn:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 #main {
-    transition: margin-left .5s;
-    padding: 16px;
+	transition: margin-left .5s;
+	padding: 16px;
 }
 
 .control-container {
-    padding: 10px;
+	padding: 10px;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
 }
 
 .header .title {
-    font-size: 18px;
-    font-weight: bold;
+	font-size: 18px;
+	font-weight: bold;
 }
 
 .header .title .title-input {
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 3px;
-    width: 150px;
-    box-sizing: border-box;
-    font-size: 16px;
-    color: #333;
-    background-color: #fff;
-    transition: border-color 0.3s, box-shadow 0.3s;
+	border: 1px solid #ccc;
+	padding: 5px;
+	border-radius: 3px;
+	width: 150px;
+	box-sizing: border-box;
+	font-size: 16px;
+	color: #333;
+	background-color: #fff;
+	transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .header .title .title-input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
+	border-color: #007bff;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+	outline: none;
 }
 
 .header .actions {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .header .actions button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-    margin-left: 10px;
-    transition: background-color 0.3s;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 3px;
+	margin-left: 10px;
+	transition: background-color 0.3s;
 }
 
 .header .actions button:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 .header .actions button:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .stats {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15px;
 }
 
 .stats div {
-    text-align: center;
+	text-align: center;
 }
 
 .stats div span {
-    display: block;
-    font-size: 1.2em;
+	display: block;
+	font-size: 1.2em;
 }
 
 .option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 17px 0;
-    border-top: 1px solid #ddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 17px 0;
+	border-top: 1px solid #ddd;
 }
 
 .option .flight-altitude {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .option .flight-altitude span {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 .option input[type="checkbox"] {
-    transform: scale(1.5);
+	transform: scale(1.5);
 }
 
 .option .toggle-switch {
-    display: inline-block;
-    width: 34px;
-    height: 20px;
-    position: relative;
+	display: inline-block;
+	width: 34px;
+	height: 20px;
+	position: relative;
 }
 
 .option .toggle-switch input {
-    display: none;
+	display: none;
 }
 
 .option .toggle-switch span {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-color: #ccc;
-    border-radius: 20px;
-    position: relative;
-    transition: background-color 0.2s;
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: #ccc;
+	border-radius: 20px;
+	position: relative;
+	transition: background-color 0.2s;
 }
 
 .option .toggle-switch span:before {
-    content: "";
-    width: 18px;
-    height: 18px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    transition: transform 0.2s;
+	content: "";
+	width: 18px;
+	height: 18px;
+	background-color: white;
+	border-radius: 50%;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	transition: transform 0.2s;
 }
 
-.option .toggle-switch input:checked + span {
-    background-color: #007bff;
+.option .toggle-switch input:checked+span {
+	background-color: #007bff;
 }
 
-.option .toggle-switch input:checked + span:before {
-    transform: translateX(14px);
+.option .toggle-switch input:checked+span:before {
+	transform: translateX(14px);
 }
 
 .option .arrow {
-    font-size: 18px;
-    cursor: pointer;
+	font-size: 18px;
+	cursor: pointer;
 }
 
 .request-button {
-    background-color: #ddd;
-    color: #999;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 3px;
-    cursor: not-allowed;
+	background-color: #ddd;
+	color: #999;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 3px;
+	cursor: not-allowed;
 }
 
 .request-button.active {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+	background-color: #007bff;
+	color: white;
+	cursor: pointer;
 }
 
 .sidebar {
-    display: block; /* 기본적으로 표시되도록 수정 */
-    width: 300px;
-    background-color: #f4f4f4;
+	display: block; /* 기본적으로 표시되도록 수정 */
+	width: 300px;
+	background-color: #f4f4f4;
+	color: black;
+	border-right: 1px solid #ccc;
+	padding: 20px;
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+	position: fixed;
+	height: 100%;
+	overflow-y: auto;
+	transition: 0.5s;
+	z-index: 9998;
+	user-select: none;
+	margin-top: 10px;
+	left: 0; /* 좌측 정렬 */
+}
+
+.toggle-btn {
+	position: fixed; /* fixed로 설정하여 항상 보이도록 함 */
+	top: 50%;
+	left: calc(300px + 41px); /* 사이드바 폭(300px) + 여유(41px) */
+	transform: translateY(-50%);
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 0 5px 5px 0;
+	padding: 10px;
+	cursor: pointer;
+	z-index: 9999; /* .sidebar보다 한 단계 위 */
+}
+
+.btn {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 3px;
+	transition: background-color 0.3s;
+	margin-right: 5px;
+}
+
+.btn:hover {
+	background-color: #0056b3;
+}
+
+.btn:focus {
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-reset {
+	background-color: #dc3545;
+	margin-left: 10px;
+}
+
+.btn-reset:hover {
+	background-color: #c82333;
+}
+
+.btn-reset:focus {
+	box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+/* 모던 모바일 스타일 시작 */
+
+/* Input 스타일 */
+.form-control {
+	width: 100%;
+	padding: 12px 15px;
+	margin: 10px 0;
+	display: inline-block;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-sizing: border-box;
+	font-size: 16px;
+	transition: border-color 0.3s, box-shadow 0.3s;
+	background-color: #f9f9f9;
+}
+
+.form-control:focus {
+	border-color: #007bff;
+	box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
+	outline: none;
+}
+
+/* Button 스타일 */
+/* 버튼 간격 조정 */
+.btn {
+	background-color: #007bff;
+	border: none;
+	color: white;
+	padding: 12px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 10px 5px; /* 좌우 간격 추가 */
+	cursor: pointer;
+	border-radius: 8px;
+	transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-reset {
+	background-color: #dc3545;
+}
+
+.btn-reset:hover {
+	background-color: #c82333;
+}
+
+.btn-reset:focus {
+	box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+.btn:hover {
+	background-color: #0056b3;
+}
+
+.btn:focus {
+	outline: none;
+	box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
+}
+
+/* Select 스타일 */
+select.form-control {
+	width: 100%;
+	padding: 12px 15px;
+	margin: 10px 0;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-sizing: border-box;
+	font-size: 16px;
+	background-color: #f9f9f9;
+	appearance: none; /* Removes default arrow in some browsers */
+	-webkit-appearance: none; /* Safari and Chrome */
+	-moz-appearance: none; /* Firefox */
+	background-image:
+		url('data:image/svg+xml;utf8,<svg fill="%23000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	background-size: 16px 16px;
+}
+
+select.form-control:focus {
+	border-color: #007bff;
+	box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
+	outline: none;
+}
+
+/* 모던 모바일 스타일 끝 */
+
+/* 꼭지점 스타일 */
+.vertex {
+	width: 10px;
+	height: 10px;
+	background-color: red;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	pointer-events: auto;
+}
+
+/* 꼭지점에 마우스 오버 시 스타일 */
+.vertex-hover {
+	width: 15px;
+	height: 15px;
+	background-color: blue;
+	border: 2px solid white;
+}
+
+/* 중간 아이콘 스타일 */
+.midpoint {
+	width: 10px;
+	height: 10px;
+	background-color: green;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	pointer-events: auto;
+}
+
+/* 중간 아이콘에 마우스 오버 시 스타일 */
+.midpoint-hover {
+	width: 15px;
+	height: 15px;
+	background-color: orange;
+	border: 2px solid white;
+}
+
+.custom-vertex-icon {
+	background-color: green; /* 기본 색상 */
+	width: 17px;
+	height: 17px;
+	border-radius: 50%;
+	border: 2px solid white;
+}
+
+.custom-vertex-icon-hover {
+	background-color: red; /* 마우스 오버 시 색상 */
+}
+
+.custom-middle-icon-hover {
+	background-color: yellow; /* 마우스 오버 시 색상 */
+}
+
+.leaflet-top.leaflet-right {
+	top: 60px; /* 원하는 상단 여백 */
+	right: 30px; /* 원하는 오른쪽 여백 */
+}
+
+.custom-zoom-control {
+	position: absolute !important;
+	bottom: 50px; /* 원하는 위치로 조정 */
+	right: 20px; /* 원하는 위치로 조정 */
+	z-index: 1000; /* 다른 컨트롤과 겹치지 않도록 */
+}
+
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+	width: 52px; /* 2배로 키움 */
+	height: 52px; /* 2배로 키움 */
+	line-height: 52px; /* 2배로 키움 */
+	font-size: 30px; /* 텍스트 크기 조정 */
+}
+
+.zoom-button {
+	width: 52px; /* 2배로 키움 */
+	height: 52px; /* 2배로 키움 */
+	line-height: 52px; /* 2배로 키움 */
+	font-size: 30px; /* 텍스트 크기 조정 */
+}
+
+/* styles.css 파일에 추가 */
+.center-marker-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 9999; /* 맨 위에 표시 */
+	pointer-events: none; /* 마우스 이벤트 무시 */
+}
+
+.center-marker {
+	width: 208px; /* 4배 크게 */
+	height: 160px; /* 4배 크게 */
+	border: 6px solid rgba(255, 255, 255, 0.8); /* 하얀색 테두리 */
+	border-radius: 12px; /* 둥근 모서리 */
+	background-color: transparent; /* 투명 배경 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.inner-marker {
+	width: 40px; /* 4배 크게 */
+	height: 40px; /* 4배 크게 */
+	border-radius: 50%;
+	border: 6px solid rgba(255, 255, 255, 0.8); /* 하얀색 테두리 */
+	background-color: rgba(255, 255, 255, 0); /* 투명한 배경 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.inner-marker .transparent-circle {
+	width: 20px; /* 투명한 원의 크기 */
+	height: 20px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0); /* 투명한 배경 */
+	border: 4px solid white; /* 하얀색 테두리 */
+}
+
+.marker-label {
+	margin-top: 10px;
+	background-color: rgba(63, 72, 216, 0.8); /* 파란색 배경에 투명도 추가 */
+	color: white;
+	padding: 10px 10px;
+	border-radius: 5px;
+	pointer-events: auto; /* 마우스 이벤트 허용 */
+	cursor: pointer; /* 커서 포인터로 변경 */
+}
+
+/* 팝업 스타일 */
+.popup-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5); /* 투명도 추가 */
+	z-index: 99000; /* 높게 설정 */
+	display: none; /* 초기 상태 숨김 */
+	justify-content: center;
+	align-items: center;
+}
+
+.popup-content {
+	background: white;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	z-index: 1001; /* overlay보다 높게 설정 */
+	max-width: 500px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* "여기에서 프로젝트 만들기" 버튼 스타일 */
+.marker-label {
+	margin-top: 10px;
+	background-color: rgba(63, 72, 216, 0.8); /* 파란색 배경에 투명도 추가 */
+	color: white;
+	padding: 10px 10px;
+	border-radius: 5px;
+	pointer-events: auto; /* 마우스 이벤트 허용 */
+	cursor: pointer; /* 커서 포인터로 변경 */
+	z-index: 999; /* 팝업보다 낮게 설정 */
+}
+
+/* 팝업 내부 스타일 */
+.popup-content h3 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 1.5em;
+	color: #333;
+	text-align: center;
+}
+
+.popup-pj-tit {
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #444;
+}
+
+.popup-pj-sub {
+	margin-bottom: 20px;
+}
+
+.popup-pj-sub span {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #555;
+}
+
+.popup-pj-sub input[type="text"], .popup-pj-sub select {
+	width: calc(100% - 20px);
+	padding: 10px;
+	margin-top: 5px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+
+.popup-pj-sub input[type="text"]:focus, .popup-pj-sub select:focus {
+	border-color: #3F48D8;
+	outline: none;
+}
+
+.popup-pj-sub div {
+	margin-bottom: 10px;
+	font-size: 0.9em;
+	color: #777;
+}
+
+.continue-button {
+	background-color: #3F48D8; /* 파란색 배경에 투명도 추가 */
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.continue-button:hover {
+	background-color: #2C358C;
+}
+
+/* CSS for newSidebar */
+#newSidebar {
+	background-color: #fff;
+	padding: 15px;
+	width: 250px;
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	overflow-y: auto;
+	z-index: 1000;
+	margin-top: 50px;
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#newSidebar .control-container {
+	display: flex;
+	flex-direction: column;
+}
+
+#newSidebar .section {
+	margin-bottom: 20px;
+}
+
+#newSidebar .header {
+	margin-bottom: 15px;
+}
+
+#newSidebar .title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#newSidebar .menu-list {
+	list-style: none;
+	padding: 0;
+}
+
+#newSidebar .menu-list li {
+	margin-bottom: 10px;
+}
+
+#newSidebar .menu-button {
+	background-color: #f5f5f5;
+	color: #333;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 10px;
+	text-align: left;
+	width: 100%;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	display: flex;
+	align-items: center;
+}
+
+#newSidebar .menu-button:hover {
+	background-color: #e9e9e9;
+}
+
+#newSidebar .menu-button span {
+	display: block;
+	font-size: 12px;
+	color: #666;
+}
+
+.search-container {
+	position: absolute;
+	top: 70px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1000;
+	display: flex;
+	flex-direction: row; /* 수정된 부분: 행 방향으로 정렬 */
+	align-items: center;
+}
+
+.search-container input {
+	padding: 15px;
+	font-size: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 400px; /* 입력창 넓이 조정 */
+	margin-right: 10px; /* 버튼과 간격 추가 */
+}
+
+.search-container button {
+	padding: 15px 20px;
+	font-size: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: #fff;
+	cursor: pointer;
+}
+
+/* 기존 스타일 유지 */ 
+
+#mySidebar {
+    width: 350px;
+    background-color: #f8f9fa;
     color: black;
     border-right: 1px solid #ccc;
     padding: 20px;
@@ -303,472 +781,109 @@ body {
     overflow-y: auto;
     transition: 0.5s;
     z-index: 9998;
-    user-select: none;
-    margin-top: 10px;
-    left: 0; /* 좌측 정렬 */
+    left: 0;
 }
+
+#newMenuSidebar {
+    width: 350px;
+    background-color: #ffffff;
+    color: black;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    transition: 0.5s;
+    z-index: 9999;
+    left: 0px; /* 초기 상태로 숨기기 */
+}
+
+#newMenuSidebar h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+ 
+ 
 
 .toggle-btn {
     position: fixed; /* fixed로 설정하여 항상 보이도록 함 */
     top: 50%;
-    left: calc(300px + 41px); /* 사이드바 폭(300px) + 여유(41px) */
+    left: calc(350px + 10px); /* 사이드바 폭(350px) + 여유(10px) */
     transform: translateY(-50%);
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 0 5px 5px 0;
     padding: 10px;
     cursor: pointer;
-    z-index: 9999; /* .sidebar보다 한 단계 위 */
+    z-index: 10000; /* .sidebar보다 한 단계 위 */
 }
 
-
-.btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-    transition: background-color 0.3s;
-    margin-right: 5px;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-.btn:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.btn-reset {
-    background-color: #dc3545;
-    margin-left:10px;
-}
-
-.btn-reset:hover {
-    background-color: #c82333;
-}
-
-.btn-reset:focus {
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
-}
-
-
-/* 모던 모바일 스타일 시작 */
-
-/* Input 스타일 */
-.form-control {
-    width: 100%;
-    padding: 12px 15px;
-    margin: 10px 0;
-    display: inline-block;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #f9f9f9;
-}
-
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
-    outline: none;
-}
-
-/* Button 스타일 */
-/* 버튼 간격 조정 */
-.btn {
-    background-color: #007bff;
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px 5px; /* 좌우 간격 추가 */
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.btn-reset {
-    background-color: #dc3545;
-}
-
-.btn-reset:hover {
-    background-color: #c82333;
-}
-
-.btn-reset:focus {
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-.btn:focus {
-    outline: none;
-    box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
-}
-
-/* Select 스타일 */
-select.form-control {
-    width: 100%;
-    padding: 12px 15px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    background-color: #f9f9f9;
-    appearance: none; /* Removes default arrow in some browsers */
-    -webkit-appearance: none; /* Safari and Chrome */
-    -moz-appearance: none; /* Firefox */
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 16px 16px;
-}
-
-select.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px 0 rgba(0, 123, 255, 0.2);
-    outline: none;
-}
-
-/* 모던 모바일 스타일 끝 */
- 
-/* 꼭지점 스타일 */
-.vertex {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: auto;
-}
-
-/* 꼭지점에 마우스 오버 시 스타일 */
-.vertex-hover {
-    width: 15px;
-    height: 15px;
-    background-color: blue;
-    border: 2px solid white;
-}
-
-/* 중간 아이콘 스타일 */
-.midpoint {
-    width: 10px;
-    height: 10px;
-    background-color: green;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: auto;
-}
-
-/* 중간 아이콘에 마우스 오버 시 스타일 */
-.midpoint-hover {
-    width: 15px;
-    height: 15px;
-    background-color: orange;
-    border: 2px solid white;
-}
-
-.custom-vertex-icon {
-    background-color: green; /* 기본 색상 */
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    border: 2px solid white;
-}
-
-.custom-vertex-icon-hover {
-    background-color: red; /* 마우스 오버 시 색상 */
-}
-
-.custom-middle-icon-hover {
-    background-color: yellow; /* 마우스 오버 시 색상 */
-}
-
-.leaflet-top.leaflet-right {
-    top: 60px; /* 원하는 상단 여백 */
-    right: 30px; /* 원하는 오른쪽 여백 */
-}
-
-.custom-zoom-control {
-    position: absolute !important;
-    bottom: 50px; /* 원하는 위치로 조정 */
-    right: 20px; /* 원하는 위치로 조정 */
-    z-index: 1000; /* 다른 컨트롤과 겹치지 않도록 */
-}
-
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
-    width: 52px; /* 2배로 키움 */
-    height: 52px; /* 2배로 키움 */
-    line-height: 52px; /* 2배로 키움 */
-    font-size: 30px; /* 텍스트 크기 조정 */
-}
-
-.zoom-button {
-    width: 52px; /* 2배로 키움 */
-    height: 52px; /* 2배로 키움 */
-    line-height: 52px; /* 2배로 키움 */
-    font-size: 30px; /* 텍스트 크기 조정 */
-}
-
-/* styles.css 파일에 추가 */
-.center-marker-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999; /* 맨 위에 표시 */
-    pointer-events: none; /* 마우스 이벤트 무시 */
-}
-
-.center-marker {
-    width: 208px; /* 4배 크게 */
-    height: 160px; /* 4배 크게 */
-    border: 6px solid rgba(255, 255, 255, 0.8); /* 하얀색 테두리 */
-    border-radius: 12px; /* 둥근 모서리 */
-    background-color: transparent; /* 투명 배경 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.inner-marker {
-    width: 40px; /* 4배 크게 */
-    height: 40px; /* 4배 크게 */
-    border-radius: 50%;
-    border: 6px solid rgba(255, 255, 255, 0.8); /* 하얀색 테두리 */
-    background-color: rgba(255, 255, 255, 0); /* 투명한 배경 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.inner-marker .transparent-circle {
-    width: 20px; /* 투명한 원의 크기 */
-    height: 20px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0); /* 투명한 배경 */
-    border: 4px solid white; /* 하얀색 테두리 */
-}
-
-.marker-label {
-    margin-top: 10px;
-    background-color: rgba(63, 72, 216, 0.8); /* 파란색 배경에 투명도 추가 */
-    color: white;
-    padding: 10px 10px;
-    border-radius: 5px;
-    pointer-events: auto; /* 마우스 이벤트 허용 */
-    cursor: pointer; /* 커서 포인터로 변경 */
-}
-
-/* 팝업 스타일 */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* 투명도 추가 */
-    z-index: 99000; /* 높게 설정 */
-    display: none; /* 초기 상태 숨김 */
-    justify-content: center;
-    align-items: center;
-}
-
-.popup-content {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    z-index: 1001; /* overlay보다 높게 설정 */
-    max-width: 500px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* "여기에서 프로젝트 만들기" 버튼 스타일 */
-.marker-label {
-    margin-top: 10px;
-    background-color: rgba(63, 72, 216, 0.8); /* 파란색 배경에 투명도 추가 */
-    color: white;
-    padding: 10px 10px;
-    border-radius: 5px;
-    pointer-events: auto; /* 마우스 이벤트 허용 */
-    cursor: pointer; /* 커서 포인터로 변경 */
-    z-index: 999; /* 팝업보다 낮게 설정 */
-}
-
-/* 팝업 내부 스타일 */
-.popup-content h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    color: #333;
-    text-align: center;
-}
-
-.popup-pj-tit {
-    margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #444;
-}
-
-.popup-pj-sub {
-    margin-bottom: 20px;
-}
-
-.popup-pj-sub span {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-.popup-pj-sub input[type="text"],
-.popup-pj-sub select {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.popup-pj-sub input[type="text"]:focus,
-.popup-pj-sub select:focus {
-    border-color: #3F48D8;
-    outline: none;
-}
-
-.popup-pj-sub div {
-    margin-bottom: 10px;
-    font-size: 0.9em;
-    color: #777;
-}
-
-.continue-button {
-    background-color: #3F48D8; /* 파란색 배경에 투명도 추가 */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.continue-button:hover {
-    background-color: #2C358C;
-}
-
-/* CSS for newSidebar */
-#newSidebar {
-    background-color: #fff;
-    padding: 15px;
-    width: 250px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    overflow-y: auto;
-    z-index: 1000;
-    margin-top:50px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
-
-#newSidebar .control-container {
-    display: flex;
-    flex-direction: column;
-}
-
-#newSidebar .section {
-    margin-bottom: 20px;
-}
-
-#newSidebar .header {
-    margin-bottom: 15px;
-}
-
-#newSidebar .title {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#newSidebar .menu-list {
-    list-style: none;
-    padding: 0;
-}
-
-#newSidebar .menu-list li {
-    margin-bottom: 10px;
-}
-
-#newSidebar .menu-button {
-    background-color: #f5f5f5;
+#newMenuSidebar .menu-button {
+    background-color: #f8f9fa;
     color: #333;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 10px;
+    padding: 20px;
     text-align: left;
     width: 100%;
     font-size: 14px;
     cursor: pointer;
+    margin-bottom: 20px;
     transition: background-color 0.3s ease;
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* 텍스트를 왼쪽 정렬 */
+    height: auto;
+    line-height: 1.2;
 }
 
-#newSidebar .menu-button:hover {
+
+#newMenuSidebar .menu-button i {
+    margin-right: 30px; /* 아이콘과 텍스트 사이 간격 증가 */
+}
+
+
+#newMenuSidebar .menu-button:hover {
     background-color: #e9e9e9;
 }
 
-#newSidebar .menu-button span {
-    display: block;
-    font-size: 12px;
-    color: #666;
+#newMenuSidebar .menu-button img {
+    vertical-align: middle;
+    margin-right: 10px;
 }
 
-        .search-container {
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            flex-direction: row; /* 수정된 부분: 행 방향으로 정렬 */
-            align-items: center;
-        }
+#newMenuSidebar .menu-button div {
+    display: flex;
+    flex-direction: column; /* 텍스트를 수직 정렬 */
+}
 
-        .search-container input {
-            padding: 15px;
-            font-size: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 400px; /* 입력창 넓이 조정 */
-            margin-right: 10px; /* 버튼과 간격 추가 */
-        }
+#newMenuSidebar .subtitle {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px; /* 제목과 부제목 사이 간격 */
+}
 
-        .search-container button {
-            padding: 15px 20px;
-            font-size: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #fff;
-            cursor: pointer;
-        }
+#newMenuSidebar hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 20px 0; /* 간격을 더 늘림 */
+}
+
+.center-move-icon {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    border: 2px solid blue;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-move-icon-inner {
+    background-image: url('/path/to/your/image.png'); /* 여기에 이미지를 경로를 넣으세요 */
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+}
