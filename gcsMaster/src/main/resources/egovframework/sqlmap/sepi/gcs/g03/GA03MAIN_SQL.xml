@@ -232,24 +232,27 @@
 	<select id="GA03MAIN.selectWaypointList"
 		parameterClass="GA03MAINVO" resultMap="PathWaypointList">
 			<![CDATA[
-					SELECT 
-					   a.dl_pk
-					   ,a.dl_name
-					   ,a.dl_div
-					   ,a.dl_addr
-					   ,a.dl_user_id
-					   ,a.dl_home_x
-					   ,a.dl_home_y
-					   ,a.dl_waypoint
-					   ,a.dl_waypoint_detail
-					   ,a.dl_create_time
-					 FROM br_drone_waypoints a
+					 SELECT 
+					       bdp.dl_pk
+					     , bdp.dl_name
+					     , bdp.dl_div
+					     , bdp.dl_addr
+					     , bdp.dl_user_id
+					     , bdp.dl_home_x
+					     , bdp.dl_home_y
+					     , bdw.dl_waypoint
+					     , bdw.dl_waypoint_detail 
+					     , bdw.dl_create_time 
+					     , bdw.dl_modify_time
+					 FROM br_drone_project bdp
+					   LEFT JOIN br_drone_waypoints bdw
+					   ON bdp.dl_pk = bdw.dl_project_dl_pk
 					]]>
 		<isNotEmpty property="dlUserId">
-			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+			where bdw.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
 		</isNotEmpty> 
-				<![CDATA[
-			 		ORDER BY a.dl_create_time desc 
+				<![CDATA[ 
+			 		ORDER BY bdp.dl_modify_time desc 
 			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
 				]]>
 	</select>
@@ -259,11 +262,13 @@
 		<![CDATA[      
 		SELECT     
         	COUNT(*)
-	    FROM
-			br_drone_waypoints a
+ 
+					 FROM br_drone_project bdp
+					   LEFT JOIN br_drone_waypoints bdw
+					   ON bdp.dl_pk = bdw.dl_project_dl_pk
 		]]>
 		<isNotEmpty property="dlUserId">
-			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+			where bdw.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
 		</isNotEmpty>
 	</select>
 
@@ -315,24 +320,27 @@
 	<select id="GA03MAIN.selectWaypointList2"
 		parameterClass="GA03MAINVO" resultMap="PathWaypointList">
 			<![CDATA[
-					SELECT 
-					   a.dl_pk
-					   ,a.dl_name
-					   ,a.dl_div
-					   ,a.dl_addr
-					   ,a.dl_user_id
-					   ,a.dl_home_x
-					   ,a.dl_home_y
-					   ,a.dl_waypoint
-					   ,a.dl_waypoint_detail
-					   ,a.dl_create_time
-					 FROM br_drone_waypoints2 a
+					 SELECT 
+					       bdp.dl_pk
+					     , bdp.dl_name
+					     , bdp.dl_div
+					     , bdp.dl_addr
+					     , bdp.dl_user_id
+					     , bdp.dl_home_x
+					     , bdp.dl_home_y
+					     , bdw.dl_waypoint
+					     , bdw.dl_waypoint_detail
+					     , bdw.dl_modify_time 
+					     , bdw.dl_create_time 
+					 FROM br_drone_project bdp
+					   LEFT JOIN br_drone_waypoints2 bdw
+					   ON bdp.dl_pk = bdw.dl_project_dl_pk
 					]]>
 		<isNotEmpty property="dlUserId">
-			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+			where bdp.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
 		</isNotEmpty> 
 				<![CDATA[
-			 		ORDER BY a.dl_create_time desc 
+			 		ORDER BY bdp.dl_modify_time desc 
 			 		LIMIT #recordCountPerPage# OFFSET #firstIndex#
 				]]>
 
@@ -341,13 +349,14 @@
 	<select id="GA03MAIN.selectWaypointListCnt2"
 		parameterClass="GA03MAINVO" resultClass="int">
 		<![CDATA[      
-		SELECT     
-        	COUNT(*)
-	    FROM
-			br_drone_waypoints2 a
+					SELECT     
+			        	COUNT(*) 
+					 FROM br_drone_project bdp
+					   LEFT JOIN br_drone_waypoints2 bdw
+					   ON bdp.dl_pk = bdw.dl_project_dl_pk
 		]]>
 		<isNotEmpty property="dlUserId">
-			where a.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
+			where bdp.dl_user_id LIKE CONCAT('%',#dlUserId#,'%')
 		</isNotEmpty>
 	</select>
 

@@ -362,7 +362,7 @@ public class GA01MAINController {
 		int resultCnt = 0; 
 		try {
 			
-			list = gA03MAINService.selectWaypointList(vo);
+			list = gA03MAINService.selectWaypointList(vo); 
 			resultCnt = gA03MAINService.selectWaypointListCnt(vo);
 			
 			paginationInfo.setTotalRecordCount(resultCnt);

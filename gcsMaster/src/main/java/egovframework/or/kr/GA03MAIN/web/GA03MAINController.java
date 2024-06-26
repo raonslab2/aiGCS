@@ -575,11 +575,10 @@ public class GA03MAINController {
 	    String polyCenterLat =  String.valueOf(map.get("polyCenterLat"));
 	    String polyCenterLng = String.valueOf(map.get("polyCenterLng"));
 
-	    LOGGER.debug("waypointsDetail : {}", waypointsDetail);
-	    LOGGER.debug("gA03Main2Waypoint : {}", tmData);
+ 
 
 	    JSONObject jObject = new JSONObject(tmData);
-	    LOGGER.debug("gA03Main2Waypoint : {}", jObject.get("creationTime"));
+ 
 	    waypointsDetail = jObject.get("missionDetail").toString();
 	    // home
 	    JSONObject home = new JSONObject(jObject.getStr("home"));
