@@ -986,12 +986,13 @@
         });
 
         // 두 타일셋이 로드된 후 카메라 초기 위치 설정
+/*
         Promise.all([tileset1.readyPromise, tileset2.readyPromise]).then(() => {
             viewer.zoomTo(tileset1);
         }).otherwise(function (error) {
             console.error(error);
         });
-
+*/
 
 //드론 시뮬레이션
 function dronePathSetting (waypointsJson,droneName) {  

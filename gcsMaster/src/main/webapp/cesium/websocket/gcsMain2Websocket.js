@@ -233,6 +233,7 @@ function droneWaypointSend2(dlName,dlPk,waypoints){
 
 
 function droneWaypointDownLoad(dlName){
+	alert(11);
 	 
       console.log("droneWaypointDownLoad::"+droneWaypointDownLoad);
 	
@@ -285,11 +286,15 @@ function fn_dronePathAction(obj, pk,str ) {
 
 var initList = function(pk,droneName,str) {
 	var tmUrl = "";
+ 
 	if(str=="1"){
+		//MC 업로드
 		tmUrl = "/gcs/dashboard/gA01MainPath2.do";
 	}else if(str=="2"){
+		//비행 FC
 		tmUrl = "/gcs/dashboard/gA01MainPath.do";
 	}else if(str=="3"){
+		//시뮬레이션
 		tmUrl = "/gcs/dashboard/gA01MainPath.do";
 	}
   
@@ -299,7 +304,7 @@ var initList = function(pk,droneName,str) {
 	        dataType : 'json',
 	        data :{dlPk:pk},
 	        success : function(result) {
-	        	if(result.result == 'success'){   
+	        	if(result.result == 'success'){    
 					$('#path_1001').val(result.waypoints); 
 					if(str== "3"){ 
 						//alert("simulation start");

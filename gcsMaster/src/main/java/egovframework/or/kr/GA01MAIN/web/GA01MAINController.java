@@ -243,9 +243,9 @@ public class GA01MAINController {
 		
 		//접속 사용자
 		LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
-		
+	    String user_id = user.getMbCode();
 		ModelAndView mav = new ModelAndView("jsonView");		
- 
+  
 		
 		String dlPk = gA03MAINVO.getDlPk();		 
 		LOGGER.debug("gA03Main2 : {}", dlPk);
@@ -254,12 +254,18 @@ public class GA01MAINController {
 		String strWayPoint = "";
 		String dlWaypointDetail = "";
 		if(dlPk !=null && !dlPk.equals("")) {
-			//파라미터 수신데이터
-			GA03MAINVO vo = new GA03MAINVO(); 
-			vo.setDlPk(dlPk);
-			waypoints = gA03MAINService.selectWaypoint(vo);  
-			strWayPoint = waypoints.getDlWaypoint(); 
-			dlWaypointDetail = waypoints.getDlWaypointDetail();
+			try {
+				//파라미터 수신데이터
+				GA03MAINVO vo = new GA03MAINVO(); 
+				vo.setDlPk(dlPk);
+				vo.setDlUserId(user_id);
+				waypoints = gA03MAINService.selectWaypoint(vo);  
+				strWayPoint = waypoints.getDlWaypoint();  
+				dlWaypointDetail = waypoints.getDlWaypointDetail();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		}
  
 		
@@ -299,12 +305,19 @@ public class GA01MAINController {
 		String strWayPoint = "";
 		String dlWaypointDetail = "";
 		if(dlPk !=null && !dlPk.equals("")) {
-			//파라미터 수신데이터
-			GA03MAINVO vo = new GA03MAINVO(); 
-			vo.setDlPk(dlPk);
-			waypoints = gA03MAINService.selectWaypoint2(vo); 
-			strWayPoint = waypoints.getDlWaypoint(); 
-			dlWaypointDetail = waypoints.getDlWaypointDetail();
+			try {
+				
+				//파라미터 수신데이터
+				GA03MAINVO vo = new GA03MAINVO(); 
+				vo.setDlPk(dlPk);
+				waypoints = gA03MAINService.selectWaypoint2(vo); 
+				strWayPoint = waypoints.getDlWaypoint(); 
+				dlWaypointDetail = waypoints.getDlWaypointDetail();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
 		}
  
 		
@@ -652,6 +665,9 @@ public class GA01MAINController {
     		return "main/login/empilogin";
     	}
     	
+ 
+	    String user_id = user.getMbCode();
+    	
 		String dlPk = gA03MAINVO.getDlPk();   
 		LOGGER.debug("gA03Main2 : {}", dlPk);
 		
@@ -662,6 +678,7 @@ public class GA01MAINController {
 			//파라미터 수신데이터
 			GA03MAINVO vo = new GA03MAINVO();
 			vo.setDlPk(dlPk);
+			vo.setDlUserId(user_id);
 			waypoints = gA03MAINService.selectWaypoint(vo);
 			strWayPoint = waypoints.getDlWaypoint(); 
 		}

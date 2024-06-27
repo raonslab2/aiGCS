@@ -207,24 +207,46 @@
 					  and a.dl_pk = #dlPk# 
 			 ]]>
 	</select>
+	
+	
+	<resultMap id="selectWaypoint2Info"
+		class="egovframework.or.kr.GA03MAIN.service.GA03MAINVO">
+		<result property="dlPk" column="dl_pk" columnIndex="1" />
+		<result property="dlName" column="dl_name" columnIndex="2" />
+		<result property="dlDiv" column="dl_div" columnIndex="3" />
+		<result property="dlAddr" column="dl_addr" columnIndex="4" />
+		<result property="dlUserId" column="dl_user_id" columnIndex="5" />
+		<result property="dlHomeX" column="dl_home_x" columnIndex="6" />
+		<result property="dlHomeY" column="dl_home_y" columnIndex="7" />
+		<result property="dlWaypoint" column="dl_waypoint"
+			columnIndex="8" />
+		<result property="dlWaypointDetail" column="dl_waypoint_detail"
+			columnIndex="9" />
+		<result property="dlCreateTime" column="dl_create_time"
+			columnIndex="10" />
+		<result property="dlModifyTime" column="dl_modify_time"
+			columnIndex="10" />
+	</resultMap>
 
 	<select id="GA03MAIN.selectWaypoint2"
-		parameterClass="GA03MAINVO" resultMap="PathWaypointList">
+		parameterClass="GA03MAINVO" resultMap="selectWaypoint2Info">
 			<![CDATA[
-					SELECT 
-					   a.dl_pk
-					   ,a.dl_name
-					   ,a.dl_div
-					   ,a.dl_addr
-					   ,a.dl_user_id
-					   ,a.dl_home_x
-					   ,a.dl_home_y
-					   ,a.dl_waypoint
-					   ,a.dl_waypoint_detail
-					   ,a.dl_create_time
-					 FROM br_drone_waypoints2 a
-			      WHERE
-				     dl_pk = #dlPk#
+					 SELECT 
+					       bdp.dl_pk
+					     , bdp.dl_name
+					     , bdp.dl_div
+					     , bdp.dl_addr
+					     , bdp.dl_user_id
+					     , bdp.dl_home_x
+					     , bdp.dl_home_y
+					     , bdw.dl_waypoint
+					     , bdw.dl_waypoint_detail
+					     , bdw.dl_modify_time 
+					     , bdw.dl_create_time 
+					 FROM br_drone_project bdp
+					   LEFT JOIN br_drone_waypoints bdw
+					   ON bdp.dl_pk = bdw.dl_project_dl_pk
+			      WHERE bdp.dl_pk = #dlPk#
 			 ]]>
 	</select>
 

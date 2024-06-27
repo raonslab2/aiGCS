@@ -126,7 +126,6 @@
 
 	var smenutop2 = 0;
 	$('.smenutop2').click(function(e) {
- 
 		if (smenutop2 == 0) {
 			$("#smenutop2").attr('src', "/images/iconSim.png");
 			smenutop2 = 1;
@@ -185,8 +184,9 @@
 	    }
 		
 		var result = confirm('Would you like to download drone routes?\n ['+droneName+']');
+ 
 		if (result == false) return false;
-		
+ 
 		droneWaypointDownLoad(droneName);
 	});
 	

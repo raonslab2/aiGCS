@@ -233,7 +233,7 @@ function droneWaypointSend2(dlName,dlPk,waypoints){
 
 
 function droneWaypointDownLoad(dlName){
-	 
+ 
       console.log("droneWaypointDownLoad::"+droneWaypointDownLoad);
 	
     let dlPk = "0";
