@@ -186,10 +186,15 @@ $('.toggle-menu').jPushMenu();
   
     <!--Button to Download the Flight Plan-->
     <td>
-        <p5 id="simulatorSt" class="simulatorSt" style="color: #5FDC46;font-size:13px"><a href="#">Simulator Start</a></p5> 
+		<div id="generatedEntitiesList">
+		  <p5 id="smenutop91" class="smenutop91" style="color: #5FDC46;font-size:13px">
+		    <h3></h3>
+		    <ul id="entitiesList"></ul>
+		  </p5> 
+		</div>
     </td>
     <td>
-        <p5 id="simulatorEd" class="simulatorEd" style="color: #5FDC46;font-size:13px"><a href="#">Simulator Stop</a></p5> 
+ 
     </td>
     <td>
         <p5 id="smenutop91" class="smenutop91" style="color: #5FDC46;font-size:13px"><a href="#">Tile01</a></p5> 
@@ -556,7 +561,8 @@ $('.toggle-menu').jPushMenu();
 		       <table width="100%" heiht="30px" style="color: white; padding:5px;margin-top:5px;" > 
 				  <colgroup>
 				    <col width="100px" style="background: #9B3822; " />
-				    <col width="70px"  />
+				    <col width="120px"  />
+				    <col width="120px"  />
 				    <col/>  
 				    <col width="100px"   />
 				    <col width="100px"   />
@@ -568,7 +574,9 @@ $('.toggle-menu').jPushMenu();
 				 <thead>
 				    <tr>
 				      <td class="logopenclose" style="text-align: center;width:50px;"><p5><a style="color:white" href="<c:url value='#'/>">LOG</a></p5></td>
-				      <td style="text-align: center;width:50px;"><p5><a style="color:white" href="<c:url value='#'/>"><img id="checkDroneTogle" src="/images/ToggleOpen.svg"  size="20" /></a></p5></td>
+				      <td style="text-align: center;"><p5>AD <a style="color:white" href="<c:url value='#'/>"><img id="checkDroneTogle" src="/images/ToggleOpen.svg"  size="20" /></a></p5></td>
+				      <td style="text-align: center;"><p5>Multi View <a style="color: white" href="#"><img id="checkMultiView" src="/images/ToggleOpen.svg" size="20" /></a></p5></td>
+				      
 				      <td></td>
 				      
 				     <td style="text-align:center;"> <p5><a style="color:white" href="<c:url value='/gcs/dashboard/gcsMain2.do'/>">GCS RELOAD</a></p5></td> 

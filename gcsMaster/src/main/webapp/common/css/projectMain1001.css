@@ -233,13 +233,14 @@
 .view-switch-buttons .toggle-button {
     width: 30px; /* 버튼의 크기를 이미지 크기에 맞게 조정 */
     height: 30px;
-    background-color: transparent;
+    background-color: transparent !important; /* 배경색을 투명하게 설정 */
     border: none;
     cursor: pointer;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
 }
+
 
 .view-switch-buttons .toggle-button.list-view {
     background-image: url('/images/iconL.png'); /* 리스트 뷰 이미지 경로 */

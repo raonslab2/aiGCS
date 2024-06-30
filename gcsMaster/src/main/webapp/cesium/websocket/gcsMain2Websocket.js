@@ -285,8 +285,7 @@ function fn_dronePathAction(obj, pk,str ) {
  
 
 var initList = function(pk,droneName,str) {
-	var tmUrl = "";
- 
+	var tmUrl = ""; 
 	if(str=="1"){
 		//MC 업로드
 		tmUrl = "/gcs/dashboard/gA01MainPath2.do";
@@ -303,16 +302,18 @@ var initList = function(pk,droneName,str) {
 	        url : tmUrl, 
 	        dataType : 'json',
 	        data :{dlPk:pk},
-	        success : function(result) {
+	        success : function(result) { 
+                 // result.waypoints.dlDiv ==> 1(폴리곤), 2(회랑), 3(파사드 - 원형), 4(파사드 - 측면)
 	        	if(result.result == 'success'){    
 					$('#path_1001').val(result.waypoints); 
 					if(str== "3"){ 
 						//alert("simulation start");
 						// 시뮬레이션
-						dronePathSetting(result.waypoints,droneName,result.dlWaypointDetail);  
+						dronePathSetting(result.waypoints,pk,result.waypoints.dlDiv);  
 					}else if(str== "2"){ 
-						//경로 FC 업로드
-						dronePathWaypoint(result.waypoints,pk,result.dlWaypointDetail);  
+						//경로 FC 업로드 
+                        selectdrone(pk, droneName);
+						dronePathWaypoint(result.waypoints,pk,result.waypoints.dlDiv);  
 					}else if(str== "1"){ 
 						//경로 MC 업로드
 						dronePathWaypoint2(result.waypoints,pk,result.dlWaypointDetail);  

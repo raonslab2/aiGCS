@@ -508,6 +508,14 @@ $(document).on('click', '#checkDroneTogle', function() {
 	   
 });
 
+$(document).on('click', '#checkMultiView', function() {     
+    if($("#checkMultiView").attr("src") === "/images/ToggleOpen.svg"){
+        $("#checkMultiView").attr("src", "/images/ToggleClose.svg");
+    } else {
+        $("#checkMultiView").attr("src", "/images/ToggleOpen.svg");
+    }
+});
+
 var initListRoute = function(str) { 
 	
      var droneName = $("#topdevie option:selected").val();

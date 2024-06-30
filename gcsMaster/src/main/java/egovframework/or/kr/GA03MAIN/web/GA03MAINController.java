@@ -386,6 +386,14 @@ public class GA03MAINController {
 			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 2차원 파사드 )
 			detailData = "3";
 			returnUrl = "main/GCSMAIN3/projectMain1002_3"; 
+		}else if(waypoints!=null && waypoints.getDlDiv().equals("4")) { 
+			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 2차원 단면 )
+			detailData = "4";
+			returnUrl = "main/GCSMAIN3/projectMain1002_4"; 
+		}else if(waypoints!=null && waypoints.getDlDiv().equals("5")) { 
+			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 오프라인 )
+			detailData = "54";
+			returnUrl = "main/GCSMAIN3/projectMain1002_5"; 
 		}else {
 			//프로젝트가 개설되어 있지 않고, 신규 생성이라면
 			detailData = "-1";

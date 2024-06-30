@@ -185,10 +185,25 @@
         <button id="facadeFlightButton" data-page="3" class="menu-button">
             <i class="fas fa-building fa-2x"></i>
             <div>
-                <div>파사드</div>
-                <div class="subtitle">3D 모델 비행 만들기</div>
+                <div>파사드(원형)</div>
+                <div class="subtitle">3D 원형 만들기</div>
             </div>
         </button>
+        <button id="facadeFlightButton2" data-page="4" class="menu-button">
+            <i class="fas fa-building fa-2x"></i>
+            <div>
+                <div>파사드(단선형)</div>
+                <div class="subtitle">3D 단면 비행 만들기</div>
+            </div>
+        </button>
+        <button id="facadeFlightButton3" data-page="5" class="menu-button">
+            <i class="fas fa-building fa-2x"></i>
+            <div>
+                <div>파사드(단선형)</div>
+                <div class="subtitle">Offline 비행 만들기</div>
+            </div>
+        </button>
+        <hr>
         <button id="corridorMappingButton" data-page="2" class="menu-button">
             <i class="fas fa-road fa-2x"></i>
             <div>

@@ -12,6 +12,7 @@ body {
 	right: 0;
 	left: 0;
 	width: 100%;
+	background-color: black;
 }
 
 .custom-vertex-icon {
@@ -887,3 +888,8 @@ select.form-control:focus {
     width: 24px;
     height: 24px;
 }
+
+.leaflet-overlay-pane img {
+    z-index: 1000 !important;  /* 높은 z-index 값 설정 */
+}
+

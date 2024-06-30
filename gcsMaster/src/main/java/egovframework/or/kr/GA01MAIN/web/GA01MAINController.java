@@ -259,7 +259,7 @@ public class GA01MAINController {
 				GA03MAINVO vo = new GA03MAINVO(); 
 				vo.setDlPk(dlPk);
 				vo.setDlUserId(user_id);
-				waypoints = gA03MAINService.selectWaypoint(vo);  
+				waypoints = gA03MAINService.selectWaypoint(vo);   
 				strWayPoint = waypoints.getDlWaypoint();  
 				dlWaypointDetail = waypoints.getDlWaypointDetail();
 			} catch (Exception e) {
