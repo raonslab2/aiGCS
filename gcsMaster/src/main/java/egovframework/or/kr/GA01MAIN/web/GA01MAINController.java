@@ -220,11 +220,22 @@ public class GA01MAINController {
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
     		return "main/login/empilogin";
-    	}
-    	
-
-		
+    	}  
 		return "main/GCSMAIN/gcsMain2";
+	} 
+	
+	@RequestMapping(value = "/gcs/dashboard/projectMain3001.do")
+	public String projectMain3001(@ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO,HttpServletRequest request, ModelMap model)
+	  throws Exception{
+		 
+		//로그인 객체 선언
+    	LoginVO user = (LoginVO)request.getSession().getAttribute("LoginVO");
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}  
+		return "/main/GCSMAIN3/projectMain3001";
 	} 
 	
 	
@@ -484,6 +495,20 @@ public class GA01MAINController {
     	}
 
 		return "main/GCSMAIN/gA01Main2";
+	}
+	
+	@RequestMapping(value = "/gcs/dashboard/projectMain5001.do")
+	public String projectMain5001(HttpServletRequest request, ModelMap model)
+	  throws Exception{
+		//로그인 객체 선언
+    	LoginVO user = (LoginVO)request.getSession().getAttribute("LoginVO");
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+
+		return "main/GCSMAIN/projectMain5001";
 	}
 	
 	

@@ -85,7 +85,7 @@ function connect() {
 					}
 
 				}
-                console.log(list.DATA_STATE[si]);
+                //console.log(list.DATA_STATE[si]);
 				droneState(
 					       list.DATA_STATE[si].st_x
 				         , list.DATA_STATE[si].st_y
@@ -129,33 +129,75 @@ connect();
 	}
     
     //FC 업로드
-	function selectdrone(dlPk,dlName) {
-		 
-		
-		var result = confirm('Are you sure you want to do this[upload] ?');
- 
-        if(result == false)return false;
- 
-	    $.ajax({
-	        type : 'POST',
-	        url : '/gcs/dashboard/gA03Main3.do', 
-	        dataType : 'json',
-	        data :{dlPk:dlPk,dlName:dlName},
-	        success : function(result) {
-	        	if(result.result == 'success'){
-                    //기체에 경로 전송
-	        		droneWaypointSend(dlName,dlPk,result.waypoints);
-	        		 
-	        		
-	        	}
-	        },
-	        error: function(request, status, error) {
-	             // 에러 출력을 활성화 하려면 아래 주석을 해제한다. 
-              alert("변경 실패하였습니다.");
-	            //console.log(request + "/" + status + "/" + error);
-	        }
-	    }); 
-	}
+function selectdrone(dlPk, dlName) {
+    var result = confirm('Are you sure you want to do this[upload] ?');
+    if (result == false) return false;
+
+    $.ajax({
+        type: 'POST',
+        url: '/gcs/dashboard/gA03Main3.do',
+        dataType: 'json',
+        data: { dlPk: dlPk, dlName: dlName },
+        success: function(result) {
+            if (result.result == 'success') {
+                if (result.waypoints.dlDiv == "3") {
+                    // 파사드 - 원형인 경우
+                    var processedPath = processFacadePath(result.waypoints);
+                    var waypoints = processedPath.positions.map(position => {
+                        return {
+                            "command": "Waypoint",
+                            "coordinate": [position.lat, position.lng, position.height],
+                            "delay": 0,
+                            "elevation": position.height,
+                            "frame": "Home",
+                            "heading": 0,
+                            "radius": 0,
+                            "speed": 3,
+                            "type": "MoveTo",
+                            "version": 1
+                        };
+                    });
+
+                    var newWaypoints = {
+                        actions: waypoints,
+                        defaultFrame: "Home",
+                        creationTime: new Date().toISOString(),
+                        defaultAngle: 0,
+                        defaultAngleOfView: [150, 85],
+                        defaultCameraName: "",
+                        defaultCameraResolution: [1280, 720],
+                        defaultAltitude: result.waypoints.droneAltitude || 33,
+                        defaultDelay: 0,
+                        defaultDistance: 0,
+                        defaultHeading: 0,
+                        defaultOverlap: 0,
+                        defaultRadius: 0,
+                        defaultSpeed: result.waypoints.droneSpeed || 2,
+                        defaultWidth: 0,
+                        home: result.waypoints.home || { coordinate: [37.21045452624767, 127.7454910574804], version: 1 },
+                        name: result.waypoints.name || "원형 - 파사드",
+                        rallys: [],
+                        version: 1,
+                        missionDetail: result.waypoints.missionDetail || [],
+                        polygons: result.waypoints.polygons || [],
+                        gridSize: result.waypoints.gridSize || 5,
+                        maxAltitude: result.waypoints.maxAltitude || 72
+                    };
+
+                    // 기체에 경로 전송
+                    droneWaypointSend(dlName, dlPk, newWaypoints);
+                } else {
+                    // 일반 회랑인 경우
+                    droneWaypointSend(dlName, dlPk, result.waypoints);
+                }
+            }
+        },
+        error: function(request, status, error) {
+            alert("변경 실패하였습니다.");
+        }
+    });
+}
+
 	
     //MC 업로드
 	function selectdrone2(dlPk,dlName) {

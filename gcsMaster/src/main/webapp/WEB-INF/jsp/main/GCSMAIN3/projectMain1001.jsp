@@ -38,6 +38,11 @@
 	                                    <a href="#">조직 프로젝트</a>
 	                                </div>
 	                                <div class="view-switch-buttons"> 
+	                                    <a id="createRouterPolygonPath2" href="#" class="add-plan-link">
+	                                        <button type="button" class="btn_style02 btn_black">
+	                                            새 폴더 <span>▷</span>
+	                                        </button>
+	                                    </a>
 	                                    <a id="createRouterPolygonPath" href="#" class="add-plan-link">
 	                                        <button type="button" class="btn_style02 btn_green">
 	                                            신규생성 <span>▷</span>
@@ -58,6 +63,50 @@
 	                            <input type="hidden" id="page" name="page" value="">
 	                            <input type="hidden" id="pageUnit" name="pageUnit" value="15">
 	                        </form>
+	                        
+	                        <!--  분류(폴더) 리스트/갤러리 -->
+	                        <div class="card-head" style="margin-top: 20px;">
+	                          <div class="table-folder">
+	                              <table class="table">
+	                                    <thead>
+	                                        <tr>
+	                                            <th scope="col" style="width: 5%" onclick="sortTable(0)">폴더명</th>
+	                                            <th scope="col" style="width: 100px">분류명</th>
+	                                            <th scope="col" onclick="sortTable(2)">폴더명</th> 
+	                                            <th scope="col" style="width: 7%">Edit</th>
+	                                            <th scope="col" style="width: 7%">DEL</th>
+	                                            <th scope="col" style="width: 8%" onclick="sortTable(6)">Reg</th>
+	                                        </tr>	                                        
+	                                    </thead>
+	                                    <tbody id="resultListFolder">
+	                                       <tr>
+	                                         <td>분류1</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                       </tr>
+	                                       <tr>
+	                                         <td>분류2</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                       </tr>
+	                                       <tr>
+	                                         <td>분류3</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                         <td>생략</td>
+	                                       </tr>
+	                                    </tbody>
+	                              </table>
+	                          </div>
+	                        </div>
 	
 	                        <div class="card-body" style="margin-top: 20px;">
 	                            <div class="table-responsive">

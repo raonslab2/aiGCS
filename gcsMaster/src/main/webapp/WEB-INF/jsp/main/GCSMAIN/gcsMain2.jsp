@@ -185,14 +185,16 @@ $('.toggle-menu').jPushMenu();
      </td> 
   
     <!--Button to Download the Flight Plan-->
-    <td>
-		<div id="generatedEntitiesList">
-		  <p5 id="smenutop91" class="smenutop91" style="color: #5FDC46;font-size:13px">
-		    <h3></h3>
-		    <ul id="entitiesList"></ul>
-		  </p5> 
-		</div>
-    </td>
+	<td>
+	    최저고도 : <input type="range" id="minAltitudeSlider" min="0" max="100" value="20" />
+	    <span id="minAltitudeValue">20</span> (m)
+	    최고고도 : <input type="range" id="maxAltitudeSlider" min="0" max="100" value="30" />
+	    <span id="maxAltitudeValue">30</span> (m)
+	</td>
+
+
+
+
     <td>
  
     </td>
@@ -720,7 +722,7 @@ function droneArmDisArm(tmNum) {
 	}else{
 		$("#topMenu2").val("DISARM");
 	}
-	console.log("#menu"+tmNum+"1");
+	//console.log("#menu"+tmNum+"1");
     attitude.setRoll($("#menu"+tmNum+"1").val());
     attitude.setPitch($("#menu"+tmNum+"2").val());
  

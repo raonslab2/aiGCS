@@ -69,7 +69,7 @@
 
 <body page-data="menu-status">
      <!-- head menu -->
-    <c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu" /> 
+    <c:import url="/EmpPageLink.do?link=main/include/projectMainHead" />
  
   <main> 
    <!-- top menu -->

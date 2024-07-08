@@ -1,5 +1,5 @@
 //var wsLink = "ws://13.209.238.3:5010/websocket"; 
-var wsLink = "ws://127.0.0.1:5010/websocket";
+var wsLink = "ws://34.47.97.35:5010/websocket";
 let socket; 
    $(document).ready(function() {
 	    // data-tab 속성의 값에 따라 메뉴 항목에 selected 클래스를 적용

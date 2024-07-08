@@ -50,7 +50,7 @@
 
 
 <!-- head menu -->
-<c:import url="/EmpPageLink.do?link=main/include/droneHeadMenu"/>
+    <c:import url="/EmpPageLink.do?link=main/include/projectMainHead" />
 
 <!-- 기존 좌측 메뉴 -->
 <div id="mySidebar" class="sidebar" ondragstart="return false;" ondrop="return false;" style="display: none;">

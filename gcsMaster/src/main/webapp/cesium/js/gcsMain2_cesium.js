@@ -18,8 +18,6 @@ const DEFAULT_LNG = 37.20821628335832;
 const COOR_PRECIS = 6;
 const OTHER_PRECIS = 1;
 
-
-
 // Cesium 설정
 Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTk5YjE3ZC1iNDk3LTRiNTItOTVhNy04ZTJhNDk4M2MzYzMiLCJpZCI6NzIzMjksImlhdCI6MTYzNTk0Mjg1Mn0.YdISux9sGatQpsMXnVUlxziv-q9XCXpfZ7h9Gxqdaes";
 
@@ -42,171 +40,78 @@ var airPathArray = [];
 var groundPathArray = [];
 var timeNow = new Cesium.JulianDate.now();
 
-const lm_10001 = viewer.entities.add({
-    id: 'lm_10001',
-    position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT, DEFAULT_LNG, 0),
-    model: {
-        uri: '/images/drone_quad.glb',
-        scale: 0.1,
-        minimumPixelSize: 130,
-        maximumScale: 1000000,
-    }
-});
-
-const lm_10002 = viewer.entities.add({
-    id: 'lm_10002',
-    position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.001, DEFAULT_LNG, 0),
-    model: {
-        uri: '/images/drone_quad.glb',
-        scale: 0.1,
-        minimumPixelSize: 130,
-        maximumScale: 1000000,
-    }
-});
-
-const lm_10003 = viewer.entities.add({
-    id: 'lm_10003',
-    position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.002, DEFAULT_LNG, 0),
-    model: {
-        uri: '/images/drone_quad.glb',
-        scale: 0.1,
-        minimumPixelSize: 130,
-        maximumScale: 1000000,
-    }
-});
-
-const lm_10004 = viewer.entities.add({
-    id: 'lm_10004',
-    position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.003, DEFAULT_LNG, 0),
-    model: {
-        uri: '/images/drone_quad.glb',
-        scale: 0.1,
-        minimumPixelSize: 130,
-        maximumScale: 1000000,
-    }
-});
-
-const lm_10005 = viewer.entities.add({
-    id: 'lm_10005',
-    position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.004, DEFAULT_LNG, 0),
-    model: {
-        uri: '/images/drone_quad.glb',
-        scale: 0.1,
-        minimumPixelSize: 130,
-        maximumScale: 1000000,
-    }
-});
+const drones = [
+    viewer.entities.add({
+        id: 'lm_10001',
+        position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT, DEFAULT_LNG, 0),
+        model: { uri: '/images/drone_quad.glb', scale: 0.1, minimumPixelSize: 130, maximumScale: 1000000 }
+    }),
+    viewer.entities.add({
+        id: 'lm_10002',
+        position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.001, DEFAULT_LNG, 0),
+        model: { uri: '/images/drone_quad.glb', scale: 0.1, minimumPixelSize: 130, maximumScale: 1000000 }
+    }),
+    viewer.entities.add({
+        id: 'lm_10003',
+        position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.002, DEFAULT_LNG, 0),
+        model: { uri: '/images/drone_quad.glb', scale: 0.1, minimumPixelSize: 130, maximumScale: 1000000 }
+    }),
+    viewer.entities.add({
+        id: 'lm_10004',
+        position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.003, DEFAULT_LNG, 0),
+        model: { uri: '/images/drone_quad.glb', scale: 0.1, minimumPixelSize: 130, maximumScale: 1000000 }
+    }),
+    viewer.entities.add({
+        id: 'lm_10005',
+        position: Cesium.Cartesian3.fromDegrees(DEFAULT_LAT + 0.004, DEFAULT_LNG, 0),
+        model: { uri: '/images/drone_quad.glb', scale: 0.1, minimumPixelSize: 130, maximumScale: 1000000 }
+    })
+];
 
 function droneState(x, y, z, vDrone, sendTime) {
-    if (typeof count == "undefined" || count == "" || count == null) {
-        var count = 0;
-    }
+    if (x !== undefined && x !== "" && x !== null) {
+        z = Math.max(parseFloat(z) + 2, 2);
+        const position = Cesium.Cartesian3.fromDegrees(y, x, z);
+        const timeString = new Date().toISOString().split("T")[1].split(".")[0];
 
-    if (typeof x == "undefined" || x == "" || x == null) {
-        // Handle undefined or null x coordinate
-    } else {
-        z = parseFloat(z) + 2;
-        if (z < 2) z = 2;
-        var position = Cesium.Cartesian3.fromDegrees(y, x, z);
-        let tmHead;
-        var heading;
-        var pitch;
-        var roll;
+        const logMessage = `${timeString}: [D=>]${vDrone} ${x}/${y}`;
+        $("#dronelog").val(`${logMessage}\n${$("#dronelog").val()}`);
 
-        var tArea = $("#dronelog")[0];
-        var tAreaLine = tArea.value.substr(0, tArea.selectionStart).split("\n").length;
-        if (tAreaLine > 1000) {
-            $("#dronelog").val('');
-        }
+        const drone = viewer.entities.getById(vDrone);
+        const tmHead = parseInt($(`#menu${vDrone.slice(-1)}4`).val());
+        const heading = Cesium.Math.toRadians(tmHead + 90);
 
-        var today = new Date();
-        var hours = ('0' + today.getHours()).slice(-2);
-        var minutes = ('0' + today.getMinutes()).slice(-2);
-        var seconds = ('0' + today.getSeconds()).slice(-2);
-        var milisecond = ('0' + today.getMilliseconds()).slice(-2);
-
-        var timeString = hours + ':' + minutes + ':' + seconds + ':' + milisecond;
-        if (typeof sendTime != "undefined" && sendTime != "" && sendTime != null) {
-            timeString = timeString + " (S):" + sendTime;
-        }
-
-        $("#dronelog").val(timeString + ": [D=>]" + vDrone + " " + x + "/" + y + "\n" + $("#dronelog").val());
-
-        let drone = viewer.entities.getById(vDrone);
-
-        if (vDrone == 'lm_10001') {
-            roll = parseFloat(0);
-            pitch = parseFloat(0);
-            tmHead = parseInt($('#menu14').val());
-            heading = Cesium.Math.toRadians(tmHead + 90);
-        } else if (vDrone == 'lm_10002') {
-            roll = parseFloat(0);
-            pitch = parseFloat(0);
-            tmHead = parseInt($('#menu24').val());
-            heading = Cesium.Math.toRadians(tmHead + 90);
-        } else if (vDrone == 'lm_10003') {
-            roll = parseFloat(0);
-            pitch = parseFloat(0);
-            tmHead = parseInt($('#menu34').val());
-            heading = Cesium.Math.toRadians(tmHead + 90);
-        } else if (vDrone == 'lm_10004') {
-            roll = parseFloat(0);
-            pitch = parseFloat(0);
-            tmHead = parseInt($('#menu44').val());
-            heading = Cesium.Math.toRadians(tmHead + 90);
-        } else if (vDrone == 'lm_10005') {
-            roll = parseFloat(0);
-            pitch = parseFloat(0);
-            tmHead = parseInt($('#menu54').val());
-            heading = Cesium.Math.toRadians(tmHead + 90);
-        }
-
-        var hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
-        var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
-
-        const tm_drone_type = $("#" + vDrone + "_alias2").text();
+        const hpr = new Cesium.HeadingPitchRoll(heading, 0, 0);
+        const orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
 
         drone.position = position;
         drone.orientation = orientation;
 
-        if (tm_drone_type == 'VTOL') {
-            drone.model.uri = "/images/drone_vtol.glb";
-            drone.model.scale = 0.5;
-            drone.model.minimumPixelSize = 120;
-            drone.model.maximumScale = 1000;
-        } else {
-            drone.model.uri = "/images/drone_quad.glb";
-            drone.model.scale = 0.05;
-            drone.model.minimumPixelSize = 120;
-            drone.model.maximumScale = 1000;
-        }
+        const tm_drone_type = $(`#${vDrone}_alias2`).text();
+        drone.model.uri = tm_drone_type === 'VTOL' ? "/images/drone_vtol.glb" : "/images/drone_quad.glb";
+        drone.model.scale = tm_drone_type === 'VTOL' ? 0.5 : 0.05;
+        drone.model.minimumPixelSize = 120;
+        drone.model.maximumScale = 1000;
     }
 }
 
 var droneEntities = [];
 var facadeEntities = [];
 var polygonEntities = [];
-let airplaneEntity22; // 변수 선언을 전역으로 이동
-let isMultiViewChecked = false; // MultiView 체크 여부를 저장할 변수
+let airplaneEntity22;
+let isMultiViewChecked = false;
 
 function removeAllEntities() {
-    if (!isMultiViewChecked) { // MultiView가 체크되지 않은 경우에만 기존 객체 제거
-        if (droneEntities.length > 0) {
-            droneEntities.forEach(entity => viewer.entities.remove(entity));
-            droneEntities = [];
-        }
+    if (!isMultiViewChecked) {
+        droneEntities.forEach(entity => viewer.entities.remove(entity));
+        facadeEntities.forEach(entity => viewer.entities.remove(entity));
+        polygonEntities.forEach(entity => viewer.entities.remove(entity));
 
-        if (facadeEntities.length > 0) {
-            facadeEntities.forEach(entity => viewer.entities.remove(entity));
-            facadeEntities = [];
-        }
+        droneEntities = [];
+        facadeEntities = [];
+        polygonEntities = [];
 
-        if (polygonEntities.length > 0) {
-            polygonEntities.forEach(entity => viewer.entities.remove(entity));
-            polygonEntities = [];
-        }
-
-        if (typeof airplaneEntity22 !== 'undefined') {
+        if (airplaneEntity22) {
             viewer.entities.remove(airplaneEntity22);
             airplaneEntity22 = undefined;
         }
@@ -250,7 +155,6 @@ function drawGridInPolygon(polygonHierarchy, gridSize) {
                     }
                 });
 
-                // 격자 점을 지상과 연결
                 viewer.entities.add({
                     polyline: {
                         positions: [point, groundPoint],
@@ -285,14 +189,12 @@ function isPointInsidePolygon(point, polygonHierarchy) {
     return inside;
 }
 
-
 // 폴리곤 그리기
 function drawPolygon(polygons) {
-    const polygonEntities = polygons.map((point, index) => {
-        const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10); // 10m elevation added
+    const polygonEntities = polygons.map(point => {
+        const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10);
         const groundPosition = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 0);
 
-        // 각 꼭지점을 지상과 연결
         viewer.entities.add({
             polyline: {
                 positions: [position, groundPosition],
@@ -312,11 +214,10 @@ function drawPolygon(polygons) {
         });
     });
 
-    // Add polygon surface
     viewer.entities.add({
         polygon: {
             hierarchy: new Cesium.PolygonHierarchy(
-                polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10)) // 10m elevation added
+                polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10))
             ),
             material: Cesium.Color.GREEN.withAlpha(0.5),
             outline: true,
@@ -324,9 +225,7 @@ function drawPolygon(polygons) {
         },
     });
 
-    // Add polyline connecting polygon vertices
     const polylinePositions = polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10));
-    // Close the loop by adding the first point at the end
     polylinePositions.push(Cesium.Cartesian3.fromDegrees(polygons[0].lng, polygons[0].lat, 10));
 
     viewer.entities.add({
@@ -340,14 +239,13 @@ function drawPolygon(polygons) {
 
     return polygonEntities;
 }
- 
-// 원을 그려서 파사드 생성
-// 원을 그려서 파사드 생성
+
+// 파사드 원형 경로를 그리는 함수 추가
 function drawFacadeCircle(polygons, speed, heightStep, startHeight, maxHeight) {
-    const boundingBox = getBoundingBox(polygons); // 폴리곤의 경계 박스 계산
+    const boundingBox = getBoundingBox(polygons);
     const center = getPolygonCenter(polygons);
-    const radius = getBoundingBoxRadius(boundingBox, center); // 경계 박스 내부에 맞는 반지름 계산
-    const numPoints = 36; // 원 둘레의 점 개수
+    const radius = getBoundingBoxRadius(boundingBox, center);
+    const numPoints = 36;
     let currentHeight = startHeight;
     const points = [];
 
@@ -363,7 +261,6 @@ function drawFacadeCircle(polygons, speed, heightStep, startHeight, maxHeight) {
         const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, point.height);
         pathPositions.push(position);
 
-        // 첫 번째 원의 각 꼭지점에서 지상까지 연결
         if (point.height === startHeight) {
             const groundPosition = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 0);
             viewer.entities.add({
@@ -375,7 +272,6 @@ function drawFacadeCircle(polygons, speed, heightStep, startHeight, maxHeight) {
             });
         }
 
-        // 다음 높이의 점과 연결
         if (i + numPoints < points.length) {
             const nextPoint = points[i + numPoints];
             const nextPosition = Cesium.Cartesian3.fromDegrees(nextPoint.lng, nextPoint.lat, nextPoint.height);
@@ -388,7 +284,6 @@ function drawFacadeCircle(polygons, speed, heightStep, startHeight, maxHeight) {
             });
         }
 
-        // 이전 원과 현재 원의 각 점을 연결
         if (i % numPoints > 0) {
             const prevPosition = Cesium.Cartesian3.fromDegrees(points[i - 1].lng, points[i - 1].lat, points[i - 1].height);
             viewer.entities.add({
@@ -401,7 +296,6 @@ function drawFacadeCircle(polygons, speed, heightStep, startHeight, maxHeight) {
         }
     }
 
-    // 각 원의 마지막 점에서 첫 번째 점으로 연결하지 않음
     for (let i = numPoints; i < points.length; i += numPoints) {
         const firstPointInCurrentLayer = points[i];
         const firstPositionInCurrentLayer = Cesium.Cartesian3.fromDegrees(firstPointInCurrentLayer.lng, firstPointInCurrentLayer.lat, firstPointInCurrentLayer.height);
@@ -419,51 +313,6 @@ function drawFacadeCircle(polygons, speed, heightStep, startHeight, maxHeight) {
     }
 
     return points;
-}
-
-
-// 외곽 사각형 그리기 함수
-// 외곽 사각형을 그리는 drawPolygon 함수
-function drawPolygon(polygons) {
-    const polygonEntities = polygons.map((point, index) => {
-        return viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10), // 10m elevation added
-            point: {
-                pixelSize: 10,
-                color: Cesium.Color.RED,
-                outlineColor: Cesium.Color.BLACK,
-                outlineWidth: 2,
-            },
-        });
-    });
-
-    // Add polygon surface
-    viewer.entities.add({
-        polygon: {
-            hierarchy: new Cesium.PolygonHierarchy(
-                polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10)) // 10m elevation added
-            ),
-            material: Cesium.Color.GREEN.withAlpha(0.5),
-            outline: true,
-            outlineColor: Cesium.Color.WHITE,
-        },
-    });
-
-    // Add polyline connecting polygon vertices
-    const polylinePositions = polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10));
-    // Close the loop by adding the first point at the end
-    polylinePositions.push(Cesium.Cartesian3.fromDegrees(polygons[0].lng, polygons[0].lat, 10));
-
-    viewer.entities.add({
-        polyline: {
-            positions: polylinePositions,
-            width: 3,
-            material: Cesium.Color.GREEN,
-            clampToGround: false,
-        },
-    });
-
-    return polygonEntities;
 }
 
 // 폴리곤 경계 박스 계산
@@ -487,7 +336,7 @@ function getBoundingBox(polygons) {
 function getBoundingBoxRadius(boundingBox, center) {
     const latDiff = boundingBox.maxLat - boundingBox.minLat;
     const lngDiff = boundingBox.maxLng - boundingBox.minLng;
-    return Math.min(latDiff, lngDiff) * 0.5 * 111320; // 경도 및 위도 차이를 미터로 변환
+    return Math.min(latDiff, lngDiff) * 0.5 * 111320;
 }
 
 // 원 둘레의 점 생성
@@ -511,30 +360,38 @@ function getPolygonCenter(polygons) {
         latSum += point.lat;
         lngSum += point.lng;
     });
-    return {
-        lat: latSum / total,
-        lng: lngSum / total
-    };
+    return { lat: latSum / total, lng: lngSum / total };
 }
 
 // 속도 레이블 업데이트
 function updateSpeedLabel(time, result) {
     const droneName = $("#topdevie option:selected").val();
     let tmpData = droneName;
-    if (airplaneEntity22 && airplaneEntity22.position) {
-        var cartographic = Cesium.Cartographic.fromCartesian(airplaneEntity22.position.getValue(viewer.clock.currentTime));
-        var Tmporientation = Cesium.Cartographic.fromCartesian(airplaneEntity22.orientation.getValue(viewer.clock.currentTime));
 
-        $("#d_roll").text(Math.round(Tmporientation.latitude * 100) / 100);
-        $("#d_pitch").text(Math.round(Tmporientation.longitude * 100) / 100);
-        $("#d_yaw").text(Math.round(Tmporientation.height * 100) / 100);
+    if (airplaneEntity22 && airplaneEntity22.position && airplaneEntity22.orientation) {
+        const positionValue = airplaneEntity22.position.getValue(viewer.clock.currentTime);
+        const orientationValue = airplaneEntity22.orientation.getValue(viewer.clock.currentTime);
 
-        var tmHeight = cartographic.height.toString().split(".");
+        if (positionValue && orientationValue) {
+            const cartographic = Cesium.Cartographic.fromCartesian(positionValue);
+            const Tmporientation = Cesium.Cartographic.fromCartesian(orientationValue);
 
-        tmpData += "\n" + Cesium.Math.toDegrees(cartographic.latitude).toString().substring(0, 10) + " , ";
-        tmpData += Cesium.Math.toDegrees(cartographic.longitude).toString().substring(0, 11) + "";
-        tmpData += "\n Height:" + tmHeight[0] + "";
+            $("#d_roll").text(Math.round(Tmporientation.latitude * 100) / 100);
+            $("#d_pitch").text(Math.round(Tmporientation.longitude * 100) / 100);
+            $("#d_yaw").text(Math.round(Tmporientation.height * 100) / 100);
+
+            const tmHeight = cartographic.height.toString().split(".");
+
+            tmpData += "\n" + Cesium.Math.toDegrees(cartographic.latitude).toString().substring(0, 10) + " , ";
+            tmpData += Cesium.Math.toDegrees(cartographic.longitude).toString().substring(0, 11) + "";
+            tmpData += "\n Height:" + tmHeight[0] + "";
+        } else {
+            console.warn("Position or orientation value is undefined.");
+        }
+    } else {
+        console.warn("airplaneEntity22 or its position/orientation is undefined.");
     }
+
     return tmpData;
 }
 
@@ -565,66 +422,9 @@ $('.smenutop444').click(function(e) {
         viewer.entities,
         new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-90))
     );
-}); 
+});
 
-// 외곽 사각형을 그리는 함수
-function drawFacadeBoundary(polygons) {
-    const polygonEntities = polygons.map((point, index) => {
-        const position = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10); // 10m elevation added
-        const groundPosition = Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 0);
-
-        // 각 꼭지점을 지상과 연결
-        viewer.entities.add({
-            polyline: {
-                positions: [position, groundPosition],
-                width: 2,
-                material: Cesium.Color.CYAN
-            }
-        });
-
-        return viewer.entities.add({
-            position: position,
-            point: {
-                pixelSize: 10,
-                color: Cesium.Color.RED,
-                outlineColor: Cesium.Color.BLACK,
-                outlineWidth: 2,
-            },
-        });
-    });
-
-    // Add polygon surface
-    viewer.entities.add({
-        polygon: {
-            hierarchy: new Cesium.PolygonHierarchy(
-                polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10)) // 10m elevation added
-            ),
-            material: Cesium.Color.GREEN.withAlpha(0.5),
-            outline: true,
-            outlineColor: Cesium.Color.WHITE,
-        },
-    });
-
-    // Add polyline connecting polygon vertices
-    const polylinePositions = polygons.map(point => Cesium.Cartesian3.fromDegrees(point.lng, point.lat, 10));
-    // Close the loop by adding the first point at the end
-    polylinePositions.push(Cesium.Cartesian3.fromDegrees(polygons[0].lng, polygons[0].lat, 10));
-
-    viewer.entities.add({
-        polyline: {
-            positions: polylinePositions,
-            width: 3,
-            material: Cesium.Color.GREEN,
-            clampToGround: false,
-        },
-    });
-
-    return polygonEntities;
-}
-
-
-// 공통 경로 처리 함수 
-// 공통 경로 처리 함수
+// 기본 경로를 처리하는 함수 
 function processPathPositions(flightData) {
     const positions = [];
     const positionProperty = new Cesium.SampledPositionProperty();
@@ -637,14 +437,13 @@ function processPathPositions(flightData) {
         if (i > 0) {
             const prevPosition = positions[i - 1];
             const distance = Cesium.Cartesian3.distance(prevPosition, position);
-            const speed = dataPoint.speed || 3; // Default speed if not provided
+            const speed = dataPoint.speed || 3;
             const timeInSeconds = distance / speed;
             currentTime = Cesium.JulianDate.addSeconds(currentTime, timeInSeconds, new Cesium.JulianDate());
         }
 
         positionProperty.addSample(currentTime, position);
 
-        // 각 꼭지점을 지상과 연결
         const groundPosition = Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], 0);
         viewer.entities.add({
             polyline: {
@@ -658,17 +457,16 @@ function processPathPositions(flightData) {
     return { positionProperty, positions, currentTime };
 }
 
-
-// 파사드 경로 처리 함수
+// 2차원 파사드 경로를 처리하는 함수
 function processFacadePath(flightData) {
     const positions = [];
     const positionProperty = new Cesium.SampledPositionProperty();
     let currentTime = Cesium.JulianDate.fromIso8601(flightData.creationTime);
-    const start = currentTime.clone(); // Add this line
+    const start = currentTime.clone();
 
-    const startHeight = 20; // 시작 높이
-    const maxHeight = 80; // 최대 높이
-    const heightStep = 7; // 높이 간격
+    const startHeight = flightData.droneAltitude || 20;
+    const maxHeight = flightData.maxAltitude || 80;
+    const heightStep = 7;
     const points = drawFacadeCircle(flightData.polygons, flightData.droneSpeed, heightStep, startHeight, maxHeight);
 
     if (points.length > 0) {
@@ -679,7 +477,7 @@ function processFacadePath(flightData) {
             if (i > 0) {
                 const prevPosition = positions[i - 1];
                 const distance = Cesium.Cartesian3.distance(prevPosition, position);
-                const speed = flightData.droneSpeed || 3; // Default speed if not provided
+                const speed = flightData.droneSpeed || 3;
                 const timeInSeconds = distance / speed;
                 currentTime = Cesium.JulianDate.addSeconds(currentTime, timeInSeconds, new Cesium.JulianDate());
             }
@@ -691,23 +489,44 @@ function processFacadePath(flightData) {
     return { positionProperty, positions, currentTime, start };
 }
 
-
-// 일반 경로 처리 함수
+// 2차원 폴리곤 경로를 처리하는 함수
 function processPolygonPath(flightData) {
-    const positions = [];
-    const polygonHierarchy = { positions: positions };
-    const gridSize = 0.001;
-    drawGridInPolygon(polygonHierarchy, gridSize);
+    drawPolygon(flightData.polygons);
 
-    return positions;
+    const positionProperty = new Cesium.SampledPositionProperty();
+    const positions = [];
+    let currentTime = Cesium.JulianDate.fromIso8601(flightData.creationTime);
+
+    flightData.actions.forEach((dataPoint, i) => {
+        if (dataPoint.coordinate && dataPoint.coordinate.length >= 2) {
+            const position = Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], dataPoint.elevation);
+            positions.push(position);
+
+            if (i > 0) {
+                const prevPosition = positions[i - 1];
+                const distance = Cesium.Cartesian3.distance(prevPosition, position);
+                const speed = dataPoint.speed || 3;
+                const timeInSeconds = distance / speed;
+                currentTime = Cesium.JulianDate.addSeconds(currentTime, timeInSeconds, new Cesium.JulianDate());
+            }
+
+            positionProperty.addSample(currentTime, position);
+        } else {
+            console.error(`Invalid coordinate data at index ${i}`, dataPoint);
+        }
+    });
+
+    return { positionProperty, positions, currentTime, start: Cesium.JulianDate.fromIso8601(flightData.creationTime) };
 }
 
 // 시뮬레이션 경로 설정 함수
 function setupSimulation(viewer, positionProperty, start, currentTime) {
-    viewer.clock.startTime = start.clone();
+    const safeStart = start ? start.clone() : Cesium.JulianDate.fromDate(new Date());
+
+    viewer.clock.startTime = safeStart;
     viewer.clock.stopTime = currentTime.clone();
-    viewer.clock.currentTime = start.clone();
-    viewer.timeline.zoomTo(start, currentTime);
+    viewer.clock.currentTime = safeStart;
+    viewer.timeline.zoomTo(safeStart, currentTime);
     viewer.clock.multiplier = 1;
     viewer.clock.shouldAnimate = true;
 
@@ -716,7 +535,7 @@ function setupSimulation(viewer, positionProperty, start, currentTime) {
     const tm_minsize = 130;
 
     airplaneEntity22 = viewer.entities.add({
-        availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({ start: start, stop: currentTime })]),
+        availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({ start: safeStart, stop: currentTime })]),
         position: positionProperty,
         model: {
             uri: tm_model,
@@ -744,74 +563,113 @@ function setupSimulation(viewer, positionProperty, start, currentTime) {
     viewer.trackedEntity = airplaneEntity22;
 }
 
-// 드론 경로 처리 함수 
-function processDronePath(flightData, dlDiv) {
-    if (dlDiv == 3 && flightData.polygons) {
-        return processFacadePath(flightData);
-    } else if (dlDiv == 1 && flightData.polygons) {
-        drawPolygon(flightData.polygons);
-        const positionProperty = new Cesium.SampledPositionProperty();
-        const positions = [];
-        let currentTime = Cesium.JulianDate.fromIso8601(flightData.creationTime);
 
-        flightData.actions.forEach((dataPoint, i) => {
+// 메인 경로 처리 함수 수정
+function processDronePath(flightData, dlDiv) {
+    // dlDiv가 1일 때, 2차원 폴리곤 경로를 처리합니다.
+    if (dlDiv == 1 && flightData.polygons) {
+        return processPolygonPath(flightData);
+    }
+    // dlDiv가 2일 때, 3차원 회랑 경로를 처리합니다.
+    else if (dlDiv == 2 && flightData.actions) {
+        return processLongCorridorPath(flightData);
+    }
+    // dlDiv가 3일 때, 2차원 파사드 경로를 처리합니다.
+    else if (dlDiv == 3 && flightData.actions) {
+        return processFacadePath(flightData);
+    }
+    // dlDiv가 4일 때, 2차원 단선형 경로를 처리합니다.
+    else if (dlDiv == 4 && flightData.actions) {
+        return processSingleLinePath(flightData);
+    }
+    // dlDiv가 5일 때, 오프라인 경로를 처리합니다.
+    else if (dlDiv == 5 && flightData.actions) {
+        return processOfflinePath(flightData);
+    }
+    // 기본 처리 경로
+    else {
+        return processPathPositions(flightData);
+    }
+}
+
+// 오프라인 경로를 처리하는 함수
+function processOfflinePath(flightData) {
+    const positionProperty = new Cesium.SampledPositionProperty();
+    const positions = [];
+    let currentTime = Cesium.JulianDate.fromIso8601(flightData.creationTime);
+    const start = currentTime.clone();
+
+    flightData.actions.forEach((dataPoint, i) => {
+        if (dataPoint.command === "Waypoint" && dataPoint.coordinate && dataPoint.coordinate.length >= 2) {
             const position = Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], dataPoint.elevation);
             positions.push(position);
 
             if (i > 0) {
                 const prevPosition = positions[i - 1];
                 const distance = Cesium.Cartesian3.distance(prevPosition, position);
-                const speed = dataPoint.speed || 3; // Default speed if not provided
+                const speed = dataPoint.speed || 3;
                 const timeInSeconds = distance / speed;
                 currentTime = Cesium.JulianDate.addSeconds(currentTime, timeInSeconds, new Cesium.JulianDate());
             }
 
             positionProperty.addSample(currentTime, position);
-        });
+        } else {
+            console.error(`Invalid coordinate data or non-Waypoint command at index ${i}`, dataPoint);
+        }
+    });
 
-        return { positionProperty, positions, currentTime, start: Cesium.JulianDate.fromIso8601(flightData.creationTime) };
-    } else {
-        return processPathPositions(flightData);
-    }
+    return { positionProperty, positions, currentTime, start };
 }
 
+// 3차원 회랑 경로를 처리하는 함수
+function processLongCorridorPath(flightData) {
+    const positionProperty = new Cesium.SampledPositionProperty();
+    const positions = [];
+    let currentTime = Cesium.JulianDate.fromIso8601(flightData.creationTime);
+    const start = currentTime.clone();
 
+    flightData.actions.forEach((dataPoint, i) => {
+        if (dataPoint.command === "Waypoint" && dataPoint.coordinate && dataPoint.coordinate.length >= 2) {
+            const position = Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], dataPoint.elevation);
+            positions.push(position);
 
+            if (i > 0) {
+                const prevPosition = positions[i - 1];
+                const distance = Cesium.Cartesian3.distance(prevPosition, position);
+                const speed = dataPoint.speed || 3;
+                const timeInSeconds = distance / speed;
+                currentTime = Cesium.JulianDate.addSeconds(currentTime, timeInSeconds, new Cesium.JulianDate());
+            }
+
+            positionProperty.addSample(currentTime, position);
+        } else {
+            console.error(`Invalid coordinate data or non-Waypoint command at index ${i}`, dataPoint);
+        }
+    });
+
+    return { positionProperty, positions, currentTime, start };
+}
 
 // 드론 FC 업로드 
 function dronePathWaypoint(waypointsJson, pk, dlDiv) {
-    // Remove previous entities if checkMultiView is not checked
     if (!$("#checkMultiView").attr("src").includes("ToggleOpen")) {
-        if (droneEntities.length > 0) {
-            droneEntities.forEach(entity => viewer.entities.remove(entity));
-            droneEntities = [];
-        }
+        droneEntities.forEach(entity => viewer.entities.remove(entity));
+        facadeEntities.forEach(entity => viewer.entities.remove(entity));
+        polygonEntities.forEach(entity => viewer.entities.remove(entity));
 
-        if (facadeEntities.length > 0) {
-            facadeEntities.forEach(entity => viewer.entities.remove(entity));
-            facadeEntities = [];
-        }
-
-        if (polygonEntities.length > 0) {
-            polygonEntities.forEach(entity => viewer.entities.remove(entity));
-            polygonEntities = [];
-        }
+        droneEntities = [];
+        facadeEntities = [];
+        polygonEntities = [];
     }
 
-    let tmWayPoint = waypointsJson.dlWaypoint;
-    let flightData = JSON.parse(tmWayPoint);
+    const tmWayPoint = waypointsJson.dlWaypoint;
+    const flightData = JSON.parse(tmWayPoint);
 
-    let positionData = processDronePath(flightData, dlDiv);
-
-    const { positions } = positionData;
+    const { positions } = processDronePath(flightData, dlDiv);
 
     if (dlDiv != 3) {
         const pathEntity = viewer.entities.add({
-            polyline: {
-                positions: positions,
-                width: 3,
-                material: Cesium.Color.YELLOW
-            }
+            polyline: { positions: positions, width: 3, material: Cesium.Color.YELLOW }
         });
         droneEntities.push(pathEntity);
     }
@@ -824,55 +682,101 @@ function dronePathWaypoint(waypointsJson, pk, dlDiv) {
 
 // 시뮬레이션 경로 설정
 function dronePathSetting(waypointsJson, droneName, dlDiv) {
-    // 기존 엔티티 제거 코드...
-    
     let tmWayPoint = waypointsJson.dlWaypoint;
     let flightData = JSON.parse(tmWayPoint);
 
     let positionData = processDronePath(flightData, dlDiv);
 
     const { positionProperty, positions, currentTime, start } = positionData;
-    setupSimulation(viewer, positionProperty, start, currentTime);
+    if (positionProperty && positions && currentTime && start) {
+        setupSimulation(viewer, positionProperty, start, currentTime);
 
-    if (dlDiv != 3) {
-        const pathEntity = viewer.entities.add({
-            polyline: {
-                positions: positions,
-                width: 3,
-                material: Cesium.Color.YELLOW
-            }
-        });
-        droneEntities.push(pathEntity);
+        if (dlDiv != 3) {
+            const pathEntity = viewer.entities.add({
+                polyline: {
+                    positions: positions,
+                    width: 3,
+                    material: Cesium.Color.YELLOW
+                }
+            });
+            droneEntities.push(pathEntity);
+        }
+    } else {
+        console.error("Invalid position data", positionData);
     }
 }
 
+// 2차원 단선형 경로를 처리하는 함수
+// 2차원 단선형 경로를 처리하는 함수
+function processSingleLinePath(flightData) {
+    const positionProperty = new Cesium.SampledPositionProperty();
+    const positions = [];
+    let currentTime = Cesium.JulianDate.fromIso8601(flightData.creationTime);
+    const start = currentTime.clone();
+
+    const minElevation = flightData.droneAltitude || 3; // 최소 고도 설정
+    const maxElevation = flightData.maxElevation || 120; // JSON에서 최고 고도 가져오기
+    const speed = flightData.droneSpeed || 2; // 기본 속도 설정
+    const heightStep = flightData.gridSize || 10; // 높이 간격 5m로 설정
+
+    // 웨이포인트 처리 함수
+    const processWaypoints = (waypoints, height) => {
+        for (let i = 0; i < waypoints.length; i++) {
+            const dataPoint = waypoints[i];
+            if (dataPoint.command === "Waypoint" && dataPoint.coordinate && dataPoint.coordinate.length >= 2) {
+                const position = Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], minElevation + height);
+                positions.push(position);
+
+                if (positions.length > 1) {
+                    const prevPosition = positions[positions.length - 2];
+                    const distance = Cesium.Cartesian3.distance(prevPosition, position);
+                    const timeInSeconds = distance / speed;
+                    currentTime = Cesium.JulianDate.addSeconds(currentTime, timeInSeconds, new Cesium.JulianDate());
+                }
+
+                positionProperty.addSample(currentTime, position);
+            } else {
+                console.error(`Invalid coordinate data at index ${i}`, dataPoint);
+            }
+        }
+    };
+
+    // 첫 번째 경로 처리
+    processWaypoints(flightData.actions, 0);
+
+    // 높이를 5m씩 올려가며 왕복 경로 추가
+    let height = heightStep;
+    while (minElevation + height <= maxElevation) {
+        processWaypoints([...flightData.actions].reverse(), height);
+        height += heightStep;
+        if (minElevation + height <= maxElevation) {
+            processWaypoints(flightData.actions, height);
+            height += heightStep;
+        }
+    }
+
+    return { positionProperty, positions, currentTime, start };
+}
 
 
 
 // 드론 MC 업로드
 function dronePathWaypoint2(waypointsJson, pk, dlWaypointDetail) {
-    var droneName = $("#topdevie option:selected").val();
+    const droneName = $("#topdevie option:selected").val();
 
-    if (droneName == 'no') {
+    if (droneName === 'no') {
         alert("Selected No Device");
         return false;
     }
     selectdrone2(pk, droneName);
 
-    var tmWayPoint = waypointsJson.dlWaypoint;
+    const tmWayPoint = waypointsJson.dlWaypoint;
 
-    // 화면에 경로 지정
     const flightData = JSON.parse(tmWayPoint);
 
-    positions = [];
-    initialPosition = "";
-    for (let i = 0; i < flightData.actions.length; i++) {
-        const dataPoint = flightData.actions[i];
-        if (i == 0) {
-            initialPosition = new Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], dataPoint.coordinate[2]);
-        }
-        positions.push(Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], dataPoint.coordinate[2]));
-    }
+    const positions = flightData.actions.map(dataPoint =>
+        Cesium.Cartesian3.fromDegrees(dataPoint.coordinate[1], dataPoint.coordinate[0], dataPoint.coordinate[2])
+    );
 
     viewer.entities.add({
         polylineVolume: {
@@ -887,11 +791,7 @@ function dronePathWaypoint2(waypointsJson, pk, dlWaypointDetail) {
 
 // 하단 로그 토글
 $('.logopenclose').click(function(e) {
-    if ($("#bottomLog").css("display") == "none") {
-        $("#bottomLog").show();
-    } else {
-        $("#bottomLog").hide();
-    }
+    $("#bottomLog").toggle();
 });
 
 // 시연용
@@ -904,40 +804,25 @@ function setVal(tmStr) {
     $("#topdevie").val("lm_1000" + tmStr).prop("selected", true);
     $("#drone_select").val("lm_1000" + tmStr);
 
-    for (var i = 0; i < 10; i++) {
-        if (i == (tmStr - 1)) {
-            $("#a1000" + (i + 1)).css("border", "3px solid #FFD700");
-            $("#droneState_" + (i)).css("border", "3px solid #FFD700");
+    for (let i = 0; i < 10; i++) {
+        if (i === (tmStr - 1)) {
+            $(`#a1000${i + 1}`).css("border", "3px solid #FFD700");
+            $(`#droneState_${i}`).css("border", "3px solid #FFD700");
         } else {
-            $("#a1000" + (i + 1)).css("border", "3px solid #006400");
-            $("#droneState_" + (i)).css("border", "3px solid #006400");
+            $(`#a1000${i + 1}`).css("border", "3px solid #006400");
+            $(`#droneState_${i}`).css("border", "3px solid #006400");
         }
     }
 
-    let drone = viewer.entities.getById("lm_1000" + tmStr);
+    const drone = viewer.entities.getById("lm_1000" + tmStr);
     viewer.trackedEntity = drone;
 }
 
-
-$('#a10001').click(function(e) {
-    setVal(1);
-});
-
-$('#a10002').click(function(e) {
-    setVal(2);
-});
-
-$('#a10003').click(function(e) {
-    setVal(3);
-});
-
-$('#a10004').click(function(e) {
-    setVal(4);
-});
-
-$('#a10005').click(function(e) {
-    setVal(5);
-});
+$('#a10001').click(() => setVal(1));
+$('#a10002').click(() => setVal(2));
+$('#a10003').click(() => setVal(3));
+$('#a10004').click(() => setVal(4));
+$('#a10005').click(() => setVal(5));
 
 // Load 3D tileset
 const tileset1 = new Cesium.Cesium3DTileset({
@@ -946,15 +831,14 @@ const tileset1 = new Cesium.Cesium3DTileset({
 
 viewer.scene.primitives.add(tileset1);
 
-tileset1.readyPromise.then(function() {
-    viewer.scene.primitives.add(tileset1);
-    var heightOffset = 41; 
-    var boundingSphere = tileset1.boundingSphere;
-    var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-    var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
-    var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
-    var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
-    var newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
+tileset1.readyPromise.then(() => {
+    const heightOffset = 41; 
+    const boundingSphere = tileset1.boundingSphere;
+    const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+    const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+    const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
+    const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+    const newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
 
     Cesium.Matrix4.multiply(tileset1.modelMatrix, newModelMatrix, tileset1.modelMatrix);
 });
@@ -966,14 +850,14 @@ const tileset2 = new Cesium.Cesium3DTileset({
 
 viewer.scene.primitives.add(tileset2);
 
-tileset2.readyPromise.then(function() {
-    var heightOffset = 71;
-    var boundingSphere = tileset2.boundingSphere;
-    var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-    var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
-    var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
-    var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
-    var newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
+tileset2.readyPromise.then(() => {
+    const heightOffset = 71;
+    const boundingSphere = tileset2.boundingSphere;
+    const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+    const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+    const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
+    const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+    const newModelMatrix = Cesium.Matrix4.fromTranslation(translation);
 
     Cesium.Matrix4.multiply(tileset2.modelMatrix, newModelMatrix, tileset2.modelMatrix);
 });
@@ -981,7 +865,6 @@ tileset2.readyPromise.then(function() {
 // Ensure both tilesets are visible
 Promise.all([tileset1.readyPromise, tileset2.readyPromise]).then(() => {
     viewer.zoomTo(tileset1);
-}).catch(function(error) {
-    console.error(error);
-});
+}).catch(error => console.error(error));
+
 

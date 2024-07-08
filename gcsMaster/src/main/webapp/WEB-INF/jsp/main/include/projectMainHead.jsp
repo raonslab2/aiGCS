@@ -1,4 +1,3 @@
-<%-- /main/include/droneHeadMenu.jsp --%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -95,13 +94,14 @@
 <div class="topnav" id="myTopnav">
     <a href="javascript:void(0)" class="menu-icon" onclick="toggleNav()">&#9776;</a>
     <a href="/gcs/dashboard/projectMain1001.do" page-data="menu-project" id="menu-project">프로젝트</a> 
-    <a href="/gcs/dashboard/gcsMain2.do" page-data="menu-realtime" target="_blank" id="menu-realtime">실시간 관제시스템</a>
-    <a href="/gcs/dashboard/gA030OfflineMain.do" page-data="menu-offline" target="_blank" id="menu-offline">오프라인 관제시스템</a>
-    <a href="/gcs/dashboard/gA01Main2.do" page-data="menu-drone" id="menu-drone">군집드론</a>
-    <a href="/gcs/dashboard/gA034Main.do" page-data="menu-status" id="menu-status">기체현황</a>
-    <a href="#" id="menu-report">보고서</a>
+    <a href="/gcs/dashboard/projectMain2001.do" page-data="menu-map" id="menu-map">지도</a> 
+    <a href="/gcs/dashboard/projectMain3001.do" page-data="menu-realtime" id="menu-realtime">실시간 관제시스템</a>
+    <a href="/gcs/dashboard/projectMain4001.do" page-data="menu-offline" id="menu-offline">오프라인 관제시스템</a>
+    <a href="/gcs/dashboard/projectMain5001.do" page-data="menu-drone" id="menu-drone">군집드론</a>
+    <a href="/gcs/dashboard/projectMain6001.do" page-data="menu-status" id="menu-status">기체현황</a>
+    <a href="/gcs/dashboard/projectMain7001.do" page-data="menu-report" id="menu-report">보고서</a>
     <div class="topnav-right">
-        <a href="/gcs/dashboard/gA035Main.do" page-data="menu-user" id="menu-user">사용자정보</a>
+        <a href="/gcs/dashboard/projectMain9001.do" page-data="menu-user" id="menu-user">사용자정보</a>
         <a href="/gcs/TD0001/TodayWork900.do" page-data="menu-today" target="_blank" id="menu-today">오늘 할 일</a>
         <a href="#" id="menu-logout">로그아웃</a>
     </div>
@@ -119,6 +119,7 @@ $(document).ready(function() {
 
   // 현재 페이지의 page-data 속성을 기반으로 active 클래스를 추가
   var pageData = $('body').attr('page-data');
+ 
   if (pageData) {
     $('.topnav a[page-data="' + pageData + '"]').addClass('active');
   }

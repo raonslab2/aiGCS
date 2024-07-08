@@ -121,6 +121,19 @@ public class GA03MAINController {
 		return "main/GCSMAIN3/projectMain1001";
 	}  
 	
+	@RequestMapping(value = "/gcs/dashboard/projectMain2001.do")
+	public String projectMain2001(HttpServletRequest request, ModelMap model)
+	  throws Exception{
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+  
+		return "main/GCSMAIN3/projectMain2001";
+	}  
+	
 	
 	/**
 	 * GCS > MAIN > 직접 waypoint 입력
@@ -168,6 +181,20 @@ public class GA03MAINController {
   
 		return "main/GCSMAIN3/gA030OfflineMain";
 	} 
+	
+	@RequestMapping(value = "/gcs/dashboard/projectMain4001.do")
+	public String projectMain4001(HttpServletRequest request, ModelMap model)
+	  throws Exception{
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+  
+		return "/main/GCSMAIN3/projectMain4001";
+	} 
+	
 	
 	/**
 	 * GCS > MAIN > 군집드론 waypoint 입력
@@ -392,7 +419,7 @@ public class GA03MAINController {
 			returnUrl = "main/GCSMAIN3/projectMain1002_4"; 
 		}else if(waypoints!=null && waypoints.getDlDiv().equals("5")) { 
 			//프로젝트가 개설되어있고, 구체적 경로 계획이 수립되어 있으면 ( 오프라인 )
-			detailData = "54";
+			detailData = "5";
 			returnUrl = "main/GCSMAIN3/projectMain1002_5"; 
 		}else {
 			//프로젝트가 개설되어 있지 않고, 신규 생성이라면
@@ -760,7 +787,7 @@ public class GA03MAINController {
 		
 		//접속 사용자
 		LoginVO user = (LoginVO) request.getSession().getAttribute("LoginVO");
-		
+		String user_id = user.getMbCode();
 		ModelAndView mav = new ModelAndView("jsonView");		
  
 		
@@ -776,14 +803,22 @@ public class GA03MAINController {
 		String dlWaypointDetail = ""; 
 		
 	    if(dlPk!=null && dlName !=null) {
-	    	gA03MAINService.insertDrone(paramMap); 
-	    	
-	    	//
-	    	GA03MAINVO vo = new GA03MAINVO();
-	    	vo.setDlPk(dlPk);
-			waypoints = gA03MAINService.selectWaypoint(vo); 
-			strWayPoint = waypoints.getDlWaypoint(); 
-			dlWaypointDetail = waypoints.getDlWaypointDetail();
+
+			try {
+		    	gA03MAINService.insertDrone(paramMap);  
+		    	
+		    	//
+		    	GA03MAINVO vo = new GA03MAINVO();
+		    	vo.setDlPk(dlPk);
+		    	vo.setDlUserId(user_id);
+		    	
+				waypoints = gA03MAINService.selectWaypoint(vo);  
+				strWayPoint = waypoints.getDlWaypoint(); 
+				dlWaypointDetail = waypoints.getDlWaypointDetail();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 	    }
 	    
  
@@ -959,6 +994,34 @@ public class GA03MAINController {
     	}
     
 		return "main/GCSMAIN3/gA034Main";
+	}
+	
+	@RequestMapping("/gcs/dashboard/projectMain6001.do") 
+	public String projectMain6001(@ModelAttribute("gA03MAINAIRVO") GA03MAINAIRVO gA03MAINAIRVO, HttpServletRequest request,
+			ModelMap model) throws Exception {
+
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+    
+		return "main/GCSMAIN3/projectMain6001";  
+	}
+	
+	@RequestMapping("/gcs/dashboard/projectMain7001.do") 
+	public String projectMain7001(@ModelAttribute("gA03MAINAIRVO") GA03MAINAIRVO gA03MAINAIRVO, HttpServletRequest request,
+			ModelMap model) throws Exception {
+
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+    
+		return "main/GCSMAIN3/projectMain7001";  
 	}
 	
 	/**
@@ -1194,6 +1257,19 @@ public class GA03MAINController {
     		return "main/login/empilogin";
     	}
 		return "main/GCSMAIN3/gA035Main";
+	}
+	
+	@RequestMapping("/gcs/dashboard/projectMain9001.do")
+	public String projectMain9001(@ModelAttribute("gA03MAINVO") GA03MAINVO gA03MAINVO, HttpServletRequest request,
+			ModelMap model) throws Exception {
+
+		//로그인 객체 선언 
+    	Boolean isAuthenticated = (LoginVO)request.getSession().getAttribute("LoginVO") == null ? false:true;
+    	if(!isAuthenticated) {
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+    		return "main/login/empilogin";
+    	}
+		return "main/GCSMAIN3/projectMain9001";
 	}
 	
 	@RequestMapping("/gcs/dashboard/gA036Main.do")
